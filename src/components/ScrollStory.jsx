@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react";
 
-const SRCC_LOGO = "/srcc-logo.png";
-const BG_CLOCK = "/srcc-clock.jpg";
-const BG_CORRIDOR = "/srcc-corridor.jpg";
+const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`;
+const SRCC_LOGO = assetUrl("srcc-logo.png");
+const BG_CLOCK = assetUrl("srcc-clock.jpg");
+const BG_CORRIDOR = assetUrl("srcc-corridor.jpg");
 
 const TOTAL = 5;
 

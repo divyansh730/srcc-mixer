@@ -1,11 +1,13 @@
 import { useEffect, useRef } from "react";
 
+const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`;
+
 const landingOptions = [
   {
     id: "memory-wall",
     title: "Memory Wall",
     href: "/memory-wall",
-    image: "/srcc-clock.jpg",
+    image: assetUrl("srcc-clock.jpg"),
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer in odio et arcu posuere viverra.",
   },
@@ -13,7 +15,7 @@ const landingOptions = [
     id: "pc-gallery",
     title: "PC Gallery",
     href: "/pc-gallery",
-    image: "/srcc-corridor.jpg",
+    image: assetUrl("srcc-corridor.jpg"),
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor sem id nunc interdum facilisis.",
   },
@@ -21,7 +23,7 @@ const landingOptions = [
     id: "quiz",
     title: "Quiz",
     href: "/quiz",
-    image: "/srcc-clock.jpg",
+    image: assetUrl("srcc-clock.jpg"),
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean varius ante ac eros tincidunt, non feugiat justo tempus.",
   },

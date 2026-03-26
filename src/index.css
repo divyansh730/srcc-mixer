@@ -41,6 +41,7 @@ body::before {
   font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.15em;
   color: #C8CDD6; text-decoration: none; text-transform: uppercase;
   opacity: 0.75; transition: color 0.3s, opacity 0.3s;
+  white-space: nowrap;
 }
 .nav-link:hover { color: #C9A84C; opacity: 1; }
 
@@ -258,16 +259,99 @@ body::before {
 }
 
 @media (max-width: 740px) {
+  .landing-heading-block {
+    margin-bottom: 40px;
+  }
+
+  .landing-heading-rule {
+    height: 44px;
+    margin-bottom: 22px;
+  }
+
+  .landing-heading-kicker {
+    font-size: 9px;
+    letter-spacing: 0.28em;
+    margin-bottom: 12px;
+  }
+
+  .landing-welcome-title {
+    font-size: clamp(34px, 12vw, 52px);
+    line-height: 0.98;
+  }
+
   .landing-grid {
     grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
   }
 
   .landing-option-card {
     min-height: 330px;
+    border-radius: 12px;
   }
 
   .landing-option-surface {
     min-height: 330px;
+  }
+
+  .landing-option-content {
+    padding: 20px 18px 14px;
+  }
+
+  .landing-option-content h3 {
+    letter-spacing: 0.14em;
+    font-size: clamp(18px, 6vw, 24px);
+  }
+
+  .landing-option-hover {
+    justify-content: flex-end;
+    align-items: flex-start;
+    text-align: left;
+    opacity: 1;
+    pointer-events: auto;
+    padding: 88px 18px 18px;
+    background: linear-gradient(180deg, rgba(5, 2, 0, 0.08) 0%, rgba(5, 2, 0, 0.72) 48%, rgba(4, 2, 0, 0.9) 100%);
+  }
+
+  .landing-option-hover-line {
+    width: 40px;
+  }
+
+  .landing-option-hover p {
+    max-width: none;
+    font-size: 18px;
+    line-height: 1.35;
+  }
+
+  .landing-option-card:hover .landing-option-hover {
+    opacity: 1;
+  }
+
+  .landing-option-card:hover .landing-option-content {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .nav-link {
+    font-size: 8px;
+    letter-spacing: 0.08em;
+  }
+}
+
+@media (max-width: 420px) {
+  .landing-option-card {
+    min-height: 300px;
+  }
+
+  .landing-option-surface {
+    min-height: 300px;
+  }
+
+  .landing-option-hover {
+    padding-top: 78px;
+  }
+
+  .landing-option-hover p {
+    font-size: 16px;
   }
 }
 

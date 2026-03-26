@@ -17,10 +17,11 @@ export default function ScrollStoryV2() {
   const mlTextRef = useRef(null);
   const countdownRef = useRef(null);
   const mlSubRef = useRef(null);
-  const headerCountdownRef = useRef(null);
-  
-  const [showCountdownInHeader, setShowCountdownInHeader] = useState(false);
 
+  const [showCountdownInHeader, setShowCountdownInHeader] = useState(false);
+  const [viewportWidth, setViewportWidth] = useState(() =>
+    typeof window === "undefined" ? 1440 : window.innerWidth
+  );
   const [countdown, setCountdown] = useState({
     days: 0,
     hours: 0,
@@ -28,23 +29,35 @@ export default function ScrollStoryV2() {
     seconds: 0,
   });
 
+  const isMobile = viewportWidth <= 768;
+  const isCompactMobile = viewportWidth <= 480;
+  const headerHeight = isMobile ? 80 : 68;
+  const logoEndSize = isMobile ? 28 : 34;
+  const logoEndX = isMobile ? 16 : 40;
+  const logoEndY = (headerHeight - logoEndSize) / 2;
+
   useEffect(() => {
     const interval = setInterval(() => {
-        const targetDate = new Date('2026-04-18T16:00:00');
-        const now = new Date();
-        const difference = targetDate.getTime() - now.getTime();
+      const targetDate = new Date("2026-04-18T16:00:00");
+      const now = new Date();
+      const difference = targetDate.getTime() - now.getTime();
 
-        const d = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-        const s = Math.floor((difference % (1000 * 60)) / 1000);
+      const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((difference % (1000 * 60)) / 1000);
 
-        setCountdown({ days: d, hours: h, minutes: m, seconds: s });
+      setCountdown({ days: d, hours: h, minutes: m, seconds: s });
     }, 1000);
 
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const onResize = () => setViewportWidth(window.innerWidth);
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   useEffect(() => {
     let winH = window.innerHeight;
@@ -52,10 +65,13 @@ export default function ScrollStoryV2() {
     let ticking = false;
     let lastSy = 0;
 
-    const onResize = () => { winH = window.innerHeight; winW = window.innerWidth; };
+    const onResize = () => {
+      winH = window.innerHeight;
+      winW = window.innerWidth;
+    };
     window.addEventListener("resize", onResize, { passive: true });
 
-    const ease = t => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    const ease = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
     const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
     const range = (p, a, b) => clamp((p - a) / (b - a), 0, 1);
 
@@ -64,8 +80,6 @@ export default function ScrollStoryV2() {
       const total = winH * TOTAL;
       const p = clamp(sy / total, 0, 1);
 
-      // Only animate opacity and transform — never filter
-      // Clock wrapper: translate up slowly
       if (clockBgRef.current) {
         const ty = -p * 22;
         const op = 1 - ease(range(p, 0.3, 0.56));
@@ -73,7 +87,6 @@ export default function ScrollStoryV2() {
         clockBgRef.current.style.transform = `translate3d(0, ${ty}%, 0)`;
       }
 
-      // Corridor wrapper: fade in, slight upward drift
       if (corridorBgRef.current) {
         const op = ease(range(p, 0.3, 0.58));
         const ty = (1 - op) * 8;
@@ -81,60 +94,50 @@ export default function ScrollStoryV2() {
         corridorBgRef.current.style.transform = `translate3d(0, ${ty}%, 0)`;
       }
 
-      // Header
       if (headerRef.current) {
         const hop = ease(range(p, 0.34, 0.46));
         headerRef.current.style.opacity = hop;
         headerRef.current.style.pointerEvents = hop > 0.5 ? "all" : "none";
       }
 
-      // Header countdown visibility
       if (countdownRef.current) {
         const rect = countdownRef.current.getBoundingClientRect();
-        if (rect.top < winH * 0.5) {
-            setShowCountdownInHeader(true);
-        } else {
-            setShowCountdownInHeader(false);
-        }
+        setShowCountdownInHeader(rect.top < winH * 0.5);
       }
 
-      // Logo
       if (logoRef.current) {
         const lp = ease(range(p, 0.12, 0.44));
-        const startSize = 88, endSize = 34;
-        const size = startSize - lp * (startSize - endSize);
+        const startSize = 88;
+        const size = startSize - lp * (startSize - logoEndSize);
         const startX = winW / 2 - startSize / 2;
-        const startY = winH * 0.22;
-        const endX = 40, endY = (68 - endSize) / 2;
-        const x = startX + lp * (endX - startX);
-        const y = startY + lp * (endY - startY);
+        const startY = isMobile ? winH * 0.16 : winH * 0.22;
+        const x = startX + lp * (logoEndX - startX);
+        const y = startY + lp * (logoEndY - startY);
         logoRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
         logoRef.current.style.width = `${size}px`;
         logoRef.current.style.height = `${size}px`;
         logoRef.current.style.opacity = p > 0.46 ? 0 : 1;
       }
 
-      // Hero text
       if (contentRef.current) {
         const cp = ease(range(p, 0.1, 0.42));
-        const op = Math.max(1 - cp * 1.65, 0);
-        const tx = cp * -winW * 0.27;
-        const ty = cp * -winH * 0.36;
-        const sc = 1 - cp * 0.48;
+        const op = Math.max(1 - cp * (isMobile ? 1.35 : 1.65), 0);
+        const tx = cp * -winW * (isMobile ? 0.08 : 0.27);
+        const ty = cp * -winH * (isMobile ? 0.22 : 0.36);
+        const sc = 1 - cp * (isMobile ? 0.2 : 0.48);
         contentRef.current.style.opacity = op;
         contentRef.current.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${sc})`;
       }
 
-      // Scroll indicator
       if (scrollIndRef.current) {
         scrollIndRef.current.style.opacity = Math.max(1 - ease(range(p, 0, 0.08)), 0);
       }
 
-      // Memory lane text
       if (mlTextRef.current) {
         if (p >= 0.68 && !mlTextRef.current.dataset.triggered) {
           mlTextRef.current.dataset.triggered = "true";
-          mlTextRef.current.style.transition = "opacity 2.2s cubic-bezier(0.16,1,0.3,1), transform 2.4s cubic-bezier(0.16,1,0.3,1)";
+          mlTextRef.current.style.transition =
+            "opacity 2.2s cubic-bezier(0.16,1,0.3,1), transform 2.4s cubic-bezier(0.16,1,0.3,1)";
           mlTextRef.current.style.opacity = 1;
           mlTextRef.current.style.transform = "translate3d(0, 0px, 0)";
         } else if (p < 0.68 && mlTextRef.current.dataset.triggered) {
@@ -145,11 +148,11 @@ export default function ScrollStoryV2() {
         }
       }
 
-      // Countdown
       if (countdownRef.current) {
         if (p >= 0.72 && !countdownRef.current.dataset.triggered) {
           countdownRef.current.dataset.triggered = "true";
-          countdownRef.current.style.transition = "opacity 2s cubic-bezier(0.16,1,0.3,1) 0.3s, transform 2s cubic-bezier(0.16,1,0.3,1) 0.3s";
+          countdownRef.current.style.transition =
+            "opacity 2s cubic-bezier(0.16,1,0.3,1) 0.3s, transform 2s cubic-bezier(0.16,1,0.3,1) 0.3s";
           countdownRef.current.style.opacity = 1;
           countdownRef.current.style.transform = "translate3d(0, 0px, 0)";
         } else if (p < 0.72 && countdownRef.current.dataset.triggered) {
@@ -160,11 +163,11 @@ export default function ScrollStoryV2() {
         }
       }
 
-      // Subtitle
       if (mlSubRef.current) {
         if (p >= 0.76 && !mlSubRef.current.dataset.triggered) {
           mlSubRef.current.dataset.triggered = "true";
-          mlSubRef.current.style.transition = "opacity 2s cubic-bezier(0.16,1,0.3,1) 0.5s, transform 2s cubic-bezier(0.16,1,0.3,1) 0.5s";
+          mlSubRef.current.style.transition =
+            "opacity 2s cubic-bezier(0.16,1,0.3,1) 0.5s, transform 2s cubic-bezier(0.16,1,0.3,1) 0.5s";
           mlSubRef.current.style.opacity = 1;
           mlSubRef.current.style.transform = "translate3d(0, 0px, 0)";
         } else if (p < 0.76 && mlSubRef.current.dataset.triggered) {
@@ -193,253 +196,452 @@ export default function ScrollStoryV2() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
     };
-  }, []);
+  }, [isMobile, logoEndSize, logoEndX, logoEndY]);
 
   return (
     <>
-      {/* HEADER */}
-      <header ref={headerRef} style={{
-        position: "fixed", top: 0, left: 0, right: 0, height: "68px",
-        background: "rgba(6,2,0,0.96)",
-        borderBottom: "1px solid rgba(201,168,76,0.18)",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "0 40px", zIndex: 200,
-        opacity: 0, pointerEvents: "none",
-        backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)"
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <img src={SRCC_LOGO} alt="SRCC" style={{
-            width: "34px", height: "34px", objectFit: "contain",
-            filter: "drop-shadow(0 0 5px rgba(201,168,76,0.25))"
-          }} />
+      <header
+        ref={headerRef}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: `${headerHeight}px`,
+          background: "rgba(6,2,0,0.96)",
+          borderBottom: "1px solid rgba(201,168,76,0.18)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: isMobile ? "0 16px" : "0 40px",
+          gap: isMobile ? "12px" : "24px",
+          zIndex: 200,
+          opacity: 0,
+          pointerEvents: "none",
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "10px" : "12px", minWidth: 0 }}>
+          <img
+            src={SRCC_LOGO}
+            alt="SRCC"
+            style={{
+              width: isMobile ? "28px" : "34px",
+              height: isMobile ? "28px" : "34px",
+              objectFit: "contain",
+              filter: "drop-shadow(0 0 5px rgba(201,168,76,0.25))",
+            }}
+          />
           <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.25 }}>
-            <span style={{
-              fontFamily: "'Cinzel', serif", fontSize: "11px",
-              letterSpacing: "0.13em", color: "#E2E6ED", textTransform: "uppercase"
-            }}>The Placement Cell · SRCC</span>
-            <span style={{
-              fontFamily: "'Pinyon Script', cursive", fontSize: "17px", color: "#C9A84C"
-            }}>30 Years of Excellence</span>
+            <span
+              style={{
+                fontFamily: "'Cinzel', serif",
+                fontSize: isMobile ? "9px" : "11px",
+                letterSpacing: isMobile ? "0.08em" : "0.13em",
+                color: "#E2E6ED",
+                textTransform: "uppercase",
+              }}
+            >
+              {isMobile ? "Placement Cell" : "The Placement Cell | SRCC"}
+            </span>
+            <span
+              style={{
+                fontFamily: "'Pinyon Script', cursive",
+                fontSize: isMobile ? "15px" : "17px",
+                color: "#C9A84C",
+              }}
+            >
+              30 Years of Excellence
+            </span>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-            <div ref={headerCountdownRef} style={{ opacity: showCountdownInHeader ? 1 : 0, transition: 'opacity 0.5s', fontFamily: "'Cinzel', serif", fontSize: "17px", color: "#C9A84C", letterSpacing: "0.1em" }}>
-                {`${String(countdown.days).padStart(2, '0')}:${String(countdown.hours).padStart(2, '0')}:${String(countdown.minutes).padStart(2, '0')}:${String(countdown.seconds).padStart(2, '0')}`}
+        <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "12px" : "2rem", minWidth: 0 }}>
+          {!isCompactMobile && (
+            <div
+              style={{
+                opacity: showCountdownInHeader ? 1 : 0,
+                transition: "opacity 0.5s",
+                fontFamily: "'Cinzel', serif",
+                fontSize: isMobile ? "10px" : "17px",
+                color: "#C9A84C",
+                letterSpacing: isMobile ? "0.04em" : "0.1em",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {`${String(countdown.days).padStart(2, "0")}:${String(countdown.hours).padStart(
+                2,
+                "0"
+              )}:${String(countdown.minutes).padStart(2, "0")}:${String(countdown.seconds).padStart(2, "0")}`}
             </div>
-            <nav style={{ display: "flex", gap: "28px" }}>
-                <a href="#memory-wall" className="nav-link">Memory Wall</a>
-                <a href="#pc-gallery" className="nav-link">PC Gallery</a>
-                <a href="#quiz" className="nav-link">Quiz</a>
-            </nav>
+          )}
+          <nav style={{ display: "flex", gap: isMobile ? "10px" : "28px", flexWrap: "wrap", justifyContent: "flex-end" }}>
+            <a href="#memory-wall" className="nav-link">
+              Memory Wall
+            </a>
+            <a href="#pc-gallery" className="nav-link">
+              PC Gallery
+            </a>
+            <a href="#quiz" className="nav-link">
+              Quiz
+            </a>
+          </nav>
         </div>
       </header>
 
-      {/* LOGO — positioned via transform, not left/top */}
-      <div ref={logoRef} style={{
-        position: "fixed", left: 0, top: 0,
-        width: "88px", height: "88px",
-        zIndex: 150, pointerEvents: "none",
-        willChange: "transform, width, height, opacity",
-        transform: "translate3d(0,0,0)"
-      }}>
-        <img src={SRCC_LOGO} alt="SRCC" style={{
-          width: "100%", height: "100%", objectFit: "contain",
-          filter: "drop-shadow(0 0 14px rgba(201,168,76,0.22)) brightness(1.05)"
-        }} />
+      <div
+        ref={logoRef}
+        style={{
+          position: "fixed",
+          left: 0,
+          top: 0,
+          width: "88px",
+          height: "88px",
+          zIndex: 150,
+          pointerEvents: "none",
+          willChange: "transform, width, height, opacity",
+          transform: "translate3d(0,0,0)",
+        }}
+      >
+        <img
+          src={SRCC_LOGO}
+          alt="SRCC"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+            filter: "drop-shadow(0 0 14px rgba(201,168,76,0.22)) brightness(1.05)",
+          }}
+        />
       </div>
 
-      {/* TALL SCROLL CONTAINER */}
       <div style={{ height: `${TOTAL * 100}vh`, position: "relative" }}>
-
-        {/* STICKY PANEL */}
-        <div style={{
-          position: "sticky", top: 0,
-          height: "100vh", overflow: "hidden",
-          isolation: "isolate"
-        }}>
-
-          {/* Clock bg — filtered image, only opacity+transform animated */}
-          <div style={{
-            position: "absolute", inset: "-20% 0 -20% 0",
-            zIndex: 0, overflow: "hidden",
-            willChange: "transform, opacity"
-          }} ref={clockBgRef}>
-            <div style={{
-              position: "absolute", inset: 0,
-              backgroundImage: `url('${BG_CLOCK}')`,
-              backgroundSize: "cover", backgroundPosition: "center 35%",
-              filter: "sepia(0.5) brightness(0.45) contrast(1.05)",
-              transform: "translate3d(0,0,0)"
-            }} />
-          </div>
-
-          {/* Corridor bg — filtered image, only opacity+transform animated */}
-          <div style={{
-            position: "absolute", inset: "-20% 0 -20% 0",
-            zIndex: 0, overflow: "hidden",
-            opacity: 0,
-            willChange: "transform, opacity"
-          }} ref={corridorBgRef}>
-            <div style={{
-              position: "absolute", inset: 0,
-              backgroundImage: `url('${BG_CORRIDOR}')`,
-              backgroundSize: "cover", backgroundPosition: "center 50%",
-              filter: "sepia(0.5) brightness(0.45) contrast(1.05)",
-              transform: "translate3d(0,0,0)"
-            }} />
-          </div>
-
-          {/* Vignette */}
-          <div style={{
-            position: "absolute", inset: 0, zIndex: 1,
-            background: "radial-gradient(ellipse at 50% 36%, transparent 10%, rgba(2,1,0,0.44) 52%, rgba(1,0,0,0.9) 100%)",
-            pointerEvents: "none"
-          }} />
-
-          {/* Lines */}
-          <div style={{
-            position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
-            backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(201,168,76,0.018) 60px)"
-          }} />
-
-          {/* HERO TEXT */}
-          <div style={{
-            position: "absolute", inset: 0, zIndex: 3,
-            display: "flex", flexDirection: "column",
-            alignItems: "center", justifyContent: "center",
-            padding: "0 24px", textAlign: "center",
-            pointerEvents: "none"
-          }}>
-            <div style={{ height: "110px" }} />
-            <div ref={contentRef} style={{
+        <div
+          style={{
+            position: "sticky",
+            top: 0,
+            height: "100vh",
+            overflow: "hidden",
+            isolation: "isolate",
+          }}
+        >
+          <div
+            ref={clockBgRef}
+            style={{
+              position: "absolute",
+              inset: "-20% 0 -20% 0",
+              zIndex: 0,
+              overflow: "hidden",
               willChange: "transform, opacity",
-              transformOrigin: "center center",
-              display: "flex", flexDirection: "column",
-              alignItems: "center", gap: "16px",
-              transform: "translate3d(0,0,0)"
-            }}>
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                backgroundImage: `url('${BG_CLOCK}')`,
+                backgroundSize: "cover",
+                backgroundPosition: isMobile ? "center center" : "center 35%",
+                filter: "sepia(0.5) brightness(0.45) contrast(1.05)",
+                transform: "translate3d(0,0,0)",
+              }}
+            />
+          </div>
+
+          <div
+            ref={corridorBgRef}
+            style={{
+              position: "absolute",
+              inset: "-20% 0 -20% 0",
+              zIndex: 0,
+              overflow: "hidden",
+              opacity: 0,
+              willChange: "transform, opacity",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                backgroundImage: `url('${BG_CORRIDOR}')`,
+                backgroundSize: "cover",
+                backgroundPosition: isMobile ? "center 42%" : "center 50%",
+                filter: "sepia(0.5) brightness(0.45) contrast(1.05)",
+                transform: "translate3d(0,0,0)",
+              }}
+            />
+          </div>
+
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              zIndex: 1,
+              background:
+                "radial-gradient(ellipse at 50% 36%, transparent 10%, rgba(2,1,0,0.44) 52%, rgba(1,0,0,0.9) 100%)",
+              pointerEvents: "none",
+            }}
+          />
+
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              zIndex: 1,
+              pointerEvents: "none",
+              backgroundImage:
+                "repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(201,168,76,0.018) 60px)",
+            }}
+          />
+
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              zIndex: 3,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: isMobile ? "0 18px" : "0 24px",
+              textAlign: "center",
+              pointerEvents: "none",
+            }}
+          >
+            <div style={{ height: isMobile ? "84px" : "110px" }} />
+            <div
+              ref={contentRef}
+              style={{
+                willChange: "transform, opacity",
+                transformOrigin: "center center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: isMobile ? "12px" : "16px",
+                maxWidth: isMobile ? "340px" : "none",
+                transform: "translate3d(0,0,0)",
+              }}
+            >
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
-                <div style={{
-                  fontFamily: "'Times New Roman', Times, serif",
-                  fontSize: "clamp(20px, 3.4vw, 42px)",
-                  color: "#DDE3ED", letterSpacing: "0.12em",
-                  lineHeight: 1.2, fontWeight: 400, textTransform: "uppercase",
-                  textShadow: "0 2px 20px rgba(0,0,0,0.9)"
-                }}>The Placement Cell</div>
-                <div style={{
-                  fontFamily: "'Times New Roman', Times, serif",
-                  fontSize: "clamp(12px, 2vw, 24px)",
-                  color: "rgba(221,227,237,0.78)", letterSpacing: "0.18em",
-                  lineHeight: 1.2, fontWeight: 400, textTransform: "uppercase",
-                  textShadow: "0 2px 20px rgba(0,0,0,0.9)"
-                }}>Shri Ram College of Commerce</div>
+                <div
+                  style={{
+                    fontFamily: "'Times New Roman', Times, serif",
+                    fontSize: isMobile ? "clamp(18px, 7vw, 26px)" : "clamp(20px, 3.4vw, 42px)",
+                    color: "#DDE3ED",
+                    letterSpacing: isMobile ? "0.08em" : "0.12em",
+                    lineHeight: 1.2,
+                    fontWeight: 400,
+                    textTransform: "uppercase",
+                    textShadow: "0 2px 20px rgba(0,0,0,0.9)",
+                  }}
+                >
+                  The Placement Cell
+                </div>
+                <div
+                  style={{
+                    fontFamily: "'Times New Roman', Times, serif",
+                    fontSize: isMobile ? "clamp(10px, 3.8vw, 14px)" : "clamp(12px, 2vw, 24px)",
+                    color: "rgba(221,227,237,0.78)",
+                    letterSpacing: isMobile ? "0.12em" : "0.18em",
+                    lineHeight: 1.2,
+                    fontWeight: 400,
+                    textTransform: "uppercase",
+                    textShadow: "0 2px 20px rgba(0,0,0,0.9)",
+                  }}
+                >
+                  Shri Ram College of Commerce
+                </div>
               </div>
 
-              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                <div style={{ width: "80px", height: "1px", background: "linear-gradient(90deg, transparent, #C9A84C)" }} />
-                <span style={{ color: "#C9A84C", fontSize: "13px" }}>✦</span>
-                <div style={{ width: "80px", height: "1px", background: "linear-gradient(90deg, #C9A84C, transparent)" }} />
+              <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "8px" : "12px" }}>
+                <div
+                  style={{
+                    width: isMobile ? "44px" : "80px",
+                    height: "1px",
+                    background: "linear-gradient(90deg, transparent, #C9A84C)",
+                  }}
+                />
+                <span style={{ color: "#C9A84C", fontSize: isMobile ? "11px" : "13px" }}>*</span>
+                <div
+                  style={{
+                    width: isMobile ? "44px" : "80px",
+                    height: "1px",
+                    background: "linear-gradient(90deg, #C9A84C, transparent)",
+                  }}
+                />
               </div>
 
-              <div style={{
-                fontFamily: "'Pinyon Script', cursive",
-                fontSize: "clamp(30px, 5vw, 56px)", color: "#C9A84C",
-                textShadow: "0 0 30px rgba(201,168,76,0.55), 0 2px 10px rgba(0,0,0,0.9)",
-                lineHeight: 1, letterSpacing: "0.02em"
-              }}>30 Years of Excellence</div>
+              <div
+                style={{
+                  fontFamily: "'Pinyon Script', cursive",
+                  fontSize: isMobile ? "clamp(28px, 11vw, 44px)" : "clamp(30px, 5vw, 56px)",
+                  color: "#C9A84C",
+                  textShadow: "0 0 30px rgba(201,168,76,0.55), 0 2px 10px rgba(0,0,0,0.9)",
+                  lineHeight: 1,
+                  letterSpacing: "0.02em",
+                }}
+              >
+                30 Years of Excellence
+              </div>
 
-              <div style={{
-                fontFamily: "'Cinzel', serif", fontSize: "clamp(8px, 1vw, 11px)",
-                color: "rgba(201,168,76,0.6)", letterSpacing: "0.3em", textTransform: "uppercase"
-              }}>Est. 1995 · A Century of SRCC · 1926 – 2026</div>
+              <div
+                style={{
+                  fontFamily: "'Cinzel', serif",
+                  fontSize: isMobile ? "10px" : "clamp(8px, 1vw, 11px)",
+                  color: "rgba(201,168,76,0.6)",
+                  letterSpacing: isMobile ? "0.18em" : "0.3em",
+                  textTransform: "uppercase",
+                  lineHeight: 1.5,
+                }}
+              >
+                Est. 1995 | A Century of SRCC | 1926 - 2026
+              </div>
             </div>
           </div>
 
-          {/* Scroll indicator */}
-          <div ref={scrollIndRef}
+          <div
+            ref={scrollIndRef}
             onClick={() => window.scrollTo({ top: window.innerHeight, behavior: "smooth" })}
             style={{
-              position: "absolute", bottom: "50px", left: "50%",
+              position: "absolute",
+              bottom: isMobile ? "28px" : "50px",
+              left: "50%",
               transform: "translateX(-50%)",
-              display: "flex", flexDirection: "column", alignItems: "center",
-              gap: "10px", zIndex: 10, cursor: "pointer"
-            }}>
-            <span style={{
-              fontFamily: "'Cinzel', serif", fontSize: "9px",
-              letterSpacing: "0.4em", color: "rgba(201,168,76,0.85)",
-              textTransform: "uppercase", textShadow: "0 0 16px rgba(201,168,76,0.5)"
-            }}>Scroll to Enter</span>
-            <div style={{
-              width: "1px", height: "36px",
-              background: "linear-gradient(180deg, rgba(201,168,76,0.8), transparent)",
-              animation: "bounce 1.9s ease-in-out infinite"
-            }} />
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "10px",
+              zIndex: 10,
+              cursor: "pointer",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "'Cinzel', serif",
+                fontSize: isMobile ? "8px" : "9px",
+                letterSpacing: isMobile ? "0.24em" : "0.4em",
+                color: "rgba(201,168,76,0.85)",
+                textTransform: "uppercase",
+                textShadow: "0 0 16px rgba(201,168,76,0.5)",
+              }}
+            >
+              Scroll to Enter
+            </span>
+            <div
+              style={{
+                width: "1px",
+                height: isMobile ? "28px" : "36px",
+                background: "linear-gradient(180deg, rgba(201,168,76,0.8), transparent)",
+                animation: "bounce 1.9s ease-in-out infinite",
+              }}
+            />
           </div>
 
-          {/* NEW TEXT SEQUENCE */}
-          <div style={{
-            position: "absolute", zIndex: 5, inset: 0,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            pointerEvents: "none"
-          }}>
-            <div id="alumni-mixer-text" style={{
-              textAlign: "center", padding: "0 24px",
-            }}>
-                <div ref={mlTextRef} style={{
-                    fontFamily: "'Pinyon Script', cursive",
-                    fontSize: "clamp(45px, 8.5vw, 80px)",
-                    color: "#F6E8BC",
-                    textShadow: "0 0 55px rgba(201,168,76,0.38), 0 4px 32px rgba(0,0,0,0.98)",
-                    lineHeight: 1,
-                    opacity: 0,
-                    transform: "translate3d(0, 80px, 0)",
-                    willChange: "transform, opacity"
-                }}>
-                    3rd Alumni Mixer
-                </div>
-              
-                <div ref={countdownRef} style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    gap: '2rem',
-                    marginTop: '2rem',
-                    fontFamily: "'Cinzel', serif",
-                    opacity: 0,
-                    transform: "translate3d(0, 32px, 0)",
-                    willChange: "transform, opacity"
-                }}>
-                    <div>
-                        <span style={{ fontSize: '3rem', color: '#F6E8BC' }}>{countdown.days}</span>
-                        <span style={{ display: 'block', color: 'rgba(218, 224, 234, 0.6)', fontSize: '0.8rem', letterSpacing: '0.2em' }}>DAYS</span>
-                    </div>
-                    <div>
-                        <span style={{ fontSize: '3rem', color: '#F6E8BC' }}>{countdown.hours}</span>
-                        <span style={{ display: 'block', color: 'rgba(218, 224, 234, 0.6)', fontSize: '0.8rem', letterSpacing: '0.2em' }}>HOURS</span>
-                    </div>
-                    <div>
-                        <span style={{ fontSize: '3rem', color: '#F6E8BC' }}>{countdown.minutes}</span>
-                        <span style={{ display: 'block', color: 'rgba(218, 224, 234, 0.6)', fontSize: '0.8rem', letterSpacing: '0.2em' }}>MINUTES</span>
-                    </div>
-                    <div>
-                        <span style={{ fontSize: '3rem', color: '#F6E8BC' }}>{countdown.seconds}</span>
-                        <span style={{ display: 'block', color: 'rgba(218, 224, 234, 0.6)', fontSize: '0.8rem', letterSpacing: '0.2em' }}>SECONDS</span>
-                    </div>
-                </div>
+          <div
+            style={{
+              position: "absolute",
+              zIndex: 5,
+              inset: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              pointerEvents: "none",
+            }}
+          >
+            <div
+              id="alumni-mixer-text"
+              style={{
+                textAlign: "center",
+                padding: isMobile ? "0 18px" : "0 24px",
+                maxWidth: isMobile ? "360px" : "none",
+              }}
+            >
+              <div
+                ref={mlTextRef}
+                style={{
+                  fontFamily: "'Pinyon Script', cursive",
+                  fontSize: isMobile ? "clamp(34px, 12vw, 52px)" : "clamp(45px, 8.5vw, 80px)",
+                  color: "#F6E8BC",
+                  textShadow: "0 0 55px rgba(201,168,76,0.38), 0 4px 32px rgba(0,0,0,0.98)",
+                  lineHeight: 1,
+                  opacity: 0,
+                  transform: "translate3d(0, 80px, 0)",
+                  willChange: "transform, opacity",
+                }}
+              >
+                3rd Alumni Mixer
+              </div>
 
-                <div ref={mlSubRef} style={{
-                    fontFamily: "'Times New Roman', Times, serif",
-                    fontSize: "clamp(13px, 1.6vw, 17px)",
-                    color: "#C8CDD6",
-                    marginTop: "28px", letterSpacing: "0.07em",
-                    opacity: 0,
-                    transform: "translate3d(0, 32px, 0)",
-                    willChange: "transform, opacity"
-                }}>
-                    18 April 2026 • 4:00 P.M. • SRCC Campus
-                </div>
+              <div
+                ref={countdownRef}
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: isMobile ? "repeat(2, minmax(0, 1fr))" : "repeat(4, minmax(0, 1fr))",
+                  gap: isCompactMobile ? "0.75rem" : isMobile ? "1rem" : "2rem",
+                  marginTop: isMobile ? "1.2rem" : "2rem",
+                  fontFamily: "'Cinzel', serif",
+                  opacity: 0,
+                  transform: "translate3d(0, 32px, 0)",
+                  willChange: "transform, opacity",
+                }}
+              >
+                {[
+                  { value: countdown.days, label: "Days" },
+                  { value: countdown.hours, label: "Hours" },
+                  { value: countdown.minutes, label: "Minutes" },
+                  { value: countdown.seconds, label: "Seconds" },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    style={{
+                      minWidth: isMobile ? "88px" : "104px",
+                      padding: isMobile ? "10px 8px" : "0",
+                      border: isMobile ? "1px solid rgba(201,168,76,0.16)" : "none",
+                      background: isMobile ? "rgba(8, 4, 1, 0.36)" : "transparent",
+                      backdropFilter: isMobile ? "blur(6px)" : "none",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: isCompactMobile ? "2rem" : isMobile ? "2.3rem" : "3rem",
+                        color: "#F6E8BC",
+                      }}
+                    >
+                      {item.value}
+                    </span>
+                    <span
+                      style={{
+                        display: "block",
+                        color: "rgba(218, 224, 234, 0.6)",
+                        fontSize: isMobile ? "0.65rem" : "0.8rem",
+                        letterSpacing: isMobile ? "0.12em" : "0.2em",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      {item.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <div
+                ref={mlSubRef}
+                style={{
+                  fontFamily: "'Times New Roman', Times, serif",
+                  fontSize: isMobile ? "clamp(11px, 3.8vw, 14px)" : "clamp(13px, 1.6vw, 17px)",
+                  color: "#C8CDD6",
+                  marginTop: isMobile ? "18px" : "28px",
+                  letterSpacing: isMobile ? "0.04em" : "0.07em",
+                  lineHeight: 1.6,
+                  opacity: 0,
+                  transform: "translate3d(0, 32px, 0)",
+                  willChange: "transform, opacity",
+                }}
+              >
+                18 April 2026 | 4:00 P.M. | SRCC Campus
+              </div>
             </div>
           </div>
-
         </div>
       </div>
     </>

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`;
 
@@ -32,6 +32,15 @@ const landingOptions = [
 export default function LandingPage() {
   const headingBlockRef = useRef(null);
   const cardRefs = useRef([]);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window === "undefined" ? false : window.innerWidth <= 768
+  );
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   useEffect(() => {
     cardRefs.current = cardRefs.current.slice(0, landingOptions.length);
@@ -83,7 +92,7 @@ export default function LandingPage() {
         background: "linear-gradient(180deg, #0A0500 0%, #0D0602 100%)",
         minHeight: "100vh",
         position: "relative",
-        padding: "110px 40px 90px",
+        padding: isMobile ? "88px 18px 64px" : "110px 40px 90px",
       }}
     >
       <div
@@ -123,7 +132,7 @@ export default function LandingPage() {
                 <div className="landing-option-content">
                   <h3>{option.title}</h3>
                 </div>
-                <div className="landing-option-hover">
+                <div className={`landing-option-hover${isMobile ? " landing-option-hover-mobile" : ""}`}>
                   <span className="landing-option-hover-line" aria-hidden />
                   <p>{option.description}</p>
                 </div>

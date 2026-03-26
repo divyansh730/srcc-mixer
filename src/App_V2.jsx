@@ -1,11 +1,11 @@
-import ScrollStory from "./components/ScrollStory";
+import ScrollStoryV2 from "./components/ScrollStory_V2";
 import FilmStrip from "./components/FilmStrip";
 import LandingPage from "./components/LandingPage";
 
-export default function App() {
+export default function AppV2() {
   return (
     <>
-      <ScrollStory />
+      <ScrollStoryV2 />
       <FilmStrip />
       <LandingPage />
     </>

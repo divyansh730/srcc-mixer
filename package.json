@@ -1,8 +1,14 @@
 {
   "name": "srcc-mixer",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "SRCC Alumni Mixer microsite built with React, Vite, and Tailwind CSS.",
   "type": "module",
+  "homepage": "https://divyansh730.github.io/srcc-mixer/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/divyansh730/srcc-mixer.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",

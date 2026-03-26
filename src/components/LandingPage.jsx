@@ -35,12 +35,29 @@ export default function LandingPage() {
   const [isMobile, setIsMobile] = useState(() =>
     typeof window === "undefined" ? false : window.innerWidth <= 768
   );
+  const [activeCardId, setActiveCardId] = useState(null);
 
   useEffect(() => {
     const onResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener("resize", onResize, { passive: true });
     return () => window.removeEventListener("resize", onResize);
   }, []);
+
+  useEffect(() => {
+    if (!isMobile && activeCardId) {
+      setActiveCardId(null);
+    }
+  }, [activeCardId, isMobile]);
+
+  const handleCardClick = (event, option) => {
+    event.preventDefault();
+
+    if (!isMobile) return;
+
+    if (activeCardId !== option.id) {
+      setActiveCardId(option.id);
+    }
+  };
 
   useEffect(() => {
     cardRefs.current = cardRefs.current.slice(0, landingOptions.length);
@@ -121,7 +138,8 @@ export default function LandingPage() {
               ref={(el) => {
                 cardRefs.current[index] = el;
               }}
-              className="landing-option-card"
+              onClick={(event) => handleCardClick(event, option)}
+              className={`landing-option-card${activeCardId === option.id ? " landing-option-card-active" : ""}`}
               style={{
                 "--landing-stagger": `${index * 220}ms`,
                 backgroundImage: `url('${option.image}')`,

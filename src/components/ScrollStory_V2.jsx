@@ -19,6 +19,7 @@ export default function ScrollStoryV2() {
   const mlSubRef = useRef(null);
 
   const [showCountdownInHeader, setShowCountdownInHeader] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [viewportWidth, setViewportWidth] = useState(() =>
     typeof window === "undefined" ? 1440 : window.innerWidth
   );
@@ -31,7 +32,7 @@ export default function ScrollStoryV2() {
 
   const isMobile = viewportWidth <= 768;
   const isCompactMobile = viewportWidth <= 480;
-  const headerHeight = isMobile ? 80 : 68;
+  const headerHeight = isMobile ? 76 : 68;
   const logoEndSize = isMobile ? 28 : 34;
   const logoEndX = isMobile ? 16 : 40;
   const logoEndY = (headerHeight - logoEndSize) / 2;
@@ -58,6 +59,12 @@ export default function ScrollStoryV2() {
     window.addEventListener("resize", onResize, { passive: true });
     return () => window.removeEventListener("resize", onResize);
   }, []);
+
+  useEffect(() => {
+    if (!isMobile && menuOpen) {
+      setMenuOpen(false);
+    }
+  }, [isMobile, menuOpen]);
 
   useEffect(() => {
     let winH = window.innerHeight;
@@ -257,37 +264,90 @@ export default function ScrollStoryV2() {
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "12px" : "2rem", minWidth: 0 }}>
-          {!isCompactMobile && (
-            <div
-              style={{
-                opacity: showCountdownInHeader ? 1 : 0,
-                transition: "opacity 0.5s",
-                fontFamily: "'Cinzel', serif",
-                fontSize: isMobile ? "10px" : "17px",
-                color: "#C9A84C",
-                letterSpacing: isMobile ? "0.04em" : "0.1em",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {`${String(countdown.days).padStart(2, "0")}:${String(countdown.hours).padStart(
-                2,
-                "0"
-              )}:${String(countdown.minutes).padStart(2, "0")}:${String(countdown.seconds).padStart(2, "0")}`}
-            </div>
+          {isMobile ? (
+            <>
+              <div
+                style={{
+                  opacity: showCountdownInHeader ? 1 : 0,
+                  transform: `translateY(${showCountdownInHeader ? "0px" : "4px"})`,
+                  transition: "opacity 0.35s ease, transform 0.35s ease",
+                  fontFamily: "'Cinzel', serif",
+                  fontSize: isCompactMobile ? "10px" : "12px",
+                  color: "#C9A84C",
+                  letterSpacing: isCompactMobile ? "0.05em" : "0.08em",
+                  whiteSpace: "nowrap",
+                  textAlign: "right",
+                }}
+              >
+                {`${String(countdown.days).padStart(2, "0")}:${String(countdown.hours).padStart(
+                  2,
+                  "0"
+                )}:${String(countdown.minutes).padStart(2, "0")}:${String(countdown.seconds).padStart(2, "0")}`}
+              </div>
+              <button
+                type="button"
+                aria-label="Open navigation menu"
+                aria-expanded={menuOpen}
+                className={`mobile-menu-button${menuOpen ? " mobile-menu-button-open" : ""}`}
+                onClick={() => setMenuOpen((open) => !open)}
+              >
+                <span />
+                <span />
+                <span />
+              </button>
+            </>
+          ) : (
+            <>
+              {!isCompactMobile && (
+                <div
+                  style={{
+                    opacity: showCountdownInHeader ? 1 : 0,
+                    transition: "opacity 0.5s",
+                    fontFamily: "'Cinzel', serif",
+                    fontSize: "17px",
+                    color: "#C9A84C",
+                    letterSpacing: "0.1em",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {`${String(countdown.days).padStart(2, "0")}:${String(countdown.hours).padStart(
+                    2,
+                    "0"
+                  )}:${String(countdown.minutes).padStart(2, "0")}:${String(countdown.seconds).padStart(2, "0")}`}
+                </div>
+              )}
+              <nav style={{ display: "flex", gap: "28px", flexWrap: "wrap", justifyContent: "flex-end" }}>
+                <a href="#memory-wall" className="nav-link">
+                  Memory Wall
+                </a>
+                <a href="#pc-gallery" className="nav-link">
+                  PC Gallery
+                </a>
+                <a href="#quiz" className="nav-link">
+                  Quiz
+                </a>
+              </nav>
+            </>
           )}
-          <nav style={{ display: "flex", gap: isMobile ? "10px" : "28px", flexWrap: "wrap", justifyContent: "flex-end" }}>
-            <a href="#memory-wall" className="nav-link">
-              Memory Wall
-            </a>
-            <a href="#pc-gallery" className="nav-link">
-              PC Gallery
-            </a>
-            <a href="#quiz" className="nav-link">
-              Quiz
-            </a>
-          </nav>
         </div>
       </header>
+
+      {isMobile && (
+        <div
+          className={`mobile-menu-panel${menuOpen ? " mobile-menu-panel-open" : ""}`}
+          style={{ top: `${headerHeight}px` }}
+        >
+          <a href="#memory-wall" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
+            Memory Wall
+          </a>
+          <a href="#pc-gallery" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
+            PC Gallery
+          </a>
+          <a href="#quiz" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
+            Quiz
+          </a>
+        </div>
+      )}
 
       <div
         ref={logoRef}

@@ -6,24 +6,24 @@ const landingOptions = [
   {
     id: "memory-wall",
     title: "Memory Wall",
-    href: "/memory-wall",
     image: assetUrl("srcc-clock.jpg"),
+    status: "Coming Soon",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer in odio et arcu posuere viverra.",
   },
   {
     id: "pc-gallery",
     title: "PC Gallery",
-    href: "/pc-gallery",
     image: assetUrl("srcc-corridor.jpg"),
+    status: "Coming Soon",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor sem id nunc interdum facilisis.",
   },
   {
     id: "quiz",
     title: "Quiz",
-    href: "/quiz",
     image: assetUrl("srcc-clock.jpg"),
+    status: "Coming Soon",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean varius ante ac eros tincidunt, non feugiat justo tempus.",
   },
@@ -114,10 +114,10 @@ export default function LandingPage() {
 
         <div className="landing-grid">
           {landingOptions.map((option, index) => (
-            <a
+            <button
               key={option.id}
               id={option.id}
-              href={option.href}
+              type="button"
               ref={(el) => {
                 cardRefs.current[index] = el;
               }}
@@ -134,10 +134,21 @@ export default function LandingPage() {
                 </div>
                 <div className={`landing-option-hover${isMobile ? " landing-option-hover-mobile" : ""}`}>
                   <span className="landing-option-hover-line" aria-hidden />
+                  <p
+                    style={{
+                      fontFamily: "'Cinzel', serif",
+                      fontSize: isMobile ? "9px" : "10px",
+                      letterSpacing: "0.26em",
+                      color: "rgba(201, 168, 76, 0.75)",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {option.status}
+                  </p>
                   <p>{option.description}</p>
                 </div>
               </div>
-            </a>
+            </button>
           ))}
         </div>
       </div>

@@ -32,7 +32,7 @@ export default function BirdseyeSection() {
       style={{
         position: "relative",
         background: "linear-gradient(180deg, #0D0602 0%, #0A0500 55%, #080402 100%)",
-        padding: "24px 12px 0",
+        padding: "16px 8px 0", // Reduced padding for mobile
         marginTop: "-8px",
         borderTop: "1px solid rgba(201, 168, 76, 0.1)",
       }}
@@ -53,14 +53,14 @@ export default function BirdseyeSection() {
           position: "relative",
           zIndex: 2,
           maxWidth: "1180px",
-          margin: "0 auto 20px",
+          margin: "0 auto 12px", // Tighter margin
           textAlign: "center",
         }}
       >
         <h2
           className="landing-welcome-title"
           style={{
-            fontSize: "clamp(34px, 6.5vw, 64px)",
+            fontSize: "clamp(32px, 6vw, 60px)", // Slightly smaller
             marginBottom: 0,
           }}
         >
@@ -86,11 +86,11 @@ export default function BirdseyeSection() {
             display: "block",
             width: "100%",
             height: "min(100vh, 920px)",
-            minHeight: "520px",
+            minHeight: "480px", // Reduced minHeight for mobile
             border: "none",
             borderRadius: "4px",
             background: "#0A0805",
-            boxShadow: "0 24px 80px rgba(0,0,0,0.45)",
+            boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
           }}
         />
       </div>

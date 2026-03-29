@@ -55,7 +55,7 @@
     }
 
     header {
-      padding: 80px 20px 60px;
+      padding: 20px 20px 0; /* Minimized padding */
       text-align: center;
       position: relative;
       z-index: 10;
@@ -70,11 +70,11 @@
 
     .wall-title {
       font-family: 'Pinyon Script', cursive;
-      font-size: clamp(50px, 8vw, 90px);
+      font-size: clamp(45px, 7vw, 85px); /* Slightly smaller to feel more elegant */
       color: var(--gold-light);
       text-shadow: 0 0 35px rgba(212, 175, 55, 0.25);
       font-weight: 400;
-      margin-bottom: 0;
+      margin-bottom: -10px; /* Pull content up */
     }
 
     /* ── Scattered Wall Container ── */
@@ -82,8 +82,9 @@
       position: relative;
       max-width: 1600px;
       margin: 0 auto;
-      min-height: 80vh;
-      padding-bottom: 250px;
+      min-height: 40vh; /* Reduced from 60vh */
+      padding-top: 20px; /* Reduced padding top */
+      padding-bottom: 120px; 
       z-index: 5;
     }
 
@@ -472,18 +473,36 @@
     }
 
     @media (max-width: 768px) {
-      .mixer-back { margin: 16px 20px 0; }
+      header { padding: 15px 20px 5px; } /* More compact header on mobile */
+      .wall-title { font-size: 48px; }
+      .mixer-back { margin: 10px 16px 0; font-size: 8px; }
       .memory-note {
         position: relative !important;
         left: 0 !important;
         top: 0 !important;
-        margin: 40px auto;
+        margin: 20px auto; /* Tighter vertical spacing */
+        width: 92vw;
+        padding: 28px 24px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.6);
       }
+      .note-text { font-size: 19px; line-height: 1.35; }
       #wall-container {
         display: flex;
         flex-direction: column;
         align-items: center;
+        padding-top: 10px;
+        padding-bottom: 140px;
       }
+      .etch-form {
+        padding: 35px 20px; /* Adjusted padding */
+        width: 94vw;
+        border-radius: 4px;
+      }
+      .form-header h3 { font-size: 15px; margin-bottom: 35px; }
+      .etch-input, .custom-select-trigger { font-size: 19px; }
+      .submit-etch, .close-etch { padding: 12px 25px; font-size: 10px; }
+      #submission-bar { padding: 35px 20px; }
+      .etch-trigger { width: 85%; padding: 14px 20px; font-size: 10px; }
     }
   </style>
 </head>

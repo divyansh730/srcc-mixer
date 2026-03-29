@@ -77,57 +77,6 @@
       mix-blend-mode: overlay;
     }
 
-    /* ── Header Wordmark ── */
-    #wordmark {
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      z-index: 10;
-      padding: 32px 48px;
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      background: linear-gradient(to bottom, rgba(5,3,1,0.7) 0%, transparent 100%);
-    }
-
-    #wordmark .title-block {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    #wordmark .cell-name {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(10px, 1.1vw, 14px);
-      letter-spacing: 0.3em;
-      color: var(--gold);
-      text-transform: uppercase;
-    }
-
-    #wordmark .college-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(18px, 2.2vw, 28px);
-      font-weight: 300;
-      color: var(--cream);
-      letter-spacing: 0.08em;
-    }
-
-    #wordmark .tagline {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: clamp(11px, 1vw, 13px);
-      color: var(--gold-light);
-      letter-spacing: 0.1em;
-      opacity: 0.85;
-    }
-
-    #wordmark .est {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(9px, 0.75vw, 11px);
-      letter-spacing: 0.25em;
-      color: rgba(212,175,55,0.6);
-      margin-top: 2px;
-    }
-
     /* ── Pulse Point Markers ── */
     .pulse-point {
       position: absolute;
@@ -136,7 +85,7 @@
       transform: translate(-50%, -50%);
       cursor: pointer;
       z-index: 8;
-      touch-action: none; /* Crucial for mobile drag */
+      touch-action: none;
     }
 
     .pulse-point:hover .pulse-label { opacity: 1; transform: translateX(-50%) translateY(-4px); }
@@ -350,7 +299,6 @@
       background: #000;
       position: relative;
       overflow: hidden;
-      /* 16:9 aspect */
       aspect-ratio: 16 / 9;
     }
 
@@ -414,38 +362,7 @@
       letter-spacing: 0.3em;
     }
 
-    /* ── Responsive ── */
-    @media (max-width: 600px) {
-      #wordmark { padding: 20px 22px; }
-      .ring-3 { display: none; }
-      /* Mobile fix for distortion: ensure stage doesn't overflow and points scale reasonably */
-      #stage { height: 100dvh; }
-      .pulse-point { width: 14px; height: 14px; }
-      .dot { width: 8px; height: 8px; }
-      .ring-1 { width: 28px; height: 28px; }
-      .ring-2 { width: 44px; height: 44px; }
-    }
-
-    /* Visual Editor Styles (keep for admin if needed, but dragMode will be off by default) */
-    #editor-bar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 200;
-      display: none; /* Hidden by default */
-      align-items: center;
-      gap: 12px;
-      padding: 10px 18px;
-      background: rgba(5,3,1,0.96);
-      border-bottom: 1px solid var(--gold-dim);
-      font-family: 'Cinzel', serif;
-      font-size: 10px;
-      color: var(--gold);
-    }
-    body.drag-mode .pulse-point {
-      cursor: grab !important;
-      outline: 1px dashed rgba(212,175,55,0.5);
-      outline-offset: 6px;
-    }
+    /* Coordinate Badge for Dragging */
     .coord-badge {
       position: absolute;
       top: calc(100% + 24px);
@@ -460,8 +377,19 @@
       color: var(--gold-light);
       opacity: 0;
       pointer-events: none;
+      z-index: 60;
     }
-    body.drag-mode .pulse-point:hover .coord-badge { opacity: 1; }
+    body.drag-mode .pulse-point:hover .coord-badge,
+    body.drag-mode .pulse-point.dragging .coord-badge { opacity: 1; }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      #stage { height: 100dvh; }
+      .pulse-point { width: 14px; height: 14px; }
+      .dot { width: 8px; height: 8px; }
+      .ring-1 { width: 28px; height: 28px; }
+      .ring-2 { width: 44px; height: 44px; }
+    }
   </style>
 </head>
 
@@ -470,7 +398,7 @@
   <div id="stage">
 
     <!-- ── Campus Aerial Background ── -->
-    <img id="campus-bg" src="Birdseye.htm_files/birdseye_fixed.jpg">
+    <img id="campus-bg" src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCATsBYQDASIAAhEBAxEB/8QAHAAAAgMBAQEBAAAAAAAAAAAAAwQCBQYBAAcI/8QAUxAAAgEDAwIEAwYDBQUFBQIPAQIDAAQRBRIhMUEGEyJRFGFxByMygZGhFUKxJDNSwdEWU2Jykgg0Q4LhFyVEk/DxNUVUc6JVY4MmZNJ0hJSywv/EABoBAAMBAQEBAAAAAAAAAAAAAAECAwAEBQb/xAAqEQACAwACAgIDAAMAAwEBAQAAAQIDERIhBDETQRQiUQUyYRUjQlIzcf/aAAwDAQACEQMRAD8A/TUbvnGCB8xXpJfK9Q60Xzk8nAHPtSkxMa7myc9MV6Ud0zYK6uXcYFBjkl75Ne2ljnNSCkVUm2FM1yp5FSWRn/GOa4wlXknP0rixvIDjPzomQxEyleTXI1jBJz+ppaMNyBQZ1lDdaAxbWciGIrkcGu3wRrbGf0NUyyNGeD+lE815Bgmhx7FcwkbANnPT51Yw3qqoGKpJDsUgGjaahmk9RAGO5rSWo0ZGk0145JOG/Kltd2hwQR70tbRSW0m4SK30NB1CZpZMM3y61zOvspy6LnTpfiLVmX2xVJMpE7gjuaLp178DGY+OTnrXJJBcSNIARnmmgmmB+hV8AE1KyQSvt9zgVPyi0ZPSu6cuyJJPA561WcuiST0uWsbq3ilZZVb0nAx8qz1tf3ZgkjcjOc59q0q6nbSKyLJyeDms+dNuWu2MRUqep7VCvfsrxLKNGaA5mJ4z0oGljybl90hPPANTjaWOMgxE9jTGlrGxdmh7ZyaLeIMV2CVJJPiiAfvDlfyrurSg3dgR0hl5P+dWkCoBGABVVrcJFvcSDO5ZRtA7ik3WNxJeIriNoQisDxk4osjRzaKImYAlNp/SqGNGeUK57c5rt3LIp8pXOM+/enVe9CtlxYK50uOAfiVduaOZhkRMRwvJqltdSeJ2Vifw45oxMs0bXCvj5Y5NF14zchiK3KxPl85JPSloZXWAxJGWO7sO2ab09lltdysT1H50OwuFh1MxsFwVxmtrRhhDHHA0SH581KwLJZsCCBlic+1J22Ir5o3I4YnmrG9uIYrU4HbPApJJswtc3kEVoxgRip6H596pY[... 409827 chars omitted ...]">
 
     <!-- Atmospheric layers -->
     <div id="vignette"></div>
@@ -478,124 +406,112 @@
 
     <!-- ── Pulse Point Markers ── -->
 
-    <!-- Sports Ground: top:18.1% left:52.4% -->
+    <!-- Sports Ground -->
     <div class="pulse-point" style="top: 18.1%; left: 52.4%;" data-title="Sports Ground" data-eyebrow="Sports &amp; Recreation · SRCC" data-subtitle="Beyond the Classroom" data-desc="The SRCC Sports Ground — where future captains of industry took their first breaks, built lifelong friendships, and learned what it truly means to lead a team." data-video="">
-      <div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
         <span class="l-title">Sports Ground</span><span class="l-sub">Sports &amp; Recreation</span>
       </div></div>
-      <span class="coord-badge"></span>
     </div>
 
-    <!-- Sports Complex: top:15.1% left:79.6% -->
+    <!-- Sports Complex -->
     <div class="pulse-point" style="top: 15.1%; left: 79.6%;" data-title="Sports Complex" data-eyebrow="Sports Complex · SRCC" data-subtitle="Arena of Champions" data-desc="The SRCC Sports Complex — a full-fledged sporting facility that has nurtured athletes and champions across generations of SRCC students." data-video="">
-      <div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
         <span class="l-title">Sports Complex</span><span class="l-sub">Arena of Champions</span>
       </div></div>
-      <span class="coord-badge"></span>
     </div>
 
-    <!-- Nescafe Annex: top:31.9% left:70.0% -->
-    <div class="pulse-point" style="top:31.9%; left:70.0%" data-title="Nescafe Annex" data-eyebrow="The Hangout · SRCC" data-subtitle="Fuel for Brilliance" data-desc="The Nescafe Annex — SRCC's beloved coffee corner where students refuel between lectures, friendships are struck over chai, and great ideas are brewed." data-video="https://drive.google.com/uc?export=download&id=1T8do3zSdeEub22QtXYkEAziFU228G69E">
-      <div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+    <!-- Nescafe Annex -->
+    <div class="pulse-point" style="top: 31.9%; left: 70.0%;" data-title="Nescafe Annex" data-eyebrow="The Hangout · SRCC" data-subtitle="Fuel for Brilliance" data-desc="The Nescafe Annex — SRCC's beloved coffee corner where students refuel between lectures, friendships are struck over chai, and great ideas are brewed." data-video="https://drive.google.com/uc?export=download&id=1T8do3zSdeEub22QtXYkEAziFU228G69E">
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
         <span class="l-title">Nescafe Annex</span><span class="l-sub">The Hangout</span>
       </div></div>
-      <span class="coord-badge"></span>
     </div>
 
-    <!-- Library: top:39.9% left:76.6% -->
+    <!-- Library -->
     <div class="pulse-point" style="top: 30.5%; left: 79.6%;" data-title="SRCC Library" data-eyebrow="Knowledge Centre · SRCC" data-subtitle="Legacy in Every Volume" data-desc="The SRCC Library — a repository of commerce, economics and business knowledge. The quiet within these walls has shaped some of India's sharpest financial minds." data-video="">
-      <div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
         <span class="l-title">Library</span><span class="l-sub">Knowledge Centre</span>
       </div></div>
-      <span class="coord-badge"></span>
     </div>
 
-    <!-- Tute Block: top:39.8% left:8.9% -->
+    <!-- Tute Block -->
     <div class="pulse-point" style="top: 39.8%; left: 8.9%;" data-title="Tute Block" data-eyebrow="Academic Block · SRCC" data-subtitle="Where Commerce Comes Alive" data-desc="The Tute Block — SRCC's dedicated tutorial and classroom wing where commerce, economics and business concepts are debated, discussed and brought to life." data-video="">
-      <div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
         <span class="l-title">Tute Block</span><span class="l-sub">Academic Block</span>
       </div></div>
-      <span class="coord-badge"></span>
     </div>
 
-    <!-- Library Lawns: top:37.5% left:64.0% -->
+    <!-- Library Lawns -->
     <div class="pulse-point" style="top: 37.5%; left: 64.0%;" data-title="Library Lawns" data-eyebrow="SRCC Library Lawns" data-subtitle="Green Heart of Campus" data-desc="The serene Library Lawns — a quiet green expanse where students unwind between lectures, study under open skies, and share the stories that define the SRCC experience." data-video="">
-      <div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
         <span class="l-title">Library Lawns</span><span class="l-sub">Green Heart of Campus</span>
       </div></div>
-      <span class="coord-badge"></span>
     </div>
 
-    <!-- New Building: top:36.8% left:22.6% -->
+    <!-- New Building -->
     <div class="pulse-point" style="top: 36.8%; left: 22.6%;" data-title="New Building" data-eyebrow="Academic Block · SRCC" data-subtitle="Modern Academia" data-desc="The New Building — SRCC's modern academic expansion, equipped with state-of-the-art facilities to complement the institution's century-old legacy." data-video="">
-      <div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
         <span class="l-title">New Building</span><span class="l-sub">Academic Block</span>
       </div></div>
-      <span class="coord-badge"></span>
     </div>
 
-    <!-- Co-op: top:45.2% left:95.0% -->
-    <div class="pulse-point" style="top:45.2%; left:95.0%" data-title="Co-op" data-eyebrow="Cooperative Store · SRCC" data-subtitle="The Campus Store" data-desc="The SRCC Co-operative Store — a student-run institution providing stationery, essentials and much more, embodying the cooperative spirit at the heart of SRCC." data-video="https://drive.google.com/uc?export=download&id=1LfIe9JJ8i5xkCxTXUjRxJub-t2WdFE6f">
-      <div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+    <!-- Co-op -->
+    <div class="pulse-point" style="top: 45.2%; left: 95.0%;" data-title="Co-op" data-eyebrow="Cooperative Store · SRCC" data-subtitle="The Campus Store" data-desc="The SRCC Co-operative Store — a student-run institution providing stationery, essentials and much more, embodying the cooperative spirit at the heart of SRCC." data-video="https://drive.google.com/uc?export=download&id=1LfIe9JJ8i5xkCxTXUjRxJub-t2WdFE6f">
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
         <span class="l-title">Co-op</span><span class="l-sub">Cooperative Store</span>
       </div></div>
-      <span class="coord-badge"></span>
     </div>
 
-    <!-- Clock Tower: top:49.7% left:51.8% -->
-    <div class="pulse-point" style="top:49.7%; left:51.8%" data-title="The Clock Tower" data-eyebrow="Main Entrance · SRCC" data-subtitle="The Iconic Heart of Campus" data-desc="The legendary SRCC clock tower — the most photographed landmark on campus and the symbolic gateway to 100 years of academic excellence." data-video="https://drive.google.com/uc?export=download&id=1YmLZOu_B4WI-CBL4Z6WcGtj8ITeFje_C">
-      <div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+    <!-- Clock Tower -->
+    <div class="pulse-point" style="top: 49.7%; left: 51.8%;" data-title="The Clock Tower" data-eyebrow="Main Entrance · SRCC" data-subtitle="The Iconic Heart of Campus" data-desc="The legendary SRCC clock tower — the most photographed landmark on campus and the symbolic gateway to 100 years of academic excellence." data-video="https://drive.google.com/uc?export=download&id=1YmLZOu_B4WI-CBL4Z6WcGtj8ITeFje_C">
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
         <span class="l-title">Clock Tower</span><span class="l-sub">Main Entrance</span>
       </div></div>
-      <span class="coord-badge"></span>
     </div>
 
-    <!-- Auditorium: top:28.8% left:50.9% -->
+    <!-- Auditorium -->
     <div class="pulse-point" style="top: 28.8%; left: 50.9%;" data-title="Shridhar Shriram Auditorium" data-eyebrow="The Auditorium · SRCC" data-subtitle="Stage for Distinction" data-desc="The Shridhar Shriram Auditorium — where placement drives are inaugurated, industry leaders address students, and three decades of careers have taken their first steps." data-video="">
-      <div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
         <span class="l-title">Auditorium</span><span class="l-sub">Shridhar Shriram</span>
       </div></div>
-      <span class="coord-badge"></span>
     </div>
 
-    <!-- PB Lawns: top:91.6% left:2.0% -->
+    <!-- PB Lawns -->
     <div class="pulse-point" style="top: 91.6%; left: 2.0%;" data-title="PB Lawns" data-eyebrow="SRCC PB Lawns" data-subtitle="Memories on the Green" data-desc="The SRCC PB Lawns — a cherished open space where students gather for events, festivals and quiet afternoons, creating memories that last well beyond graduation." data-video="">
-      <div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
         <span class="l-title">PB Lawns</span><span class="l-sub">PB Lawns</span>
       </div></div>
-      <span class="coord-badge"></span>
     </div>
 
-    <!-- Statue Lawns: top:93.1% left:30.9% -->
+    <!-- Statue Lawns -->
     <div class="pulse-point" style="top: 93.1%; left: 30.9%;" data-title="Statue Lawns" data-eyebrow="SRCC Statue Lawns" data-subtitle="Where Memories Were Made" data-desc="The SRCC Statue Lawns — the iconic heart of campus life where generations of students marked their milestones, farewells, and the beginning of something extraordinary." data-video="https://drive.google.com/uc?export=download&id=1o11abzKhAeN_HV3BFJzPndSjpDG9cQY-">
-      <div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
         <span class="l-title">Statue Lawns</span><span class="l-sub">Statue Lawns</span>
       </div></div>
-      <span class="coord-badge"></span>
     </div>
 
   </div><!-- /stage -->
@@ -603,10 +519,7 @@
 
   <!-- ══════════════ MODAL ══════════════ -->
   <div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-
     <div id="modal-box">
-
-      <!-- Header -->
       <div id="modal-header">
         <div id="modal-title-wrap">
           <span id="modal-eyebrow"></span>
@@ -615,32 +528,26 @@
         </div>
         <button id="modal-close" aria-label="Close modal">×</button>
       </div>
-
-      <!-- Video -->
       <div id="modal-video-wrap">
         <video id="modal-video" controls playsinline preload="none">
           Your browser does not support the video tag.
         </video>
         <iframe id="modal-iframe" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
       </div>
-
-      <!-- Decorative rule -->
       <div class="gold-rule"><span>◆</span></div>
-
-      <!-- Footer -->
       <div id="modal-footer">
         <p id="modal-desc"></p>
         <span id="modal-badge">30 Years of Excellence</span>
       </div>
-
-    </div><!-- /modal-box -->
-  </div><!-- /modal-overlay -->
+    </div>
+  </div>
 
 
   <script>
     const overlay   = document.getElementById('modal-overlay');
     const modalBox  = document.getElementById('modal-box');
     const video     = document.getElementById('modal-video');
+    const iframe    = document.getElementById('modal-iframe');
     const closeBtn  = document.getElementById('modal-close');
     const elTitle    = document.getElementById('modal-title');
     const elEyebrow  = document.getElementById('modal-eyebrow');
@@ -669,6 +576,7 @@
     }
 
     function openModal(point) {
+      if (dragMode) return;
       elTitle.textContent    = point.dataset.title   || '';
       elEyebrow.textContent  = point.dataset.eyebrow || 'The Placement Cell · SRCC';
       elSubtitle.textContent = point.dataset.subtitle || '';
@@ -680,11 +588,9 @@
       if (embed) {
         video.style.display = 'none';
         video.src = '';
-        const iframe = document.getElementById('modal-iframe');
         iframe.style.display = 'block';
         iframe.src = embed.src + (embed.src.includes('youtube') ? '?autoplay=1&rel=0' : '');
       } else {
-        const iframe = document.getElementById('modal-iframe');
         iframe.style.display = 'none';
         iframe.src = '';
         video.style.display = 'block';
@@ -704,29 +610,15 @@
       setTimeout(() => {
         video.pause();
         video.src = '';
-        const iframe = document.getElementById('modal-iframe');
         iframe.src = '';
       }, 420);
     }
 
-    document.querySelectorAll('.pulse-point').forEach(point => {
-      point.addEventListener('click', e => {
-        e.stopPropagation();
-        openModal(point);
-      });
-    });
-
-    closeBtn.addEventListener('click', closeModal);
-    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
-    });
-
     /* ════════════════════════════
        DRAG-AND-DROP EDITOR
     ════════════════════════════ */
-    let dragMode = false; // Drag mode off by default
-    const ebStatus = { textContent: '' }; // Mock for status updates
+    let dragMode = false; 
+    let activePoint = null, startMouse = {}, startPos = {};
 
     function updateBadge(point) {
       const badge = point.querySelector('.coord-badge');
@@ -736,8 +628,6 @@
       badge.textContent = `top:${t}%  left:${l}%`;
     }
     document.querySelectorAll('.pulse-point').forEach(updateBadge);
-
-    let activePoint = null, startMouse = {}, startPos = {};
 
     function startDrag(e, point) {
       if (!dragMode) return;
@@ -761,7 +651,8 @@
 
     function moveDrag(e) {
       if (!activePoint) return;
-      if (e.cancelable) e.preventDefault(); // Prevent scrolling on mobile
+      if (e.cancelable) e.preventDefault();
+
       const stage = document.getElementById('stage');
       const sr = stage.getBoundingClientRect();
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -790,6 +681,11 @@
     document.querySelectorAll('.pulse-point').forEach(point => {
       point.addEventListener('mousedown', e => startDrag(e, point));
       point.addEventListener('touchstart', e => startDrag(e, point), { passive: false });
+      point.addEventListener('click', e => {
+        if (dragMode) { e.stopPropagation(); return; }
+        e.stopPropagation();
+        openModal(point);
+      });
     });
 
     document.addEventListener('mousemove', moveDrag);
@@ -797,7 +693,12 @@
     document.addEventListener('mouseup', endDrag);
     document.addEventListener('touchend', endDrag);
 
-    // Toggle drag mode with a hidden sequence or console command if needed
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+    });
+
     window.enableDrag = () => {
       dragMode = true;
       document.body.classList.add('drag-mode');

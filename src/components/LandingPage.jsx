@@ -9,7 +9,7 @@ const landingOptions = [
     image: assetUrl("srcc-clock.jpg"),
     status: "Open",
     description:
-      "A collective wall of shared memories from alumni across decades.",
+      "A wall of shared memories from alumni across decades - etch your own!",
     href: "./memory-wall.html",
   },
   {
@@ -18,7 +18,7 @@ const landingOptions = [
     image: assetUrl("srcc-corridor.jpg"),
     status: "Open",
     description:
-      "Polaroid wall of The Placement Cell's memories.",
+      "A collection of The Placement Cell's memories - captured through the lens.",
     href: `${import.meta.env.BASE_URL}pc-gallery.html`,
   },
   {

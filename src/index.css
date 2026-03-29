@@ -152,6 +152,14 @@ body::before {
   margin-bottom: 56px;
 }
 
+.landing-heading-block--simple {
+  margin-bottom: 32px;
+}
+
+.landing-heading-block--simple .landing-welcome-title {
+  margin-top: 0;
+}
+
 .landing-heading-rule {
   width: 1px;
   height: 54px;
@@ -215,6 +223,9 @@ body::before {
   min-height: 395px;
   padding: 0;
   text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  scroll-margin-top: 100px;
   background-size: cover;
   background-position: center;
   border: none;
@@ -345,6 +356,10 @@ body::before {
     margin-bottom: 40px;
   }
 
+  .landing-heading-block--simple {
+    margin-bottom: 22px;
+  }
+
   .landing-heading-rule {
     height: 44px;
     margin-bottom: 22px;
@@ -404,8 +419,7 @@ body::before {
     line-height: 1.35;
   }
 
-  .landing-option-card:hover .landing-option-hover,
-  .landing-option-card-active .landing-option-hover {
+  .landing-option-card:hover .landing-option-hover {
     opacity: 1;
     pointer-events: auto;
   }
@@ -413,15 +427,6 @@ body::before {
   .landing-option-card:hover .landing-option-content {
     opacity: 1;
     transform: translate3d(0, 0, 0);
-  }
-
-  .landing-option-card-active .landing-option-base {
-    background: linear-gradient(180deg, rgba(4, 1, 0, 0.34) 0%, rgba(2, 1, 0, 0.86) 100%);
-  }
-
-  .landing-option-card-active .landing-option-content {
-    opacity: 0;
-    transform: translate3d(0, 10px, 0);
   }
 
   .nav-link {

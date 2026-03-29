@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`;
+const GALLERY_PAGE = `${import.meta.env.BASE_URL}pc-gallery.html`;
 const SRCC_LOGO = assetUrl("srcc-logo.png");
 const BG_CLOCK = assetUrl("srcc-clock.jpg");
 const BG_CORRIDOR = assetUrl("srcc-corridor.jpg");
@@ -19,6 +20,7 @@ export default function ScrollStoryV2() {
   const mlSubRef = useRef(null);
 
   const [showCountdownInHeader, setShowCountdownInHeader] = useState(false);
+  const [birdseyeInView, setBirdseyeInView] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [viewportWidth, setViewportWidth] = useState(() =>
     typeof window === "undefined" ? 1440 : window.innerWidth
@@ -32,10 +34,12 @@ export default function ScrollStoryV2() {
 
   const isMobile = viewportWidth <= 768;
   const isCompactMobile = viewportWidth <= 480;
-  const headerHeight = isMobile ? 76 : 68;
+  const mainHeaderBarHeight = isMobile ? 76 : 68;
+  const birdseyeSubRowHeight = birdseyeInView ? 30 : 0;
+  const headerTotalHeight = mainHeaderBarHeight + birdseyeSubRowHeight;
   const logoEndSize = isMobile ? 28 : 34;
   const logoEndX = isMobile ? 16 : 40;
-  const logoEndY = (headerHeight - logoEndSize) / 2;
+  const logoEndY = (mainHeaderBarHeight - logoEndSize) / 2;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -65,6 +69,33 @@ export default function ScrollStoryV2() {
       setMenuOpen(false);
     }
   }, [isMobile, menuOpen]);
+
+  useEffect(() => {
+    let io;
+    let cancelled = false;
+
+    const attach = () => {
+      if (cancelled) return;
+      const el = document.getElementById("birdseye-section");
+      if (!el) {
+        requestAnimationFrame(attach);
+        return;
+      }
+      io = new IntersectionObserver(
+        ([e]) => {
+          if (e) setBirdseyeInView(e.isIntersecting);
+        },
+        { root: null, rootMargin: "-48px 0px -35% 0px", threshold: [0, 0.08] }
+      );
+      io.observe(el);
+    };
+
+    requestAnimationFrame(attach);
+    return () => {
+      cancelled = true;
+      io?.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     let winH = window.innerHeight;
@@ -214,14 +245,14 @@ export default function ScrollStoryV2() {
           top: 0,
           left: 0,
           right: 0,
-          height: `${headerHeight}px`,
+          height: `${headerTotalHeight}px`,
           background: "rgba(6,2,0,0.96)",
           borderBottom: "1px solid rgba(201,168,76,0.18)",
           display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: isMobile ? "0 16px" : "0 40px",
-          gap: isMobile ? "12px" : "24px",
+          flexDirection: "column",
+          alignItems: "stretch",
+          justifyContent: "flex-start",
+          padding: 0,
           zIndex: 200,
           opacity: 0,
           pointerEvents: "none",
@@ -229,6 +260,17 @@ export default function ScrollStoryV2() {
           WebkitBackdropFilter: "blur(14px)",
         }}
       >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: isMobile ? "0 16px" : "0 40px",
+            gap: isMobile ? "12px" : "24px",
+            minHeight: `${mainHeaderBarHeight}px`,
+            flexShrink: 0,
+          }}
+        >
         <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "10px" : "12px", minWidth: 0 }}>
           <img
             src={SRCC_LOGO}
@@ -320,7 +362,7 @@ export default function ScrollStoryV2() {
                 <a href="#memory-wall" className="nav-link">
                   Memory Wall
                 </a>
-                <a href="#pc-gallery" className="nav-link">
+                <a href={GALLERY_PAGE} className="nav-link">
                   PC Gallery
                 </a>
                 <a href="#quiz" className="nav-link">
@@ -330,17 +372,56 @@ export default function ScrollStoryV2() {
             </>
           )}
         </div>
+        </div>
+        {birdseyeInView && (
+          <div
+            style={{
+              flexShrink: 0,
+              borderTop: "1px solid rgba(201,168,76,0.12)",
+              padding: "5px 16px 7px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "10px",
+              background: "linear-gradient(180deg, rgba(201,168,76,0.04), transparent)",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "'Cinzel', serif",
+                fontSize: isMobile ? "7px" : "8px",
+                letterSpacing: "0.32em",
+                color: "rgba(201,168,76,0.78)",
+                textTransform: "uppercase",
+              }}
+            >
+              The Placement Cell · SRCC
+            </span>
+            <span style={{ color: "rgba(201,168,76,0.25)", fontSize: "8px" }}>✦</span>
+            <span
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontStyle: "italic",
+                fontSize: isMobile ? "10px" : "11px",
+                color: "rgba(246,232,188,0.85)",
+                letterSpacing: "0.06em",
+              }}
+            >
+              Campus bird&rsquo;s-eye
+            </span>
+          </div>
+        )}
       </header>
 
       {isMobile && (
         <div
           className={`mobile-menu-panel${menuOpen ? " mobile-menu-panel-open" : ""}`}
-          style={{ top: `${headerHeight}px` }}
+          style={{ top: `${headerTotalHeight}px` }}
         >
           <a href="#memory-wall" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
             Memory Wall
           </a>
-          <a href="#pc-gallery" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
+          <a href={GALLERY_PAGE} className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
             PC Gallery
           </a>
           <a href="#quiz" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>

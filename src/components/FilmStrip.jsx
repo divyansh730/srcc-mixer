@@ -213,6 +213,7 @@ export default function FilmStrip() {
       style={{
         background: "#0A0500",
         paddingTop: "0px",
+        marginBottom: "-4px",
         borderTop: "1px solid rgba(201,168,76,0.08)",
       }}
     >

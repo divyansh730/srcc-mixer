@@ -10,14 +10,16 @@ const landingOptions = [
     status: "Coming Soon",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer in odio et arcu posuere viverra.",
+    href: "#memory-wall",
   },
   {
     id: "pc-gallery",
     title: "PC Gallery",
     image: assetUrl("srcc-corridor.jpg"),
-    status: "Coming Soon",
+    status: "Open",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor sem id nunc interdum facilisis.",
+      "Polaroid wall of The Placement Cell's memories.",
+    href: `${import.meta.env.BASE_URL}pc-gallery.html`,
   },
   {
     id: "quiz",
@@ -26,6 +28,7 @@ const landingOptions = [
     status: "Coming Soon",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean varius ante ac eros tincidunt, non feugiat justo tempus.",
+    href: "#quiz",
   },
 ];
 
@@ -35,29 +38,12 @@ export default function LandingPage() {
   const [isMobile, setIsMobile] = useState(() =>
     typeof window === "undefined" ? false : window.innerWidth <= 768
   );
-  const [activeCardId, setActiveCardId] = useState(null);
 
   useEffect(() => {
     const onResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener("resize", onResize, { passive: true });
     return () => window.removeEventListener("resize", onResize);
   }, []);
-
-  useEffect(() => {
-    if (!isMobile && activeCardId) {
-      setActiveCardId(null);
-    }
-  }, [activeCardId, isMobile]);
-
-  const handleCardClick = (event, option) => {
-    event.preventDefault();
-
-    if (!isMobile) return;
-
-    if (activeCardId !== option.id) {
-      setActiveCardId(option.id);
-    }
-  };
 
   useEffect(() => {
     cardRefs.current = cardRefs.current.slice(0, landingOptions.length);
@@ -107,11 +93,11 @@ export default function LandingPage() {
       id="mixer"
       style={{
         background: "linear-gradient(180deg, #0A0500 0%, #0D0602 100%)",
-        minHeight: "100vh",
         position: "relative",
-        padding: isMobile ? "88px 18px 64px" : "110px 40px 90px",
+        padding: isMobile ? "56px 18px 48px" : "72px 40px 60px",
       }}
     >
+
       <div
         style={{
           position: "absolute",
@@ -123,23 +109,20 @@ export default function LandingPage() {
       />
 
       <div style={{ position: "relative", zIndex: 2, maxWidth: "1180px", margin: "0 auto" }}>
-        <div ref={headingBlockRef} className="landing-heading-block">
-          <div className="landing-heading-rule" />
-          <p className="landing-heading-kicker">Explore</p>
+        <div ref={headingBlockRef} className="landing-heading-block landing-heading-block--simple">
           <h2 className="landing-welcome-title">Welcome to Memory Lane</h2>
         </div>
 
         <div className="landing-grid">
           {landingOptions.map((option, index) => (
-            <button
+            <a
               key={option.id}
               id={option.id}
-              type="button"
+              href={option.href}
               ref={(el) => {
                 cardRefs.current[index] = el;
               }}
-              onClick={(event) => handleCardClick(event, option)}
-              className={`landing-option-card${activeCardId === option.id ? " landing-option-card-active" : ""}`}
+              className="landing-option-card"
               style={{
                 "--landing-stagger": `${index * 220}ms`,
                 backgroundImage: `url('${option.image}')`,
@@ -155,7 +138,7 @@ export default function LandingPage() {
                   <p
                     style={{
                       fontFamily: "'Cinzel', serif",
-                      fontSize: isMobile ? "9px" : "10px",
+                      fontSize: "clamp(9px, 2.5vw, 10px)",
                       letterSpacing: "0.26em",
                       color: "rgba(201, 168, 76, 0.75)",
                       textTransform: "uppercase",
@@ -166,7 +149,7 @@ export default function LandingPage() {
                   <p>{option.description}</p>
                 </div>
               </div>
-            </button>
+            </a>
           ))}
         </div>
       </div>

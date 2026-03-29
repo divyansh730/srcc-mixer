@@ -77,6 +77,40 @@
       mix-blend-mode: overlay;
     }
 
+    /* ── Header Wordmark ── */
+    #wordmark {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 10;
+      padding: 32px 48px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      background: linear-gradient(to bottom, rgba(5,3,1,0.7) 0%, transparent 100%);
+    }
+
+    #wordmark .title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    #wordmark .cell-name {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(10px, 1.1vw, 14px);
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    #wordmark .college-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(18px, 2.2vw, 28px);
+      font-weight: 300;
+      color: var(--cream);
+      letter-spacing: 0.08em;
+    }
+
     /* ── Pulse Point Markers ── */
     .pulse-point {
       position: absolute;
@@ -362,7 +396,7 @@
       letter-spacing: 0.3em;
     }
 
-    /* Coordinate Badge for Dragging */
+    /* Coordinate Badge for Dragging (Console help only) */
     .coord-badge {
       position: absolute;
       top: calc(100% + 24px);
@@ -379,8 +413,7 @@
       pointer-events: none;
       z-index: 60;
     }
-    body.drag-mode .pulse-point:hover .coord-badge,
-    body.drag-mode .pulse-point.dragging .coord-badge { opacity: 1; }
+    body.drag-mode .pulse-point .coord-badge { opacity: 1; }
 
     /* ── Responsive ── */
     @media (max-width: 600px) {
@@ -398,7 +431,7 @@
   <div id="stage">
 
     <!-- ── Campus Aerial Background ── -->
-    <img id="campus-bg" src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCATsBYQDASIAAhEBAxEB/8QAHAAAAgMBAQEBAAAAAAAAAAAAAwQCBQYBAAcI/8QAUxAAAgEDAwIEAwYDBQUFBQIPAQIDAAQRBRIhMUEGEyJRFGFxByMygZGhFUKxJDNSwdEWU2Jykgg0Q4LhFyVEk/DxNUVUc6JVY4MmZNJ0hJSywv/EABoBAAMBAQEBAAAAAAAAAAAAAAECAwAEBQb/xAAqEQACAwACAgIDAAMAAwEBAQAAAQIDERIhBDETQRQiUQUyYRUjQlIzcf/aAAwDAQACEQMRAD8A/TUbvnGCB8xXpJfK9Q60Xzk8nAHPtSkxMa7myc9MV6Ud0zYK6uXcYFBjkl75Ne2ljnNSCkVUm2FM1yp5FSWRn/GOa4wlXknP0rixvIDjPzomQxEyleTXI1jBJz+ppaMNyBQZ1lDdaAxbWciGIrkcGu3wRrbGf0NUyyNGeD+lE815Bgmhx7FcwkbANnPT51Yw3qqoGKpJDsUgGjaahmk9RAGO5rSWo0ZGk0145JOG/Kltd2hwQR70tbRSW0m4SK30NB1CZpZMM3y61zOvspy6LnTpfiLVmX2xVJMpE7gjuaLp178DGY+OTnrXJJBcSNIARnmmgmmB+hV8AE1KyQSvt9zgVPyi0ZPSu6cuyJJPA561WcuiST0uWsbq3ilZZVb0nAx8qz1tf3ZgkjcjOc59q0q6nbSKyLJyeDms+dNuWu2MRUqep7VCvfsrxLKNGaA5mJ4z0oGljybl90hPPANTjaWOMgxE9jTGlrGxdmh7ZyaLeIMV2CVJJPiiAfvDlfyrurSg3dgR0hl5P+dWkCoBGABVVrcJFvcSDO5ZRtA7ik3WNxJeIriNoQisDxk4osjRzaKImYAlNp/SqGNGeUK57c5rt3LIp8pXOM+/enVe9CtlxYK50uOAfiVduaOZhkRMRwvJqltdSeJ2Vifw45oxMs0bXCvj5Y5NF14zchiK3KxPl85JPSloZXWAxJGWO7sO2ab09lltdysT1H50OwuFh1MxsFwVxmtrRhhDHHA0SH581KwLJZsCCBlic+1J22Ir5o3I4YnmrG9uIYrU4HbPApJJswtc3kEVoxgRip6H596pY[... 409827 chars omitted ...]">
+    <img id="campus-bg" src="./srcc-aerial.jpg">
 
     <!-- Atmospheric layers -->
     <div id="vignette"></div>
@@ -614,10 +647,8 @@
       }, 420);
     }
 
-    /* ════════════════════════════
-       DRAG-AND-DROP EDITOR
-    ════════════════════════════ */
-    let dragMode = false; 
+    /* ── Drag logic (Console access only) ── */
+    let dragMode = false;
     let activePoint = null, startMouse = {}, startPos = {};
 
     function updateBadge(point) {
@@ -633,15 +664,12 @@
       if (!dragMode) return;
       e.preventDefault();
       e.stopPropagation();
-
       activePoint = point;
       point.classList.add('dragging');
-
       const stage = document.getElementById('stage');
       const sr = stage.getBoundingClientRect();
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
       startMouse = { x: clientX, y: clientY };
       startPos = {
         top:  (parseFloat(point.style.top)  / 100) * sr.height,
@@ -652,21 +680,16 @@
     function moveDrag(e) {
       if (!activePoint) return;
       if (e.cancelable) e.preventDefault();
-
       const stage = document.getElementById('stage');
       const sr = stage.getBoundingClientRect();
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
       const dx = clientX - startMouse.x;
       const dy = clientY - startMouse.y;
-
       let newTop  = ((startPos.top  + dy) / sr.height) * 100;
       let newLeft = ((startPos.left + dx) / sr.width)  * 100;
-
       newTop  = Math.max(0, Math.min(100, newTop));
       newLeft = Math.max(0, Math.min(100, newLeft));
-
       activePoint.style.top  = newTop  + '%';
       activePoint.style.left = newLeft + '%';
       updateBadge(activePoint);
@@ -702,12 +725,12 @@
     window.enableDrag = () => {
       dragMode = true;
       document.body.classList.add('drag-mode');
-      console.log("Drag mode enabled");
+      console.log("Drag mode enabled. Use console to find new coordinates.");
     };
     window.disableDrag = () => {
       dragMode = false;
       document.body.classList.remove('drag-mode');
-      console.log("Drag mode disabled");
+      console.log("Drag mode disabled.");
     };
   </script>
 </body>

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory Wall · SRCC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --gold: #D4AF37;
+      --gold-light: #E8CC6A;
+      --gold-dim: rgba(212, 175, 55, 0.2);
+      --cream: #F5EDD7;
+      --dark: #0A0805;
+      --brick-dark: #050402;
+      --brick-line: rgba(212, 175, 55, 0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--dark);
+      /* ── Realistic Black & Gold Brick Wall ── */
+      background-image: 
+        /* Vertical lines (staggered) */
+        linear-gradient(90deg, transparent 50%, var(--brick-line) 50%, var(--brick-line) 51%, transparent 51%),
+        linear-gradient(90deg, var(--brick-line) 1%, transparent 1%, transparent 50%, var(--brick-line) 50%, var(--brick-line) 51%, transparent 51%),
+        /* Horizontal lines */
+        linear-gradient(0deg, var(--brick-line) 2px, transparent 2px);
+      background-size: 160px 80px, 160px 80px, 160px 40px;
+      background-position: 0 0, 80px 40px, 0 0;
+      
+      color: var(--cream);
+      font-family: 'Cormorant Garamond', serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Subtle texture and shading on bricks */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background: radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.4) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Grain Overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 100; opacity: 0.3; mix-blend-mode: overlay;
+    }
+
+    header {
+      padding: 80px 20px 40px;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+      opacity: 0;
+      animation: floatUpTitle 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes floatUpTitle {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .wall-title {
+      font-family: 'Pinyon Script', cursive;
+      font-size: clamp(50px, 8vw, 90px);
+      color: var(--gold-light);
+      text-shadow: 0 0 35px rgba(212, 175, 55, 0.25);
+      font-weight: 400; /* Unbolded */
+      margin-bottom: 0;
+    }
+
+    /* ── Sticky Notes Wall ── */
+    #wall-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px 220px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .memory-note {
+      --note-bg: #fdfaf0;
+      background: var(--note-bg);
+      color: #2c241a;
+      width: min(320px, 85vw);
+      padding: 30px;
+      box-shadow: 
+        3px 3px 15px rgba(0,0,0,0.4),
+        inset 0 0 40px rgba(212, 175, 55, 0.05);
+      position: relative;
+      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+      transform: rotate(var(--rotation));
+      opacity: 0;
+      animation: noteEntrance 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-delay: var(--delay);
+    }
+
+    /* Visual Variety - 3 Styles */
+    .note-style-1 { --note-bg: #fdfaf0; }
+    .note-style-2 { --note-bg: #f5f0e1; }
+    .note-style-3 { --note-bg: #f9f4e8; }
+
+    @keyframes noteEntrance {
+      from { opacity: 0; transform: translateY(50px) rotate(var(--rotation)) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) rotate(var(--rotation)) scale(1); }
+    }
+
+    .memory-note:hover {
+      transform: scale(1.06) rotate(0deg) !important;
+      z-index: 50;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.6);
+    }
+
+    /* Note Pin/Tape effect */
+    .memory-note::before {
+      content: '';
+      position: absolute;
+      top: -12px; left: 50%;
+      transform: translateX(-50%);
+      width: 70px; height: 18px;
+      background: rgba(212, 175, 55, 0.12);
+      backdrop-filter: blur(3px);
+      border: 1px solid rgba(212, 175, 55, 0.1);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .note-text {
+      font-size: 19px;
+      font-style: italic;
+      margin-bottom: 25px;
+      min-height: 90px;
+      font-family: 'Cormorant Garamond', serif;
+      line-height: 1.5;
+    }
+
+    .note-footer {
+      border-top: 1px solid rgba(0,0,0,0.06);
+      padding-top: 18px;
+      display: flex;
+      justify-content: flex-end;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+    }
+
+    .note-batch {
+      color: var(--gold);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    /* ── Fixed Footer Submission Bar ── */
+    #submission-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, var(--dark) 70%, transparent);
+      padding: 50px 20px;
+      z-index: 200;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .etch-trigger {
+      background: transparent;
+      border: 1px solid var(--gold-dim);
+      color: var(--gold);
+      padding: 16px 45px;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(5px);
+    }
+
+    .etch-trigger:hover {
+      background: var(--gold);
+      color: var(--dark);
+      border-color: var(--gold);
+      box-shadow: 0 0 40px rgba(212, 175, 55, 0.35);
+      transform: translateY(-2px);
+    }
+
+    /* ── Modal Form ── */
+    #etch-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 3, 1, 0.97);
+      backdrop-filter: blur(15px);
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    #etch-modal.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .etch-form {
+      width: min(650px, 90vw);
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    #etch-modal.open .etch-form {
+      transform: translateY(0);
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .form-header h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 20px;
+      letter-spacing: 0.45em;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-weight: 400;
+    }
+
+    .form-group {
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .form-label {
+      display: block;
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      margin-bottom: 15px;
+      opacity: 0.6;
+      text-transform: uppercase;
+    }
+
+    .etch-input, .etch-select {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--gold-dim);
+      color: var(--cream);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      padding: 12px 0;
+      outline: none;
+      transition: border-color 0.4s ease;
+    }
+
+    .etch-input:focus, .etch-select:focus {
+      border-color: var(--gold);
+    }
+
+    /* Select year customization */
+    .etch-select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23D4AF37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right center;
+    }
+
+    .etch-select option {
+      background: var(--dark);
+      color: var(--cream);
+      padding: 10px;
+      font-family: 'EB Garamond', serif;
+    }
+
+    /* Rotating Prompt Effect */
+    .prompt-container {
+      position: relative;
+    }
+
+    #prompt-hint {
+      position: absolute;
+      top: 12px; left: 0;
+      font-size: 24px;
+      font-style: italic;
+      color: var(--cream);
+      opacity: 0.25;
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .etch-input:focus + #prompt-hint,
+    .etch-input:not(:placeholder-shown) + #prompt-hint {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 60px;
+    }
+
+    .submit-etch {
+      background: var(--gold);
+      color: var(--dark);
+      border: none;
+      padding: 14px 50px;
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      letter-spacing: 0.25em;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    .submit-etch:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3);
+    }
+
+    .close-etch {
+      background: transparent;
+      color: var(--gold);
+      border: 1px solid var(--gold-dim);
+      padding: 14px 30px;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    .close-etch:hover {
+      border-color: var(--gold);
+      background: rgba(212, 175, 55, 0.05);
+    }
+
+    /* Admin Button (Modulation) */
+    #admin-access {
+      position: fixed;
+      top: 20px; right: 20px;
+      z-index: 250;
+    }
+    .admin-btn {
+      background: transparent;
+      border: 1px solid rgba(212, 175, 55, 0.1);
+      color: rgba(212, 175, 55, 0.3);
+      padding: 8px 15px;
+      font-family: 'Cinzel', serif;
+      font-size: 8px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .admin-btn:hover {
+      color: var(--gold);
+      border-color: var(--gold-dim);
+    }
+
+  </style>
+</head>
+<body>
+
+  <div id="admin-access">
+    <button class="admin-btn" id="admin-trigger">Moderator</button>
+  </div>
+
+  <header>
+    <h1 class="wall-title">Memory Wall</h1>
+  </header>
+
+  <main id="wall-container">
+    <!-- Anonymous Memories (Examples) -->
+    <div class="memory-note note-style-1" style="--rotation: -1.5deg; --delay: 0.2s;">
+      <p class="note-text">"The corridor discussions were more enlightening than the lectures sometimes. SRCC taught me more than just commerce."</p>
+      <div class="note-footer">
+        <span class="note-batch">Batch of 2012</span>
+      </div>
+    </div>
+
+    <div class="memory-note note-style-2" style="--rotation: 1.2deg; --delay: 0.4s;">
+      <p class="note-text">"I still recall the smell of the old library and the excitement of the first placement day. Truly the best years."</p>
+      <div class="note-footer">
+        <span class="note-batch">Batch of 2005</span>
+      </div>
+    </div>
+
+    <div class="memory-note note-style-3" style="--rotation: -0.8deg; --delay: 0.6s;">
+      <p class="note-text">"From the Statue Lawns to the corporate boardrooms, the journey has been incredible. Thank you, SRCC."</p>
+      <div class="note-footer">
+        <span class="note-batch">Batch of 1998</span>
+      </div>
+    </div>
+
+    <div class="memory-note note-style-1" style="--rotation: 1.8deg; --delay: 0.8s;">
+      <p class="note-text">"The Nescafe Annex was where all our business plans were born. Memories that will last a lifetime."</p>
+      <div class="note-footer">
+        <span class="note-batch">Batch of 2018</span>
+      </div>
+    </div>
+  </main>
+
+  <div id="submission-bar">
+    <button class="etch-trigger" id="open-form">Etch Your Memory</button>
+  </div>
+
+  <!-- ── Submission Modal ── -->
+  <div id="etch-modal">
+    <div class="etch-form">
+      <div class="form-header">
+        <h3>◆ Etch Your Legacy</h3>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Graduating Batch</label>
+        <select id="batch-select" class="etch-select" required>
+          <option value="" disabled selected>Select Year</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Your Memory</label>
+        <div class="prompt-container">
+          <input type="text" id="memory-input" class="etch-input" placeholder=" " required>
+          <span id="prompt-hint">I recall...</span>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="close-etch" id="close-form">Cancel</button>
+        <button class="submit-etch" id="submit-btn">Etch It</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('etch-modal');
+    const openBtn = document.getElementById('open-form');
+    const closeBtn = document.getElementById('close-form');
+    const batchSelect = document.getElementById('batch-select');
+    const promptHint = document.getElementById('prompt-hint');
+    const memoryInput = document.getElementById('memory-input');
+
+    // Populate Batch Dropdown
+    const currentYear = 2026;
+    for (let year = currentYear; year >= 1960; year--) {
+      const opt = document.createElement('option');
+      opt.value = year;
+      opt.textContent = `Batch of ${year}`;
+      batchSelect.appendChild(opt);
+    }
+
+    // Rotating Prompts
+    const prompts = [
+      "I recall...",
+      "My favorite memory is...",
+      "SRCC taught me...",
+      "I will never forget...",
+      "Standing on the Statue Lawns...",
+      "The best part was...",
+      "Late nights in the library...",
+      "The placement cell journey..."
+    ];
+    let promptIndex = 0;
+
+    setInterval(() => {
+      if (!memoryInput.value) {
+        promptHint.style.opacity = 0;
+        setTimeout(() => {
+          promptIndex = (promptIndex + 1) % prompts.length;
+          promptHint.textContent = prompts[promptIndex];
+          promptHint.style.opacity = 0.25;
+        }, 400);
+      }
+    }, 5000);
+
+    // Modal Logic
+    openBtn.addEventListener('click', () => modal.classList.add('open'));
+    closeBtn.addEventListener('click', () => modal.classList.remove('open'));
+
+    // Admin/Moderator Placeholder
+    document.getElementById('admin-trigger').addEventListener('click', () => {
+      const pw = prompt("Enter Moderator Password:");
+      if (pw === 'srcc2026') {
+        alert("Moderator mode enabled. You can now delete notes (Coming soon with Firebase).");
+      } else {
+        alert("Incorrect password.");
+      }
+    });
+
+    // Staggered Scroll Reveal for Notes
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animationPlayState = 'running';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.memory-note').forEach(note => {
+      note.style.animationPlayState = 'paused';
+      observer.observe(note);
+    });
+
+  </script>
+</body>
+</html>

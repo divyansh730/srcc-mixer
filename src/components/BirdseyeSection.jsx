@@ -4,10 +4,8 @@ const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`;
 
 export default function BirdseyeSection() {
   const iframeRef = useRef(null);
-  const headingBlockRef = useRef(null);
 
   useEffect(() => {
-    const headingEl = headingBlockRef.current;
     const headingObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -20,7 +18,8 @@ export default function BirdseyeSection() {
       { root: null, rootMargin: "0px 0px -5% 0px", threshold: 0.15 }
     );
 
-    if (headingEl) headingObserver.observe(headingEl);
+    const elements = document.querySelectorAll("#birdseye-section .landing-heading-block");
+    elements.forEach((el) => headingObserver.observe(el));
 
     return () => {
       headingObserver.disconnect();
@@ -48,11 +47,29 @@ export default function BirdseyeSection() {
         }}
       />
 
-      {/* EXPLORE THE CAMPUS Pointer removed as it's now in the iframe header */}
-
-      {/* Redundant heading block removed */}
+      <div
+        className="landing-heading-block"
+        style={{
+          position: "relative",
+          zIndex: 2,
+          maxWidth: "1180px",
+          margin: "0 auto 20px",
+          textAlign: "center",
+        }}
+      >
+        <h2
+          className="landing-welcome-title"
+          style={{
+            fontSize: "clamp(34px, 6.5vw, 64px)",
+            marginBottom: 0,
+          }}
+        >
+          Campus Bird&rsquo;s-Eye
+        </h2>
+      </div>
 
       <div
+        className="landing-heading-block" // Reusing this class for animation
         style={{
           position: "relative",
           zIndex: 3,

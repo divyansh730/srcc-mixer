@@ -85,22 +85,15 @@
       padding: 32px 48px;
       display: flex;
       align-items: flex-start;
-      justify-content: space-between;
+      justify-content: center;
       background: linear-gradient(to bottom, rgba(5,3,1,0.7) 0%, transparent 100%);
+      text-align: center;
     }
 
     #wordmark .title-block {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-    }
-
-    #wordmark .cell-name {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(10px, 1.1vw, 14px);
-      letter-spacing: 0.3em;
-      color: var(--gold);
-      text-transform: uppercase;
+      gap: 2px;
     }
 
     #wordmark .college-name {
@@ -109,59 +102,19 @@
       font-weight: 300;
       color: var(--cream);
       letter-spacing: 0.08em;
-    }
-
-    #wordmark .tagline {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: clamp(11px, 1vw, 13px);
-      color: var(--gold-light);
-      letter-spacing: 0.1em;
-      opacity: 0.85;
+      text-transform: uppercase;
     }
 
     #wordmark .est {
       font-family: 'Cinzel', serif;
       font-size: clamp(9px, 0.75vw, 11px);
       letter-spacing: 0.25em;
-      color: rgba(212,175,55,0.6);
-      margin-top: 2px;
-    }
-
-    /* ── Instruction Tag ── */
-    #hint {
-      position: absolute;
-      bottom: 36px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      animation: hintFloat 3s ease-in-out infinite;
-    }
-
-    #hint span {
-      font-family: 'Cinzel', serif;
-      font-size: 10px;
-      letter-spacing: 0.35em;
       color: var(--gold);
-      opacity: 0.7;
-      text-transform: uppercase;
+      margin-top: 4px;
+      opacity: 0.8;
     }
 
-    #hint .scroll-line {
-      width: 1px;
-      height: 32px;
-      background: linear-gradient(to bottom, var(--gold), transparent);
-      opacity: 0.6;
-    }
-
-    @keyframes hintFloat {
-      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.9; }
-      50%       { transform: translateX(-50%) translateY(6px); opacity: 0.5; }
-    }
+    /* ── Instruction Tag removed ── */
 
     /* ── Pulse Point Markers ── */
     .pulse-point {
@@ -588,7 +541,9 @@
     /* ── Responsive ── */
     @media (max-width: 600px) {
       #stage { height: 100dvh; }
-      #wordmark { padding: 20px 22px; }
+      #wordmark { padding: 16px 20px; }
+      #wordmark .college-name { font-size: 16px; }
+      #wordmark .est { font-size: 8px; }
       .ring-3 { display: none; }
       .pulse-point { width: 14px; height: 14px; }
       .dot { width: 8px; height: 8px; }
@@ -649,9 +604,7 @@
     <!-- ── Header Wordmark ── -->
     <div id="wordmark">
       <div class="title-block">
-        <span class="cell-name">The Placement Cell</span>
         <h1 class="college-name">Shri Ram College of Commerce</h1>
-        <span class="tagline">30 Years of Excellence · Dedicated to the Nation</span>
         <span class="est">EST. 1926</span>
       </div>
     </div>
@@ -737,12 +690,6 @@
       <div class="pulse-label"><div class="label-inner">
         <span class="l-title">Statue Lawns</span><span class="l-sub">The Lawns</span>
       </div></div>
-    </div>
-
-    <!-- ── Bottom Hint ── -->
-    <div id="hint">
-      <span>Explore the Campus</span>
-      <div class="scroll-line"></div>
     </div>
 
   </div><!-- /stage -->

@@ -27,7 +27,7 @@
         url("https://www.transparenttextures.com/patterns/brick-wall.png"),
         url("https://images.unsplash.com/photo-1590060153074-303deaa567af?q=80&w=2000&auto=format&fit=crop");
       background-size: auto, auto, cover;
-      background-attachment: fixed;
+      /* Removed background-attachment: fixed to make wall scroll with notes */
       background-position: center;
       
       color: var(--cream);
@@ -209,15 +209,16 @@
     #etch-modal {
       position: fixed;
       inset: 0;
-      background: rgba(5, 3, 1, 0.98);
-      backdrop-filter: blur(20px);
+      background: rgba(5, 3, 1, 0.85); /* Slightly darker */
+      backdrop-filter: blur(12px) saturate(1.2); /* Enhanced blur */
+      -webkit-backdrop-filter: blur(12px) saturate(1.2);
       z-index: 300;
       display: flex;
       align-items: center;
       justify-content: center;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     #etch-modal.open {
@@ -226,45 +227,56 @@
     }
 
     .etch-form {
-      width: min(600px, 90vw);
+      width: min(580px, 90vw);
       position: relative;
-      transform: translateY(30px);
-      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(40px) scale(0.95); /* Popup effect */
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+      background: rgba(10, 7, 3, 0.95);
+      padding: 50px 60px;
+      border: 1px solid var(--gold-dim);
+      box-shadow: 0 30px 100px rgba(0,0,0,0.8);
     }
 
     #etch-modal.open .etch-form {
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
+      opacity: 1;
     }
 
     .form-header h3 {
       font-family: 'Cinzel', serif;
-      font-size: 20px;
-      letter-spacing: 0.45em;
+      font-size: 18px;
+      letter-spacing: 0.4em;
       color: var(--gold);
       text-transform: uppercase;
       text-align: center;
-      margin-bottom: 50px;
+      margin-bottom: 45px;
+      font-weight: 400;
     }
 
     .form-group {
-      margin-bottom: 40px;
+      margin-bottom: 35px;
       position: relative;
     }
 
     .form-label {
       display: block;
       font-family: 'Cinzel', serif;
-      font-size: 10px;
-      letter-spacing: 0.25em;
+      font-size: 9px;
+      letter-spacing: 0.2em;
       color: var(--gold);
-      margin-bottom: 15px;
-      opacity: 0.6;
+      margin-bottom: 12px;
+      opacity: 0.5;
       text-transform: uppercase;
     }
 
+    /* Clean Minimal Dropdown */
     .select-wrapper {
       position: relative;
-      border-bottom: 1px solid var(--gold-dim);
+      border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+      transition: border-color 0.3s ease;
+    }
+    .select-wrapper:focus-within {
+      border-color: var(--gold);
     }
 
     .etch-select {
@@ -273,34 +285,43 @@
       border: none;
       color: var(--cream);
       font-family: 'Cormorant Garamond', serif;
-      font-size: 24px;
-      padding: 12px 0;
+      font-size: 22px;
+      padding: 8px 0;
       outline: none;
       cursor: pointer;
       appearance: none;
+      -webkit-appearance: none;
     }
 
     .select-wrapper::after {
-      content: '◆';
+      content: '▾';
       position: absolute;
       right: 0; top: 50%;
       transform: translateY(-50%);
-      color: var(--gold);
-      font-size: 10px;
+      color: var(--gold-dim);
+      font-size: 14px;
       pointer-events: none;
+      transition: color 0.3s ease;
+    }
+    .select-wrapper:hover::after {
+      color: var(--gold);
     }
 
     .etch-input {
       width: 100%;
       background: transparent;
       border: none;
-      border-bottom: 1px solid var(--gold-dim);
+      border-bottom: 1px solid rgba(212, 175, 55, 0.15);
       color: var(--cream);
       font-family: 'Cormorant Garamond', serif;
-      font-size: 24px;
-      padding: 12px 0;
+      font-size: 22px;
+      padding: 8px 0;
       outline: none;
       transition: border-color 0.4s ease;
+    }
+
+    .etch-input:focus {
+      border-color: var(--gold);
     }
 
     .prompt-container {
@@ -309,11 +330,11 @@
 
     #prompt-hint {
       position: absolute;
-      top: 12px; left: 0;
-      font-size: 24px;
+      top: 8px; left: 0;
+      font-size: 22px;
       font-style: italic;
       color: var(--cream);
-      opacity: 0.25;
+      opacity: 0.2;
       pointer-events: none;
       transition: opacity 0.3s ease;
     }
@@ -327,19 +348,27 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 60px;
+      margin-top: 50px;
     }
 
     .submit-etch {
       background: var(--gold);
       color: var(--dark);
-      border: none;
-      padding: 14px 50px;
+      border: 1px solid var(--gold);
+      padding: 12px 45px;
       font-family: 'Cinzel', serif;
-      font-size: 12px;
-      letter-spacing: 0.25em;
+      font-size: 11px;
+      letter-spacing: 0.2em;
       cursor: pointer;
       text-transform: uppercase;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .submit-etch:hover {
+      background: transparent;
+      color: var(--gold);
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
+      transform: translateY(-2px);
     }
 
     .submit-etch:disabled {
@@ -349,14 +378,22 @@
 
     .close-etch {
       background: transparent;
-      color: var(--gold);
-      border: 1px solid var(--gold-dim);
-      padding: 14px 30px;
+      color: rgba(212, 175, 55, 0.6);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      padding: 12px 30px;
       font-family: 'Cinzel', serif;
-      font-size: 11px;
-      letter-spacing: 0.25em;
+      font-size: 10px;
+      letter-spacing: 0.2em;
       cursor: pointer;
       text-transform: uppercase;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .close-etch:hover {
+      color: var(--gold);
+      border-color: var(--gold);
+      background: rgba(212, 175, 55, 0.05);
+      transform: translateY(-2px);
     }
 
     #admin-access {
@@ -508,7 +545,7 @@
         if (!isMobile) {
           const side = i % 2 === 0 ? 'left' : 'right';
           const horizontalOffset = 10 + (Math.random() * 20);
-          const verticalOffset = 100 + (i * 320) + (Math.random() * 80); 
+          const verticalOffset = 100 + (i * 250) + (Math.random() * 60); 
           
           if (side === 'left') note.style.left = `${horizontalOffset}%`;
           else note.style.right = `${horizontalOffset}%`;
@@ -526,7 +563,7 @@
       });
 
       if (!isMobile) {
-        wall.style.height = `${200 + (snapshot.size * 320) + 400}px`;
+        wall.style.height = `${200 + (snapshot.size * 250) + 400}px`;
       } else {
         wall.style.height = 'auto';
       }

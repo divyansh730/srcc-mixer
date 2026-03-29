@@ -111,6 +111,58 @@
       letter-spacing: 0.08em;
     }
 
+    #wordmark .tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(11px, 1vw, 13px);
+      color: var(--gold-light);
+      letter-spacing: 0.1em;
+      opacity: 0.85;
+    }
+
+    #wordmark .est {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(9px, 0.75vw, 11px);
+      letter-spacing: 0.25em;
+      color: rgba(212,175,55,0.6);
+      margin-top: 2px;
+    }
+
+    /* ── Instruction Tag ── */
+    #hint {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      animation: hintFloat 3s ease-in-out infinite;
+    }
+
+    #hint span {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      opacity: 0.7;
+      text-transform: uppercase;
+    }
+
+    #hint .scroll-line {
+      width: 1px;
+      height: 32px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      opacity: 0.6;
+    }
+
+    @keyframes hintFloat {
+      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.9; }
+      50%       { transform: translateX(-50%) translateY(6px); opacity: 0.5; }
+    }
+
     /* ── Pulse Point Markers ── */
     .pulse-point {
       position: absolute;
@@ -205,6 +257,124 @@
       font-size: 11px;
       color: rgba(245, 237, 215, 0.7);
     }
+
+    /* ── Owner Modal ── */
+    #owner-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 400;
+      background: rgba(5,3,1,0.92);
+      backdrop-filter: blur(10px);
+      align-items: center;
+      justify-content: center;
+    }
+    #owner-modal.open { display: flex; }
+
+    #owner-box {
+      width: min(560px, 94vw);
+      background: rgba(10,7,3,0.99);
+      border: 1px solid var(--gold-dim);
+      padding: 32px 36px;
+      position: relative;
+    }
+    #owner-box::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: -1px;
+      width: 20px; height: 20px;
+      border-top: 1.5px solid var(--gold);
+      border-left: 1.5px solid var(--gold);
+      opacity: 0.6;
+    }
+    #owner-box::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; right: -1px;
+      width: 20px; height: 20px;
+      border-bottom: 1.5px solid var(--gold);
+      border-right: 1.5px solid var(--gold);
+      opacity: 0.6;
+    }
+    #owner-box h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.4em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    #owner-box .owner-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: rgba(245,237,215,0.5);
+      margin-bottom: 22px;
+    }
+    .owner-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .owner-field label {
+      font-family: 'Cinzel', serif;
+      font-size: 8px;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+    .owner-field input, .owner-field select {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(212,175,55,0.25);
+      color: var(--cream);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 14px;
+      padding: 9px 12px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    .owner-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      align-items: center;
+    }
+    #owner-save-btn {
+      padding: 9px 24px;
+      background: var(--gold);
+      color: var(--dark);
+      border: none;
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    #owner-close-btn {
+      padding: 9px 18px;
+      background: transparent;
+      color: var(--gold);
+      border: 1px solid var(--gold-dim);
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    #owner-msg {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--gold-light);
+      opacity: 0;
+      transition: opacity 0.3s;
+      margin-left: 8px;
+    }
+    #owner-msg.show { opacity: 1; }
+    #owner-msg.error { color: #e05c5c; }
 
     /* ── Modal Overlay ── */
     #modal-overlay {
@@ -418,6 +588,8 @@
     /* ── Responsive ── */
     @media (max-width: 600px) {
       #stage { height: 100dvh; }
+      #wordmark { padding: 20px 22px; }
+      .ring-3 { display: none; }
       .pulse-point { width: 14px; height: 14px; }
       .dot { width: 8px; height: 8px; }
       .ring-1 { width: 28px; height: 28px; }
@@ -428,6 +600,43 @@
 
 <body>
 
+  <!-- ══════════════ OWNER VIDEO PANEL (Hidden) ══════════════ -->
+  <div id="owner-modal">
+    <div id="owner-box">
+      <div id="owner-login-section">
+        <h3>◆ Owner Access</h3>
+        <p class="owner-sub">Enter the owner password to manage location videos.</p>
+        <div class="owner-field">
+          <label>Password</label>
+          <input type="password" id="owner-pw-input" placeholder="Enter owner password…" autocomplete="off">
+        </div>
+        <div class="owner-actions">
+          <button id="owner-login-btn" onclick="ownerLogin()">Unlock</button>
+          <button id="owner-login-close-btn" onclick="closeOwnerPanel()">Cancel</button>
+          <span id="owner-login-msg"></span>
+        </div>
+      </div>
+
+      <div id="owner-video-section" style="display:none;">
+        <h3>◆ Manage Videos</h3>
+        <p class="owner-sub">Upload a video file or paste a URL for each location.</p>
+        <div class="owner-field">
+          <label>Location</label>
+          <select id="owner-location-select"><option value="">— Select a location —</option></select>
+        </div>
+        <div class="owner-field">
+          <label>Video URL (YouTube, Drive, or Direct Link)</label>
+          <input type="text" id="owner-video-url" placeholder="https://…">
+        </div>
+        <div class="owner-actions">
+          <button id="owner-save-btn" onclick="ownerSave()">Save</button>
+          <button id="owner-close-btn" onclick="closeOwnerPanel()">Close</button>
+          <span id="owner-msg"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="stage">
 
     <!-- ── Campus Aerial Background ── -->
@@ -437,37 +646,29 @@
     <div id="vignette"></div>
     <div id="grain"></div>
 
-    <!-- ── Pulse Point Markers ── -->
-
-    <!-- Sports Ground -->
-    <div class="pulse-point" style="top: 18.1%; left: 52.4%;" data-title="Sports Ground" data-eyebrow="Sports &amp; Recreation · SRCC" data-subtitle="Beyond the Classroom" data-desc="The SRCC Sports Ground — where future captains of industry took their first breaks, built lifelong friendships, and learned what it truly means to lead a team." data-video="">
-      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
-      <div class="dot"></div>
-      <div class="pulse-label"><div class="label-inner">
-        <span class="l-title">Sports Ground</span><span class="l-sub">Sports &amp; Recreation</span>
-      </div></div>
+    <!-- ── Header Wordmark ── -->
+    <div id="wordmark">
+      <div class="title-block">
+        <span class="cell-name">The Placement Cell</span>
+        <h1 class="college-name">Shri Ram College of Commerce</h1>
+        <span class="tagline">30 Years of Excellence · Dedicated to the Nation</span>
+        <span class="est">EST. 1926</span>
+      </div>
     </div>
 
-    <!-- Sports Complex -->
-    <div class="pulse-point" style="top: 15.1%; left: 79.6%;" data-title="Sports Complex" data-eyebrow="Sports Complex · SRCC" data-subtitle="Arena of Champions" data-desc="The SRCC Sports Complex — a full-fledged sporting facility that has nurtured athletes and champions across generations of SRCC students." data-video="">
-      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
-      <div class="dot"></div>
-      <div class="pulse-label"><div class="label-inner">
-        <span class="l-title">Sports Complex</span><span class="l-sub">Arena of Champions</span>
-      </div></div>
-    </div>
+    <!-- ── Pulse Point Markers (From v2-2) ── -->
 
     <!-- Nescafe Annex -->
-    <div class="pulse-point" style="top: 31.9%; left: 70.0%;" data-title="Nescafe Annex" data-eyebrow="The Hangout · SRCC" data-subtitle="Fuel for Brilliance" data-desc="The Nescafe Annex — SRCC's beloved coffee corner where students refuel between lectures, friendships are struck over chai, and great ideas are brewed." data-video="https://drive.google.com/uc?export=download&id=1T8do3zSdeEub22QtXYkEAziFU228G69E">
+    <div class="pulse-point" style="top:31.9%; left:70.0%" data-title="Nescafe Annex" data-eyebrow="The Hangout · SRCC" data-subtitle="Fuel for Brilliance" data-desc="The Nescafe Annex — SRCC's beloved coffee corner where students refuel between lectures, friendships are struck over chai, and great ideas are brewed." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765339/IMG_5739_gbb9yv.mp4">
       <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
-        <span class="l-title">Nescafe Annex</span><span class="l-sub">The Hangout</span>
+        <span class="l-title">Nescafe Annex</span><span class="l-sub">The Hangout · SRCC</span>
       </div></div>
     </div>
 
     <!-- Library -->
-    <div class="pulse-point" style="top: 30.5%; left: 79.6%;" data-title="SRCC Library" data-eyebrow="Knowledge Centre · SRCC" data-subtitle="Legacy in Every Volume" data-desc="The SRCC Library — a repository of commerce, economics and business knowledge. The quiet within these walls has shaped some of India's sharpest financial minds." data-video="">
+    <div class="pulse-point" style="top: 27.1772%; left: 78.8536%;" data-title="SRCC Library" data-eyebrow="Knowledge Centre · SRCC" data-subtitle="Legacy in Every Volume" data-desc="The SRCC Library — a repository of commerce, economics and business knowledge. The quiet within these walls has shaped some of India's sharpest financial minds." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765390/IMG_3907_vwbiue.mp4">
       <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
@@ -476,7 +677,7 @@
     </div>
 
     <!-- Tute Block -->
-    <div class="pulse-point" style="top: 39.8%; left: 8.9%;" data-title="Tute Block" data-eyebrow="Academic Block · SRCC" data-subtitle="Where Commerce Comes Alive" data-desc="The Tute Block — SRCC's dedicated tutorial and classroom wing where commerce, economics and business concepts are debated, discussed and brought to life." data-video="">
+    <div class="pulse-point" style="top: 39.837%; left: 8.87917%;" data-title="Tute Block" data-eyebrow="Academic Block · SRCC" data-subtitle="Where Commerce Comes Alive" data-desc="The Tute Block — SRCC's dedicated tutorial and classroom wing where commerce, economics and business concepts are debated, discussed and brought to life." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774764959/WhatsApp_Video_2026-03-27_at_18.59.15_ttwz6b.mp4">
       <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
@@ -485,7 +686,7 @@
     </div>
 
     <!-- Library Lawns -->
-    <div class="pulse-point" style="top: 37.5%; left: 64.0%;" data-title="Library Lawns" data-eyebrow="SRCC Library Lawns" data-subtitle="Green Heart of Campus" data-desc="The serene Library Lawns — a quiet green expanse where students unwind between lectures, study under open skies, and share the stories that define the SRCC experience." data-video="">
+    <div class="pulse-point" style="top: 37.5116%; left: 64.0089%;" data-title="Library Lawns" data-eyebrow="SRCC Library Lawns" data-subtitle="Green Heart of Campus" data-desc="The serene Library Lawns — a quiet green expanse where students unwind between lectures, study under open skies, and share the stories that define the SRCC experience." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765405/IMG_8310_nsq8kz.mp4">
       <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
@@ -493,17 +694,8 @@
       </div></div>
     </div>
 
-    <!-- New Building -->
-    <div class="pulse-point" style="top: 36.8%; left: 22.6%;" data-title="New Building" data-eyebrow="Academic Block · SRCC" data-subtitle="Modern Academia" data-desc="The New Building — SRCC's modern academic expansion, equipped with state-of-the-art facilities to complement the institution's century-old legacy." data-video="">
-      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
-      <div class="dot"></div>
-      <div class="pulse-label"><div class="label-inner">
-        <span class="l-title">New Building</span><span class="l-sub">Academic Block</span>
-      </div></div>
-    </div>
-
     <!-- Co-op -->
-    <div class="pulse-point" style="top: 45.2%; left: 95.0%;" data-title="Co-op" data-eyebrow="Cooperative Store · SRCC" data-subtitle="The Campus Store" data-desc="The SRCC Co-operative Store — a student-run institution providing stationery, essentials and much more, embodying the cooperative spirit at the heart of SRCC." data-video="https://drive.google.com/uc?export=download&id=1LfIe9JJ8i5xkCxTXUjRxJub-t2WdFE6f">
+    <div class="pulse-point" style="top:45.2%; left:95.0%" data-title="Co-op" data-eyebrow="Cooperative Store · SRCC" data-subtitle="The Campus Store" data-desc="The SRCC Co-operative Store — a student-run institution providing stationery, essentials and much more, embodying the cooperative spirit at the heart of SRCC." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765575/WhatsApp_Video_2026-03-28_at_21.34.20_rvdndy.mp4">
       <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
@@ -512,7 +704,7 @@
     </div>
 
     <!-- Clock Tower -->
-    <div class="pulse-point" style="top: 49.7%; left: 51.8%;" data-title="The Clock Tower" data-eyebrow="Main Entrance · SRCC" data-subtitle="The Iconic Heart of Campus" data-desc="The legendary SRCC clock tower — the most photographed landmark on campus and the symbolic gateway to 100 years of academic excellence." data-video="https://drive.google.com/uc?export=download&id=1YmLZOu_B4WI-CBL4Z6WcGtj8ITeFje_C">
+    <div class="pulse-point" style="top:49.7%; left:51.8%" data-title="The Clock Tower" data-eyebrow="Main Entrance · SRCC" data-subtitle="The Iconic Heart of Campus" data-desc="The legendary SRCC clock tower — the most photographed landmark on campus and the symbolic gateway to 100 years of academic excellence." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765393/IMG_8302_cwruz8.mp4">
       <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
@@ -521,7 +713,7 @@
     </div>
 
     <!-- Auditorium -->
-    <div class="pulse-point" style="top: 28.8%; left: 50.9%;" data-title="Shridhar Shriram Auditorium" data-eyebrow="The Auditorium · SRCC" data-subtitle="Stage for Distinction" data-desc="The Shridhar Shriram Auditorium — where placement drives are inaugurated, industry leaders address students, and three decades of careers have taken their first steps." data-video="">
+    <div class="pulse-point" style="top: 28.8485%; left: 50.8792%;" data-title="Shridhar Shriram Auditorium" data-eyebrow="The Auditorium · SRCC" data-subtitle="Stage for Distinction" data-desc="The Shridhar Shriram Auditorium — where placement drives are inaugurated, industry leaders address students, and three decades of careers have taken their first steps." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774764959/WhatsApp_Video_2026-03-26_at_18.19.02_tiuqe0.mp4">
       <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
@@ -530,21 +722,27 @@
     </div>
 
     <!-- PB Lawns -->
-    <div class="pulse-point" style="top: 91.6%; left: 2.0%;" data-title="PB Lawns" data-eyebrow="SRCC PB Lawns" data-subtitle="Memories on the Green" data-desc="The SRCC PB Lawns — a cherished open space where students gather for events, festivals and quiet afternoons, creating memories that last well beyond graduation." data-video="">
+    <div class="pulse-point" style="top: 91.6411%; left: 1.98438%;" data-title="PB Lawns" data-eyebrow="SRCC PB Lawns" data-subtitle="Memories on the Green" data-desc="The SRCC PB Lawns — a cherished open space where students gather for events, festivals and quiet afternoons, creating memories that last well beyond graduation." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774764962/WhatsApp_Video_2026-03-28_at_21.34.23_msksey.mp4">
       <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
-        <span class="l-title">PB Lawns</span><span class="l-sub">PB Lawns</span>
+        <span class="l-title">PB Lawns</span><span class="l-sub">SRCC PB Lawns</span>
       </div></div>
     </div>
 
     <!-- Statue Lawns -->
-    <div class="pulse-point" style="top: 93.1%; left: 30.9%;" data-title="Statue Lawns" data-eyebrow="SRCC Statue Lawns" data-subtitle="Where Memories Were Made" data-desc="The SRCC Statue Lawns — the iconic heart of campus life where generations of students marked their milestones, farewells, and the beginning of something extraordinary." data-video="https://drive.google.com/uc?export=download&id=1o11abzKhAeN_HV3BFJzPndSjpDG9cQY-">
+    <div class="pulse-point" style="top: 93.11%; left: 30.8604%;" data-title="Statue Lawns" data-eyebrow="SRCC Statue Lawns" data-subtitle="Where Memories Were Made" data-desc="The SRCC Statue Lawns — the iconic heart of campus life where generations of students marked their milestones, farewells, and the beginning of something extraordinary." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765405/IMG_2046_zmlttf.mp4">
       <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
-        <span class="l-title">Statue Lawns</span><span class="l-sub">Statue Lawns</span>
+        <span class="l-title">Statue Lawns</span><span class="l-sub">The Lawns</span>
       </div></div>
+    </div>
+
+    <!-- ── Bottom Hint ── -->
+    <div id="hint">
+      <span>Explore the Campus</span>
+      <div class="scroll-line"></div>
     </div>
 
   </div><!-- /stage -->
@@ -719,13 +917,51 @@
     closeBtn.addEventListener('click', closeModal);
     overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+      if (e.key === 'Escape') {
+        if (document.getElementById('owner-modal').classList.contains('open')) closeOwnerPanel();
+        else if (overlay.classList.contains('open')) closeModal();
+      }
     });
+
+    /* ── Owner panel logic (Console access only) ── */
+    window.openOwnerPanel = () => {
+      document.getElementById('owner-modal').classList.add('open');
+      const sel = document.getElementById('owner-location-select');
+      sel.innerHTML = '<option value="">— Select a location —</option>';
+      document.querySelectorAll('.pulse-point').forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.dataset.title;
+        opt.textContent = p.dataset.title;
+        sel.appendChild(opt);
+      });
+    };
+    window.closeOwnerPanel = () => {
+      document.getElementById('owner-modal').classList.remove('open');
+    };
+    window.ownerLogin = () => {
+      const pw = document.getElementById('owner-pw-input').value;
+      if (pw === 'srcc2024') {
+        document.getElementById('owner-login-section').style.display = 'none';
+        document.getElementById('owner-video-section').style.display = 'block';
+      } else {
+        document.getElementById('owner-login-msg').textContent = 'Incorrect password.';
+      }
+    };
+    window.ownerSave = () => {
+      const sel = document.getElementById('owner-location-select').value;
+      const url = document.getElementById('owner-video-url').value;
+      if (!sel) return;
+      document.querySelectorAll('.pulse-point').forEach(p => {
+        if (p.dataset.title === sel) p.dataset.video = url;
+      });
+      document.getElementById('owner-msg').textContent = 'Saved ✓';
+      setTimeout(() => { document.getElementById('owner-msg').textContent = ''; }, 2000);
+    };
 
     window.enableDrag = () => {
       dragMode = true;
       document.body.classList.add('drag-mode');
-      console.log("Drag mode enabled. Use console to find new coordinates.");
+      console.log("Drag mode enabled.");
     };
     window.disableDrag = () => {
       dragMode = false;

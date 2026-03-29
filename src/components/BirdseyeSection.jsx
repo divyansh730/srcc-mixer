@@ -48,62 +48,9 @@ export default function BirdseyeSection() {
         }}
       />
 
-      {/* EXPLORE THE CAMPUS Pointer */}
-      <div
-        style={{
-          position: "relative",
-          zIndex: 10,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "8px",
-          marginBottom: "32px",
-          animation: "bounce 3s ease-in-out infinite",
-        }}
-      >
-        <span
-          style={{
-            fontFamily: "'Cinzel', serif",
-            fontSize: "10px",
-            letterSpacing: "0.35em",
-            color: "#C9A84C",
-            opacity: 0.7,
-            textTransform: "uppercase",
-          }}
-        >
-          Explore the Campus
-        </span>
-        <div
-          style={{
-            width: "1px",
-            height: "32px",
-            background: "linear-gradient(to bottom, #C9A84C, transparent)",
-            opacity: 0.6,
-          }}
-        />
-      </div>
+      {/* EXPLORE THE CAMPUS Pointer removed as it's now in the iframe header */}
 
-      <div
-        ref={headingBlockRef}
-        className="landing-heading-block"
-        style={{
-          position: "relative",
-          zIndex: 2,
-          maxWidth: "1180px",
-          margin: "0 auto 20px",
-          textAlign: "center",
-        }}
-      >
-        <h2
-          className="landing-welcome-title"
-          style={{
-            fontSize: "clamp(34px, 6.5vw, 64px)",
-            marginBottom: 0,
-          }}
-        >
-          Campus Bird&rsquo;s-Eye
-        </h2>
-      </div>
+      {/* Redundant heading block removed */}
 
       <div
         style={{

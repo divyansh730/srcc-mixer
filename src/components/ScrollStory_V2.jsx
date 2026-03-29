@@ -362,6 +362,9 @@ export default function ScrollStoryV2() {
                 <a href="#memory-wall" className="nav-link">
                   Memory Wall
                 </a>
+                <a href="#birdseye-section" className="nav-link">
+                  Birdseye
+                </a>
                 <a href={GALLERY_PAGE} className="nav-link">
                   PC Gallery
                 </a>
@@ -420,6 +423,9 @@ export default function ScrollStoryV2() {
         >
           <a href="#memory-wall" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
             Memory Wall
+          </a>
+          <a href="#birdseye-section" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
+            Birdseye
           </a>
           <a href={GALLERY_PAGE} className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
             PC Gallery

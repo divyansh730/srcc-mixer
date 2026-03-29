@@ -7,10 +7,10 @@ const landingOptions = [
     id: "memory-wall",
     title: "Memory Wall",
     image: assetUrl("srcc-clock.jpg"),
-    status: "Coming Soon",
+    status: "Open",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer in odio et arcu posuere viverra.",
-    href: "#memory-wall",
+      "A collective wall of shared memories from alumni across decades.",
+    href: "./memory-wall.html",
   },
   {
     id: "pc-gallery",

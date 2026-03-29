@@ -359,7 +359,7 @@ export default function ScrollStoryV2() {
                 </div>
               )}
               <nav style={{ display: "flex", gap: "28px", flexWrap: "wrap", justifyContent: "flex-end" }}>
-                <a href="#memory-wall" className="nav-link">
+                <a href="./memory-wall.html" className="nav-link">
                   Memory Wall
                 </a>
                 <a href="#birdseye-section" className="nav-link">
@@ -421,7 +421,7 @@ export default function ScrollStoryV2() {
           className={`mobile-menu-panel${menuOpen ? " mobile-menu-panel-open" : ""}`}
           style={{ top: `${headerTotalHeight}px` }}
         >
-          <a href="#memory-wall" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
+          <a href="./memory-wall.html" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
             Memory Wall
           </a>
           <a href="#birdseye-section" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>

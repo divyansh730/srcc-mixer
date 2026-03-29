@@ -274,12 +274,13 @@
       position: relative;
       border-bottom: 1px solid rgba(212, 175, 55, 0.15);
       transition: border-color 0.3s ease;
+      cursor: pointer;
     }
     .select-wrapper:focus-within {
       border-color: var(--gold);
     }
 
-    .etch-select {
+    .custom-select-trigger {
       width: 100%;
       background: transparent;
       border: none;
@@ -288,24 +289,55 @@
       font-size: 22px;
       padding: 8px 0;
       outline: none;
-      cursor: pointer;
-      appearance: none;
-      -webkit-appearance: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .select-wrapper::after {
-      content: '▾';
+    .custom-options {
       position: absolute;
-      right: 0; top: 50%;
-      transform: translateY(-50%);
-      color: var(--gold-dim);
-      font-size: 14px;
-      pointer-events: none;
-      transition: color 0.3s ease;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: rgba(15, 12, 8, 0.98);
+      border: 1px solid var(--gold-dim);
+      max-height: 250px;
+      overflow-y: auto;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
-    .select-wrapper:hover::after {
+
+    .select-wrapper.active .custom-options {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .custom-option {
+      padding: 12px 20px;
+      color: rgba(245, 237, 215, 0.7);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      transition: all 0.2s ease;
+    }
+
+    .custom-option:hover {
+      background: rgba(212, 175, 55, 0.1);
       color: var(--gold);
     }
+
+    .custom-option.selected {
+      color: var(--gold);
+      background: rgba(212, 175, 55, 0.05);
+    }
+
+    /* Custom Scrollbar for dropdown */
+    .custom-options::-webkit-scrollbar { width: 4px; }
+    .custom-options::-webkit-scrollbar-thumb { background: var(--gold-dim); }
 
     .etch-input {
       width: 100%;
@@ -454,10 +486,14 @@
 
       <div class="form-group">
         <label class="form-label">Graduating Batch</label>
-        <div class="select-wrapper">
-          <select id="batch-select" class="etch-select" required>
-            <option value="" disabled selected>Select Year</option>
-          </select>
+        <div class="select-wrapper" id="custom-select">
+          <div class="custom-select-trigger">
+            <span id="selected-year">Select Year</span>
+            <span style="font-size: 12px; color: var(--gold-dim);">▾</span>
+          </div>
+          <div class="custom-options" id="year-options">
+            <!-- Will be populated by JS -->
+          </div>
         </div>
       </div>
 
@@ -498,11 +534,40 @@
     const modal = document.getElementById('etch-modal');
     const openBtn = document.getElementById('open-form');
     const closeBtn = document.getElementById('close-form');
-    const batchSelect = document.getElementById('batch-select');
+    const customSelect = document.getElementById('custom-select');
+    const selectedYearLabel = document.getElementById('selected-year');
+    const yearOptionsContainer = document.getElementById('year-options');
     const promptHint = document.getElementById('prompt-hint');
     const memoryInput = document.getElementById('memory-input');
     const wall = document.getElementById('wall-container');
     const submitBtn = document.getElementById('submit-btn');
+
+    let selectedYearValue = "";
+
+    // Populate Batch Dropdown
+    for (let year = 2026; year >= 1960; year--) {
+      const opt = document.createElement('div');
+      opt.className = 'custom-option';
+      opt.textContent = `Batch of ${year}`;
+      opt.dataset.value = year;
+      opt.onclick = (e) => {
+        e.stopPropagation();
+        selectedYearValue = year;
+        selectedYearLabel.textContent = `Batch of ${year}`;
+        selectedYearLabel.style.color = 'var(--cream)';
+        customSelect.classList.remove('active');
+        
+        document.querySelectorAll('.custom-option').forEach(el => el.classList.remove('selected'));
+        opt.classList.add('selected');
+      };
+      yearOptionsContainer.appendChild(opt);
+    }
+
+    // Toggle Custom Select
+    customSelect.onclick = () => customSelect.classList.toggle('active');
+    window.onclick = (e) => {
+      if (!customSelect.contains(e.target)) customSelect.classList.remove('active');
+    };
 
     const prompts = [
       "I recall...",
@@ -514,14 +579,6 @@
       "Late nights in the library...",
       "The placement cell journey..."
     ];
-
-    // Populate Batch Dropdown
-    for (let year = 2026; year >= 1960; year--) {
-      const opt = document.createElement('option');
-      opt.value = year;
-      opt.textContent = `Batch of ${year}`;
-      batchSelect.appendChild(opt);
-    }
 
     // Load Memories Real-time
     const q = query(memoriesCol, orderBy("createdAt", "desc"));
@@ -571,7 +628,7 @@
 
     // Submit Memory
     submitBtn.addEventListener('click', async () => {
-      const batch = batchSelect.value;
+      const batch = selectedYearValue;
       const text = memoryInput.value.trim();
 
       if (!batch || !text) {
@@ -588,7 +645,9 @@
         });
         modal.classList.remove('open');
         memoryInput.value = '';
-        batchSelect.value = '';
+        selectedYearValue = '';
+        selectedYearLabel.textContent = 'Select Year';
+        selectedYearLabel.style.color = '';
       } catch (e) {
         alert("Error saving memory. Please try again.");
       } finally {

@@ -15,20 +15,18 @@
       --gold-dim: rgba(212, 175, 55, 0.2);
       --cream: #F5EDD7;
       --dark: #0A0805;
-      --brick-brown: #1a0f07;
-      --brick-black: #050402;
-      --brick-line: rgba(212, 175, 55, 0.15);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background-color: #2a0a05; /* Deep brick red base */
-      /* ── Red Brick Wall Background Image ── */
+      background-color: #1a0a05; 
+      /* ── Realistic Red Brick Wall Background ── */
       background-image: 
-        linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), /* Dark overlay to match theme */
-        url("https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=2070&auto=format&fit=crop"); /* Realistic Red Brick Texture */
-      background-size: cover;
+        linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), 
+        url("https://www.transparenttextures.com/patterns/brick-wall.png"),
+        url("https://images.unsplash.com/photo-1590060153074-303deaa567af?q=80&w=2000&auto=format&fit=crop");
+      background-size: auto, auto, cover;
       background-attachment: fixed;
       background-position: center;
       
@@ -43,9 +41,17 @@
     body::after {
       content: '';
       position: fixed; inset: 0;
-      background: radial-gradient(circle at 50% 30%, transparent 0%, rgba(0,0,0,0.6) 100%);
+      background: radial-gradient(circle at 50% 30%, transparent 0%, rgba(0,0,0,0.7) 100%);
       pointer-events: none;
       z-index: 1;
+    }
+
+    /* Grain Overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 100; opacity: 0.3; mix-blend-mode: overlay;
     }
 
     header {
@@ -82,20 +88,21 @@
     }
 
     .memory-note {
-      position: absolute; /* Scattered placement */
+      position: absolute;
       --note-bg: #fdfaf0;
       background: var(--note-bg);
       color: #2c241a;
-      width: min(380px, 85vw); /* Bigger notes */
-      padding: 35px; /* More breathing room */
+      width: min(380px, 85vw);
+      padding: 35px;
       box-shadow: 
         5px 5px 20px rgba(0,0,0,0.5),
         inset 0 0 40px rgba(212, 175, 55, 0.05);
-      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, z-index 0s;
+      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
       opacity: 0;
       animation: noteEntrance 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       animation-delay: var(--delay);
       cursor: default;
+      transform: translate(0, 0) rotate(var(--rotation));
     }
 
     .note-style-1 { --note-bg: #fdfaf0; }
@@ -113,19 +120,37 @@
       box-shadow: 0 25px 50px rgba(0,0,0,0.7);
     }
 
+    /* Delete button for moderator */
+    .delete-note {
+      position: absolute;
+      top: 10px; right: 10px;
+      width: 24px; height: 24px;
+      background: #e05c5c;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      z-index: 10;
+    }
+    body.moderator-mode .delete-note { display: flex; }
+
     .memory-note::before {
       content: '';
       position: absolute;
       top: -10px; left: 50%;
       transform: translateX(-50%);
-      width: 60px; height: 15px;
+      width: 70px; height: 18px;
       background: rgba(212, 175, 55, 0.12);
       backdrop-filter: blur(3px);
       border: 1px solid rgba(212, 175, 55, 0.1);
     }
 
     .note-text {
-      font-size: 17px;
+      font-size: 20px;
       font-style: italic;
       margin-bottom: 20px;
       font-family: 'Cormorant Garamond', serif;
@@ -138,7 +163,7 @@
       display: flex;
       justify-content: flex-end;
       font-family: 'Cinzel', serif;
-      font-size: 10px;
+      font-size: 12px;
       letter-spacing: 0.1em;
     }
 
@@ -180,7 +205,7 @@
       transform: translateY(-2px);
     }
 
-    /* ── Modal Form (Mobile-style cleanup) ── */
+    /* ── Modal Form ── */
     #etch-modal {
       position: fixed;
       inset: 0;
@@ -237,7 +262,6 @@
       text-transform: uppercase;
     }
 
-    /* Clean Mobile-style Dropdown */
     .select-wrapper {
       position: relative;
       border-bottom: 1px solid var(--gold-dim);
@@ -279,10 +303,6 @@
       transition: border-color 0.4s ease;
     }
 
-    .etch-input:focus {
-      border-color: var(--gold);
-    }
-
     .prompt-container {
       position: relative;
     }
@@ -322,6 +342,11 @@
       text-transform: uppercase;
     }
 
+    .submit-etch:disabled {
+      opacity: 0.5;
+      cursor: wait;
+    }
+
     .close-etch {
       background: transparent;
       color: var(--gold);
@@ -356,7 +381,7 @@
         position: relative !important;
         left: 0 !important;
         top: 0 !important;
-        margin: 20px auto;
+        margin: 40px auto;
       }
       #wall-container {
         display: flex;
@@ -377,7 +402,7 @@
   </header>
 
   <main id="wall-container">
-    <!-- Memories will be injected here -->
+    <!-- Memories will be injected here from Firebase -->
   </main>
 
   <div id="submission-bar">
@@ -414,7 +439,25 @@
     </div>
   </div>
 
-  <script>
+  <!-- ── Firebase Integration ── -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = { 
+      apiKey: "AIzaSyAAbJeb6hQFc78RGgzY-eoftS5zrx-pRv0", 
+      authDomain: "memory-wall-pc-srcc.firebaseapp.com", 
+      projectId: "memory-wall-pc-srcc", 
+      storageBucket: "memory-wall-pc-srcc.firebasestorage.app", 
+      messagingSenderId: "85707520730", 
+      appId: "1:85707520730:web:277d825c226586996a03e3", 
+      measurementId: "G-V8T3981NCW"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const memoriesCol = collection(db, "memories");
+
     const modal = document.getElementById('etch-modal');
     const openBtn = document.getElementById('open-form');
     const closeBtn = document.getElementById('close-form');
@@ -422,6 +465,7 @@
     const promptHint = document.getElementById('prompt-hint');
     const memoryInput = document.getElementById('memory-input');
     const wall = document.getElementById('wall-container');
+    const submitBtn = document.getElementById('submit-btn');
 
     const prompts = [
       "I recall...",
@@ -434,15 +478,6 @@
       "The placement cell journey..."
     ];
 
-    const sampleMemories = [
-      { text: "The corridor discussions were more enlightening than the lectures sometimes. SRCC taught me more than just commerce.", batch: "2012" },
-      { text: "I still recall the smell of the old library and the excitement of the first placement day. Truly the best years.", batch: "2005" },
-      { text: "From the Statue Lawns to the corporate boardrooms, the journey has been incredible. Thank you, SRCC.", batch: "1998" },
-      { text: "The Nescafe Annex was where all our business plans were born. Memories that will last a lifetime.", batch: "2018" },
-      { text: "That first interview call from the Placement Cell changed everything. A legacy of excellence.", batch: "2010" },
-      { text: "Sitting on the stairs of the auditorium, dreaming big. SRCC made those dreams real.", batch: "2021" }
-    ];
-
     // Populate Batch Dropdown
     for (let year = 2026; year >= 1960; year--) {
       const opt = document.createElement('option');
@@ -451,55 +486,88 @@
       batchSelect.appendChild(opt);
     }
 
-    function scatterMemories() {
+    // Load Memories Real-time
+    const q = query(memoriesCol, orderBy("createdAt", "desc"));
+    onSnapshot(q, (snapshot) => {
       wall.innerHTML = '';
       const isMobile = window.innerWidth <= 768;
       
-      sampleMemories.forEach((m, i) => {
+      snapshot.docs.forEach((docSnap, i) => {
+        const m = docSnap.data();
         const note = document.createElement('div');
         const styleNum = (i % 3) + 1;
         note.className = `memory-note note-style-${styleNum}`;
         
-        const rotation = (Math.random() * 8 - 4).toFixed(1); // Slightly more rotation
+        // Random slight rotation (random direction)
+        const rotation = (Math.random() * 6 - 3).toFixed(1); 
         const delay = (i * 0.1).toFixed(1);
         
         note.style.setProperty('--rotation', `${rotation}deg`);
         note.style.setProperty('--delay', `${delay}s`);
         
         if (!isMobile) {
-          // Moderate vertical spacing: roughly 320px apart (reduced from 450px)
           const side = i % 2 === 0 ? 'left' : 'right';
-          const horizontalOffset = 10 + (Math.random() * 20); // 10% to 30% from edge
+          const horizontalOffset = 10 + (Math.random() * 20);
           const verticalOffset = 100 + (i * 320) + (Math.random() * 80); 
           
-          if (side === 'left') {
-            note.style.left = `${horizontalOffset}%`;
-          } else {
-            note.style.right = `${horizontalOffset}%`;
-          }
+          if (side === 'left') note.style.left = `${horizontalOffset}%`;
+          else note.style.right = `${horizontalOffset}%`;
           note.style.top = `${verticalOffset}px`;
         }
 
         note.innerHTML = `
-          <p class="note-text" style="font-size: 20px;">"${m.text}"</p>
-          <div class="note-footer" style="font-size: 12px;">
+          <button class="delete-note" data-id="${docSnap.id}">×</button>
+          <p class="note-text">"${m.text}"</p>
+          <div class="note-footer">
             <span class="note-batch">Batch of ${m.batch}</span>
           </div>
         `;
         wall.appendChild(note);
       });
 
-      // Update container height
       if (!isMobile) {
-        const totalHeight = 200 + (sampleMemories.length * 320) + 400;
-        wall.style.height = `${totalHeight}px`;
+        wall.style.height = `${200 + (snapshot.size * 320) + 400}px`;
       } else {
         wall.style.height = 'auto';
       }
-    }
+    });
 
-    scatterMemories();
-    window.addEventListener('resize', scatterMemories);
+    // Submit Memory
+    submitBtn.addEventListener('click', async () => {
+      const batch = batchSelect.value;
+      const text = memoryInput.value.trim();
+
+      if (!batch || !text) {
+        alert("Please fill in both fields.");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      try {
+        await addDoc(memoriesCol, {
+          batch,
+          text,
+          createdAt: new Date()
+        });
+        modal.classList.remove('open');
+        memoryInput.value = '';
+        batchSelect.value = '';
+      } catch (e) {
+        alert("Error saving memory. Please try again.");
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+
+    // Delete Logic
+    wall.addEventListener('click', async (e) => {
+      if (e.target.classList.contains('delete-note')) {
+        const id = e.target.dataset.id;
+        if (confirm("Delete this memory forever?")) {
+          await deleteDoc(doc(db, "memories", id));
+        }
+      }
+    });
 
     // Modal & Prompt Logic
     openBtn.addEventListener('click', () => {
@@ -512,10 +580,15 @@
 
     closeBtn.addEventListener('click', () => modal.classList.remove('open'));
 
-    // Admin Placeholder
+    // Admin Toggle
     document.getElementById('admin-trigger').addEventListener('click', () => {
       const pw = prompt("Enter Moderator Password:");
-      if (pw === 'srcc2026') alert("Moderator mode enabled.");
+      if (pw === 'srcc2026') {
+        document.body.classList.toggle('moderator-mode');
+        alert("Moderator mode toggled.");
+      } else {
+        alert("Incorrect password.");
+      }
     });
 
   </script>

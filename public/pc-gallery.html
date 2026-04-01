@@ -47,110 +47,130 @@
     z-index: 12;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    margin: 20px 56px 0;
+    gap: 12px;
+    margin: 30px 56px 0;
+    padding: 12px 24px;
+    background: rgba(201, 168, 76, 0.05);
+    border: 1px solid rgba(201, 168, 76, 0.15);
+    border-radius: 4px;
     font-family: 'Cinzel', serif;
-    font-size: 9px;
-    letter-spacing: 0.22em;
+    font-size: 11px;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
-    color: rgba(201, 168, 76, 0.55);
+    color: rgba(201, 168, 76, 0.7);
     text-decoration: none;
-    transition: color 0.25s ease, letter-spacing 0.25s ease;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .mixer-back:hover { color: var(--gold); letter-spacing: 0.26em; }
+  .mixer-back:hover { 
+    color: var(--gold); 
+    background: rgba(201, 168, 76, 0.12);
+    border-color: var(--gold);
+    letter-spacing: 0.3em;
+    transform: translateX(-8px);
+    box-shadow: 0 0 20px rgba(201, 168, 76, 0.1);
+  }
 
-  /* ── HEADER (reference layout: eyebrow + The + Gallery + subtitle) ── */
+  /* ── HEADER ── */
   header {
-    position: relative;
-    z-index: 10;
-    padding: 36px 56px 40px;
+    padding: 0px 0px 0; /* Reduced top padding to move it up */
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; /* Center heading horizontally */
     text-align: center;
-    border-bottom: 1px solid rgba(201, 168, 76, 0.14);
-    background: linear-gradient(to bottom, rgba(10,6,2,0.97) 0%, transparent 100%);
-  }
-
-  @keyframes heroEntrance {
-    from { opacity: 0; transform: translateY(22px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes titleEntrance {
-    from { opacity: 0; transform: translateY(88px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .header-left {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-    max-width: 960px;
-  }
-
-  .gh-eyebrow {
-    font-family: 'Cinzel', serif;
-    font-size: clamp(8px, 0.95vw, 11px);
-    letter-spacing: 0.32em;
-    color: rgba(201, 168, 76, 0.52);
-    text-transform: uppercase;
-    opacity: 0;
-    animation: heroEntrance 1s cubic-bezier(0.16,1,0.3,1) forwards;
-    animation-delay: 0.3s;
+    margin-bottom: 60px; /* Space before description */
+    position: relative;
   }
 
   .gh-title-row {
     display: flex;
-    flex-direction: row;
     align-items: baseline;
     justify-content: center;
-    gap: 0.28em;
-    flex-wrap: wrap;
-    margin-top: 18px;
-    margin-bottom: 4px;
-    opacity: 0;
-    animation: titleEntrance 1.1s cubic-bezier(0.16,1,0.3,1) forwards;
-    animation-delay: 0.4s;
+    gap: 20px;
+    margin-bottom: 20;
   }
 
   .gh-the {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(40px, 7vw, 78px);
-    font-weight: 400;
-    color: #F6E8BC;
-    letter-spacing: 0.04em;
-    line-height: 1;
-    text-shadow: 0 0 40px rgba(201, 168, 76, 0.22), 0 4px 24px rgba(0,0,0,0.85);
+    font-family: 'Pinyon Script', cursive;
+    font-size: 80px;
+    color: var(--gold);
+    line-height: 0;
   }
 
   .gh-gallery {
-    font-family: 'Pinyon Script', cursive;
-    font-size: clamp(44px, 7.5vw, 86px);
+    font-family: 'Cinzel', serif;
+    font-size: 70px;
+    letter-spacing: 0.16em;
+    color: var(--cream);
+    text-transform: uppercase;
+    line-height: 0;
     font-weight: 400;
-    color: #C9A84C;
-    line-height: 1;
-    text-shadow: 0 0 48px rgba(201, 168, 76, 0.35), 0 4px 28px rgba(0,0,0,0.92);
   }
 
-  .gh-eyebrow-bottom {
+  .gallery-description {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: rgba(246, 232, 188, 0.6);
+    letter-spacing: 0.04em;
+    margin: 0 48px 15px; /* Left aligned with side padding */
+    max-width: 800px;
+    text-align: left; /* Explicitly left aligned */
+  }
+
+  /* ── GOLD RULE ── */
+  .gold-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3) 20%, rgba(201,168,76,0.3) 80%, transparent);
+    position: relative;
+    margin: 0 48px 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .gold-divider::after {
+    content: '◆';
+    color: rgba(201,168,76,0.4);
+    font-size: 8px;
+    background: #080502; /* Match body bg to create break */
+    padding: 0 15px;
+  }
+
+  /* ── OWNER LOGIN LINK ── */
+  #owner-login-wrap {
+    position: fixed; /* Fixed to absolute top right */
+    top: 20px;
+    right: 20px;
+    z-index: 250;
+  }
+
+  #owner-login-link {
     font-family: 'Cinzel', serif;
-    font-size: clamp(8px, 0.9vw, 11px);
+    font-size: 8px; /* Matches moderator btn size */
     letter-spacing: 0.2em;
-    color: rgba(201, 168, 76, 0.48);
+    color: rgba(212,175,55,0.3);
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid rgba(212, 175, 55, 0.1);
+    padding: 8px 15px;
+    transition: all 0.2s;
     text-transform: uppercase;
-    margin-top: 14px;
+  }
+
+  #owner-login-link:hover { 
+    color: var(--gold); 
+    border-color: var(--gold-dim);
   }
 
   .header-right {
-    position: absolute;
-    top: 24px;
-    right: 40px;
+    display: none; /* Hide old owner badge wrapper */
   }
 
   #owner-badge {
-    display: none;
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    z-index: 250;
     font-family: 'Cinzel', serif;
     font-size: 8px;
     letter-spacing: 0.25em;
@@ -158,66 +178,8 @@
     border: 0.5px solid var(--gold-dim);
     padding: 4px 12px;
     opacity: 0.85;
+    background: rgba(10,8,5,0.9);
   }
-
-  @media (max-width: 768px) {
-    .mixer-back { margin: 16px 20px 0; }
-    header { padding: 28px 20px 32px; }
-    .header-right { top: 16px; right: 16px; }
-    .gold-divider { padding: 0 20px !important; }
-    #owner-login-wrap { padding: 0 20px !important; }
-    .toolbar { padding: 0 20px !important; }
-    .grid { padding: 0 20px 56px !important; gap: 20px !important; }
-  }
-
-  /* ── GOLD RULE ── */
-  .gold-divider {
-    position: relative;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 0 56px;
-    margin: 28px 0;
-  }
-
-  .gold-divider::before, .gold-divider::after {
-    content: '';
-    flex: 1;
-    height: 0.5px;
-    background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
-  }
-
-  .gold-divider span {
-    font-family: 'Cinzel', serif;
-    font-size: 9px;
-    color: var(--gold);
-    letter-spacing: 0.3em;
-    opacity: 0.6;
-  }
-
-  /* ── OWNER LOGIN LINK ── */
-  #owner-login-wrap {
-    position: relative;
-    z-index: 10;
-    text-align: right;
-    padding: 0 56px;
-    margin-bottom: 8px;
-  }
-
-  #owner-login-link {
-    font-family: 'Cinzel', serif;
-    font-size: 9px;
-    letter-spacing: 0.22em;
-    color: rgba(212,175,55,0.55);
-    cursor: pointer;
-    background: none;
-    border: none;
-    transition: color 0.2s;
-    text-transform: uppercase;
-  }
-
-  #owner-login-link:hover { color: var(--gold); }
 
   /* ── TOOLBAR (owner only) ── */
   .toolbar {
@@ -657,6 +619,183 @@
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   input[type=file] { display: none; }
+
+  /* ── USER UPLOAD MODAL ── */
+  #upload-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 3, 1, 0.85); /* Exactly like memory wall */
+    backdrop-filter: blur(12px) saturate(1.2); 
+    -webkit-backdrop-filter: blur(12px) saturate(1.2);
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #upload-modal.open { 
+    opacity: 1; 
+    pointer-events: all; 
+  }
+
+  .upload-form {
+    width: min(580px, 90vw); /* Exactly like memory wall etch-form */
+    position: relative;
+    transform: translateY(40px) scale(0.95);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+    background: rgba(10, 7, 3, 0.95);
+    padding: 50px 60px;
+    border: 1px solid var(--gold-dim);
+    box-shadow: 0 30px 100px rgba(0,0,0,0.8);
+    opacity: 0;
+  }
+
+  #upload-modal.open .upload-form {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+
+  .upload-form h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 45px;
+    font-weight: 400;
+  }
+
+  .upload-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 35px; }
+  .upload-label { 
+    display: block;
+    font-family: 'Cinzel', serif; 
+    font-size: 9px; 
+    letter-spacing: 0.2em; 
+    color: var(--gold); 
+    margin-bottom: 12px;
+    opacity: 0.5; 
+    text-transform: uppercase; 
+  }
+  
+  .file-drop-zone {
+    border: 1px solid rgba(201, 168, 76, 0.15);
+    padding: 50px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    background: rgba(201, 168, 76, 0.02);
+  }
+  .file-drop-zone:hover { 
+    background: rgba(201, 168, 76, 0.05); 
+    border-color: var(--gold); 
+    box-shadow: 0 0 30px rgba(201, 168, 76, 0.1);
+  }
+  .file-drop-zone p { font-family: 'EB Garamond', serif; font-style: italic; font-size: 18px; color: rgba(245,237,215,0.4); }
+
+  #preview-container {
+    width: 100%;
+    height: 220px;
+    background: var(--dark-3);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid var(--gold-dim);
+  }
+  #preview-container img { width: 100%; height: 100%; object-fit: contain; }
+
+  .upload-actions { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    margin-top: 50px; 
+  }
+
+  /* ── Exactly like submit-etch ── */
+  .submit-photo-btn {
+    background: var(--gold);
+    color: var(--dark);
+    border: 1px solid var(--gold);
+    padding: 12px 45px;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .submit-photo-btn:hover {
+    background: transparent;
+    color: var(--gold);
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
+    transform: translateY(-2px);
+  }
+
+  /* ── Exactly like close-etch ── */
+  .close-upload {
+    background: transparent;
+    color: rgba(212, 175, 55, 0.6);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    padding: 12px 30px;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .close-upload:hover {
+    color: var(--gold);
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.05);
+    transform: translateY(-2px);
+  }
+
+  /* ── Floating Trigger Bar EXACTLY like memory wall ── */
+  #submission-bar-gallery {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, var(--dark) 70%, transparent);
+    padding: 50px 20px;
+    z-index: 500;
+    display: flex;
+    justify-content: center;
+  }
+
+  .gallery-trigger {
+    background: transparent;
+    border: 1px solid var(--gold-dim);
+    color: var(--gold);
+    padding: 16px 45px;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    backdrop-filter: blur(5px);
+  }
+
+  .gallery-trigger:hover {
+    background: var(--gold);
+    color: var(--dark);
+    border-color: var(--gold);
+    box-shadow: 0 0 40px rgba(212, 175, 55, 0.35);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    .upload-form { padding: 35px 20px; width: 94vw; border-radius: 4px; }
+    .upload-form h3 { font-size: 15px; margin-bottom: 35px; }
+    .submit-photo-btn, .close-upload { padding: 12px 25px; font-size: 10px; }
+    #submission-bar-gallery { padding: 35px 20px; }
+    .gallery-trigger { width: 85%; padding: 14px 20px; font-size: 10px; }
+  }
 </style>
 </head>
 <body>
@@ -664,19 +803,17 @@
 <a class="mixer-back" id="mixer-back" href="./index.html">← Back</a>
 
 <header>
-  <div class="header-left">
-    <span class="gh-eyebrow">The Placement Cell · SRCC</span>
     <div class="gh-title-row">
       <span class="gh-the">The</span>
       <span class="gh-gallery">Gallery</span>
     </div>
-  </div>
-  <div class="header-right">
-    <div id="owner-badge">◆ OWNER MODE</div>
-  </div>
-</header>
+  </header>
 
-<div class="gold-divider"><span>◆</span></div>
+<p class="gallery-description">A collection of memories captured through the lens. Add your own photographs to the legacy below.</p>
+
+<div id="owner-badge" style="display:none">◆ OWNER MODE</div>
+
+<div class="gold-divider"></div>
 
 <div id="owner-login-wrap">
   <button id="owner-login-link" onclick="openAuthModal()">owner</button>
@@ -691,6 +828,31 @@
 
 <div id="loading">Loading gallery…</div>
 <div class="grid" id="grid" style="display:none"></div>
+
+<div id="submission-bar-gallery">
+  <button class="gallery-trigger" onclick="openUploadModal()">Add your photos</button>
+</div>
+
+<!-- UPLOAD MODAL -->
+<div id="upload-modal" onclick="closeUploadModal()">
+  <div class="upload-form" onclick="event.stopPropagation()">
+    <h3>◆ Add to the gallery</h3>
+    
+    <div class="upload-group">
+      <label class="upload-label">Select Photograph</label>
+      <div class="file-drop-zone" onclick="document.getElementById('user-photo-input').click()">
+        <p id="file-hint">Click to select or drag photo here</p>
+        <div id="preview-container"><img id="preview-img" src=""></div>
+      </div>
+      <input type="file" id="user-photo-input" accept="image/*" onchange="handleFileSelect(this)">
+    </div>
+
+    <div class="upload-actions">
+      <button class="close-upload" onclick="closeUploadModal()">Cancel</button>
+      <button class="submit-photo-btn" id="gallery-submit-btn" onclick="submitUserPhoto()">Add to Gallery</button>
+    </div>
+  </div>
+</div>
 
 <footer>
   <div class="footer-rule"><span>◆</span></div>
@@ -723,110 +885,117 @@
 
 <div id="toast"></div>
 
-<script>
-  /* ── CONFIG ── change this to your desired password */
+<!-- Firebase Integration & Gallery Logic -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
+  const firebaseConfig = { 
+    apiKey: "AIzaSyAAbJeb6hQFc78RGgzY-eoftS5zrx-pRv0", 
+    authDomain: "memory-wall-pc-srcc.firebaseapp.com", 
+    projectId: "memory-wall-pc-srcc", 
+    storageBucket: "memory-wall-pc-srcc.firebasestorage.app", 
+    messagingSenderId: "85707520730", 
+    appId: "1:85707520730:web:277d825c226586996a03e3", 
+    measurementId: "G-V8T3981NCW"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
+  const galleryCol = collection(db, "gallery_photos");
+  const settingsDocRef = doc(db, "gallery_settings", "overrides");
+
+  /* ── CONFIG ── */
   const OWNER_PASS  = 'srcc1996';
   const TOTAL       = 49;
-  const STORAGE_KEY = 'pc-gallery-photos';
-
-  /** Bundled defaults (from MHTML export) — relative to this HTML file */
-  function defaultPhotoSrc(i) {
-    return 'pc-gallery-defaults/' + String(i).padStart(2, '0') + '.jpg';
-  }
-
+  
   let isOwner = false;
-  let photos  = {}; // { slotIndex: base64DataUrl } overrides only; slots fall back to default JPEGs
+  let photos  = {}; // { slotIndex: photoURL }
+  window.userPhotos = [];
 
   const grid       = document.getElementById('grid');
   const toolbar    = document.getElementById('toolbar');
   const ownerBadge = document.getElementById('owner-badge');
   const loading    = document.getElementById('loading');
 
+  /** Bundled defaults */
+  function defaultPhotoSrc(i) {
+    return 'pc-gallery-defaults/' + String(i).padStart(2, '0') + '.jpg';
+  }
+
   /* ── TOAST ── */
   let toastTimer;
-  function showToast(msg) {
+  window.showToast = (msg) => {
     const t = document.getElementById('toast');
+    if (!t) return;
     t.textContent = msg;
     t.classList.add('show');
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
-  }
+  };
 
   /* ── LIGHTBOX ── */
-  function openLightbox(src) {
+  window.openLightbox = (src) => {
     document.getElementById('lightbox-img').src = src;
     document.getElementById('lightbox').classList.add('open');
-  }
+  };
 
-  function closeLightbox() {
+  window.closeLightbox = () => {
     document.getElementById('lightbox').classList.remove('open');
     document.getElementById('lightbox-img').src = '';
-  }
+  };
 
   /* ── AUTH ── */
-  function openAuthModal() {
-    if (isOwner) { exitOwnerMode(); return; }
+  window.openAuthModal = () => {
+    if (isOwner) { window.exitOwnerMode(); return; }
     document.getElementById('auth-input').value = '';
     document.getElementById('auth-error').classList.remove('show');
     document.getElementById('auth-modal').classList.add('open');
     setTimeout(() => document.getElementById('auth-input').focus(), 80);
-  }
+  };
 
-  function closeAuthModal() {
+  window.closeAuthModal = () => {
     document.getElementById('auth-modal').classList.remove('open');
-  }
+  };
 
-  function submitAuth() {
+  window.submitAuth = () => {
     if (document.getElementById('auth-input').value === OWNER_PASS) {
-      closeAuthModal();
-      enterOwnerMode();
+      window.closeAuthModal();
+      window.enterOwnerMode();
     } else {
       document.getElementById('auth-error').classList.add('show');
       document.getElementById('auth-input').value = '';
       document.getElementById('auth-input').focus();
     }
-  }
+  };
 
-  function enterOwnerMode() {
+  window.enterOwnerMode = () => {
     isOwner = true;
     toolbar.classList.add('visible');
     ownerBadge.style.display = 'block';
     document.getElementById('owner-login-link').textContent = 'exit owner';
     document.querySelectorAll('.polaroid').forEach(p => p.classList.add('owner-mode'));
-    showToast('Owner mode active');
-  }
+    window.showToast('Owner mode active');
+  };
 
-  function exitOwnerMode() {
+  window.exitOwnerMode = () => {
     isOwner = false;
     toolbar.classList.remove('visible');
     ownerBadge.style.display = 'none';
     document.getElementById('owner-login-link').textContent = 'owner';
     document.querySelectorAll('.polaroid').forEach(p => p.classList.remove('owner-mode'));
-    showToast('Viewing as guest');
-  }
+    window.showToast('Viewing as guest');
+  };
 
-  /* ── STORAGE (localStorage — works in browser; MHTML archive APIs are not used) ── */
-  async function saveAll() {
+  /* ── DATABASE STORAGE ── */
+  async function saveOverrides() {
     try {
-      const json = JSON.stringify(photos);
-      if (json.length > 4e6) {
-        showToast('Gallery too large for this browser — remove some photos');
-        return;
-      }
-      localStorage.setItem(STORAGE_KEY, json);
+      await setDoc(settingsDocRef, photos);
     } catch (e) {
-      console.error('Save failed', e);
-      showToast('Save failed — storage full or blocked');
-    }
-  }
-
-  async function loadAll() {
-    photos = {};
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) photos = JSON.parse(raw) || {};
-    } catch (e) {
-      photos = {};
+      console.error('Firestore save failed', e);
+      window.showToast('Save failed — database error');
     }
   }
 
@@ -841,7 +1010,7 @@
 
     img.addEventListener('click', ev => {
       ev.stopPropagation();
-      openLightbox(src);
+      window.openLightbox(src);
     });
   }
 
@@ -850,25 +1019,29 @@
     renderPhoto(pol, defaultPhotoSrc(i));
   }
 
-  /* ── LOAD FROM FILE ── */
-  function loadImage(pol, file) {
-    const reader = new FileReader();
-    reader.onload = async function(e) {
-      const src = e.target.result;
-      photos[pol.dataset.index] = src;
-      renderPhoto(pol, src);
-      showToast('Saving…');
-      await saveAll();
-      showToast('Photo saved');
-    };
-    reader.readAsDataURL(file);
+  /* ── LOAD FROM FILE (Owner) ── */
+  async function loadImage(pol, file) {
+    window.showToast('Uploading to database...');
+    try {
+      const storageRef = ref(storage, `owner_overrides/${pol.dataset.index}_${Date.now()}_${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      
+      photos[pol.dataset.index] = downloadURL;
+      renderPhoto(pol, downloadURL);
+      await saveOverrides();
+      window.showToast('Photo saved to database');
+    } catch (e) {
+      console.error(e);
+      window.showToast('Upload failed');
+    }
   }
 
   /* ── CREATE POLAROID ── */
-  function createPolaroid(i) {
+  function createPolaroid(i, userPhoto = null) {
     const pol = document.createElement('div');
     pol.className = 'polaroid';
-    pol.dataset.index = i;
+    if (!userPhoto) pol.dataset.index = i;
 
     const tilt = ((Math.random() - 0.5) * 2.4).toFixed(2);
     pol.style.setProperty('--tilt', tilt + 'deg');
@@ -880,71 +1053,185 @@
     slot.innerHTML = `<div class="empty-hint"><div class="plus-icon"></div><span class="slot-label">add photo</span></div>`;
     pol.appendChild(slot);
 
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'image/*';
-    fileInput.addEventListener('change', function() {
-      if (this.files[0]) loadImage(pol, this.files[0]);
-    });
-    pol.appendChild(fileInput);
+    if (userPhoto) {
+      renderPhoto(pol, userPhoto.url);
+      pol.classList.add('user-contributed');
+    } else {
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.addEventListener('change', function() {
+        if (this.files[0]) loadImage(pol, this.files[0]);
+      });
+      pol.appendChild(fileInput);
 
-    pol.addEventListener('click', function(e) {
-      if (e.target.closest('img')) return;
-      if (!isOwner) {
-        if (this.classList.contains('has-image')) {
-          const im = this.querySelector('.photo-slot img');
-          if (im && im.src) openLightbox(im.src);
+      pol.addEventListener('click', function(e) {
+        if (e.target.closest('img')) return;
+        if (!isOwner) {
+          if (this.classList.contains('has-image')) {
+            const im = this.querySelector('.photo-slot img');
+            if (im && im.src) window.openLightbox(im.src);
+          }
+          return;
         }
-        return;
-      }
-      if (this.classList.contains('has-image')) {
-        delete photos[this.dataset.index];
-        clearSlot(this);
-        saveAll().then(() => showToast('Photo reset to default'));
-      } else {
-        fileInput.click();
-      }
-    });
+        if (this.classList.contains('has-image')) {
+          delete photos[this.dataset.index];
+          clearSlot(this);
+          saveOverrides().then(() => window.showToast('Photo reset to default'));
+        } else {
+          fileInput.click();
+        }
+      });
+    }
 
     grid.appendChild(pol);
     return pol;
   }
 
   /* ── BULK UPLOAD ── */
-  function bulkUpload(input) {
+  window.bulkUpload = async function(input) {
     const files = Array.from(input.files);
-    const slots = Array.from(document.querySelectorAll('.polaroid'));
-    files.forEach((file, i) => { if (i < slots.length) loadImage(slots[i], file); });
+    const slots = Array.from(document.querySelectorAll('.polaroid:not(.user-contributed)'));
+    window.showToast(`Uploading ${files.length} photos...`);
+    for (let i = 0; i < files.length && i < slots.length; i++) {
+      await loadImage(slots[i], files[i]);
+    }
     input.value = '';
-  }
+    window.showToast('Bulk upload complete');
+  };
 
   /* ── CLEAR ALL ── */
-  async function clearAll() {
-    if (!confirm('Reset all frames to the default photographs? Custom uploads will be cleared.')) return;
+  window.clearAll = async function() {
+    if (!confirm('Reset all frames to the default photographs? Custom uploads will be cleared from database.')) return;
     photos = {};
-    document.querySelectorAll('.polaroid').forEach(pol => {
-      renderPhoto(pol, defaultPhotoSrc(pol.dataset.index));
+    document.querySelectorAll('.polaroid:not(.user-contributed)').forEach(pol => {
+      clearSlot(pol);
     });
-    await saveAll();
-    showToast('Gallery reset to defaults');
+    await saveOverrides();
+    window.showToast('Gallery reset to defaults');
+  };
+
+  /* ── USER UPLOAD LOGIC ── */
+  window.openUploadModal = () => {
+    const modal = document.getElementById('upload-modal');
+    modal.classList.add('open');
+    resetUploadForm();
+    modal.onclick = (e) => { if (e.target === modal) window.closeUploadModal(); };
+  };
+
+  window.closeUploadModal = () => {
+    document.getElementById('upload-modal').classList.remove('open');
+  };
+
+  window.handleFileSelect = (input) => {
+    const file = input.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        document.getElementById('preview-img').src = e.target.result;
+        document.getElementById('preview-container').style.display = 'flex';
+        document.getElementById('file-hint').style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  function resetUploadForm() {
+    document.getElementById('user-photo-input').value = '';
+    document.getElementById('preview-img').src = '';
+    document.getElementById('preview-container').style.display = 'none';
+    document.getElementById('file-hint').style.display = 'block';
+    document.getElementById('gallery-submit-btn').disabled = false;
+    document.getElementById('gallery-submit-btn').textContent = 'Add to Gallery';
   }
 
-  /* ── KEYBOARD ── */
+  window.submitUserPhoto = async () => {
+    const fileInput = document.getElementById('user-photo-input');
+    const submitBtn = document.getElementById('gallery-submit-btn');
+
+    if (!fileInput.files[0]) {
+      alert("Please select a photograph first.");
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Uploading...';
+
+    try {
+      const file = fileInput.files[0];
+      const storageRef = ref(storage, `gallery/${Date.now()}_${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+
+      await addDoc(galleryCol, {
+        url: downloadURL,
+        createdAt: new Date()
+      });
+
+      window.showToast("Photo added to gallery!");
+      window.closeUploadModal();
+    } catch (e) {
+      console.error(e);
+      alert("Upload failed. Check connection or file size.");
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Add to Gallery';
+    }
+  };
+
+  /* ── REFRESH GALLERY ── */
+  window.refreshGallery = function() {
+    grid.innerHTML = '';
+    // User photos
+    window.userPhotos.forEach((up, idx) => {
+      createPolaroid(idx, up);
+    });
+    // Default/Owner photos
+    for (let i = 0; i < TOTAL; i++) {
+      const pol = createPolaroid(i + window.userPhotos.length);
+      const src = photos[i] || defaultPhotoSrc(i);
+      renderPhoto(pol, src);
+      if (isOwner) pol.classList.add('owner-mode');
+    }
+  };
+
+  /* ── LISTENERS ── */
+  const q = query(galleryCol, orderBy("createdAt", "desc"));
+  onSnapshot(q, (snapshot) => {
+    window.userPhotos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    window.refreshGallery();
+  });
+
+  onSnapshot(settingsDocRef, (docSnap) => {
+    if (docSnap.exists()) {
+      photos = docSnap.data();
+      window.refreshGallery();
+    }
+  });
+
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeLightbox(); closeAuthModal(); }
+    if (e.key === 'Escape') { 
+      window.closeLightbox(); 
+      window.closeAuthModal(); 
+      window.closeUploadModal(); 
+    }
   });
 
   /* ── INIT ── */
   async function init() {
-    for (let i = 0; i < TOTAL; i++) createPolaroid(i);
-    await loadAll();
-    document.querySelectorAll('.polaroid').forEach(pol => {
-      const i = pol.dataset.index;
-      const src = photos[i] || defaultPhotoSrc(i);
-      renderPhoto(pol, src);
-    });
     loading.style.display = 'none';
     grid.style.display = 'grid';
+
+    // Scroll Position Persistence
+    const savedPos = localStorage.getItem('srcc_gallery_scroll_pos');
+    if (savedPos) {
+      setTimeout(() => window.scrollTo({ top: parseInt(savedPos, 10), behavior: 'smooth' }), 600);
+    }
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => localStorage.setItem('srcc_gallery_scroll_pos', window.scrollY), 500);
+    }, { passive: true });
   }
 
   init();

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`;
 const GALLERY_PAGE = `${import.meta.env.BASE_URL}pc-gallery.html`;
 const SRCC_LOGO = assetUrl("srcc-logo.png");
+const MIXER_LOGO = assetUrl("Mixer logo.png");
 const BG_CLOCK = assetUrl("srcc-clock.jpg");
 const BG_CORRIDOR = assetUrl("srcc-corridor.jpg");
 
@@ -34,16 +35,17 @@ export default function ScrollStoryV2() {
 
   const isMobile = viewportWidth <= 768;
   const isCompactMobile = viewportWidth <= 480;
-  const mainHeaderBarHeight = isMobile ? 76 : 68;
-  const birdseyeSubRowHeight = birdseyeInView ? 30 : 0;
-  const headerTotalHeight = mainHeaderBarHeight + birdseyeSubRowHeight;
-  const logoEndSize = isMobile ? 28 : 34;
-  const logoEndX = isMobile ? 16 : 40;
+  const mainHeaderBarHeight = isMobile ? 76 : 68; // Increased from 76/68
+  const birdseyeInViewHeight = birdseyeInView ? 34 : 0; // Slightly taller sub-row
+  const headerTotalHeight = mainHeaderBarHeight + birdseyeInViewHeight;
+  const logoEndSize = isMobile ? 36 : 42; // Increased from 28/34
+  const logoEndX = isMobile ? 20 : 48; // Increased from 16/40
   const logoEndY = (mainHeaderBarHeight - logoEndSize) / 2;
+  const mixerLogoSize = isMobile ? 65 : 77; // Scaled up Mixer Logo size for header
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const targetDate = new Date("2026-04-18T16:00:00");
+      const targetDate = new Date("2026-04-25T16:00:00");
       const now = new Date();
       const difference = targetDate.getTime() - now.getTime();
 
@@ -145,10 +147,10 @@ export default function ScrollStoryV2() {
 
       if (logoRef.current) {
         const lp = ease(range(p, 0.12, 0.44));
-        const startSize = 88;
+        const startSize = isMobile ? 80 : 96; // Slightly adjusted start size
         const size = startSize - lp * (startSize - logoEndSize);
         const startX = winW / 2 - startSize / 2;
-        const startY = isMobile ? winH * 0.16 : winH * 0.22;
+        const startY = isMobile ? winH * 0.16 : winH * 0.22; // Moved up slightly to be "at the top"
         const x = startX + lp * (logoEndX - startX);
         const y = startY + lp * (logoEndY - startY);
         logoRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
@@ -246,8 +248,8 @@ export default function ScrollStoryV2() {
           left: 0,
           right: 0,
           height: `${headerTotalHeight}px`,
-          background: "rgba(6,2,0,0.96)",
-          borderBottom: "1px solid rgba(201,168,76,0.18)",
+          background: "rgba(6,2,0,0.985)", // More opaque for better visibility
+          borderBottom: "1px solid rgba(201,168,76,0.22)", // Slightly stronger border
           display: "flex",
           flexDirection: "column",
           alignItems: "stretch",
@@ -256,8 +258,9 @@ export default function ScrollStoryV2() {
           zIndex: 200,
           opacity: 0,
           pointerEvents: "none",
-          backdropFilter: "blur(14px)",
-          WebkitBackdropFilter: "blur(14px)",
+          backdropFilter: "blur(18px)", // Enhanced blur
+          WebkitBackdropFilter: "blur(18px)",
+          boxShadow: "0 4px 30px rgba(0,0,0,0.4)", // Added shadow for visibility
         }}
       >
         <div
@@ -265,47 +268,64 @@ export default function ScrollStoryV2() {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            padding: isMobile ? "0 16px" : "0 40px",
-            gap: isMobile ? "12px" : "24px",
+            padding: isMobile ? "0 20px" : "0 48px", // Increased padding
+            gap: isMobile ? "14px" : "32px", // Increased gap
             minHeight: `${mainHeaderBarHeight}px`,
             flexShrink: 0,
           }}
         >
-        <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "10px" : "12px", minWidth: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "12px" : "16px", minWidth: 0 }}> {/* Adjusted gap */}
           <img
             src={SRCC_LOGO}
             alt="SRCC"
             style={{
-              width: isMobile ? "28px" : "34px",
-              height: isMobile ? "28px" : "34px",
+              width: isMobile ? "34px" : "40px", // Matches logoEndSize
+              height: isMobile ? "34px" : "40px",
               objectFit: "contain",
-              filter: "drop-shadow(0 0 5px rgba(201,168,76,0.25))",
+              filter: "drop-shadow(0 0 8px rgba(201,168,76,0.3))", // Stronger shadow
             }}
           />
-          <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.25 }}>
+          <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.2 }}> {/* Adjusted line-height */}
             <span
               style={{
                 fontFamily: "'Cinzel', serif",
-                fontSize: isMobile ? "9px" : "11px",
-                letterSpacing: isMobile ? "0.08em" : "0.13em",
+                fontSize: isMobile ? "14px" : "17px",
+                letterSpacing: isMobile ? "0.1em" : "0.15em",
                 color: "#E2E6ED",
                 textTransform: "uppercase",
+                fontWeight: 600,
               }}
             >
-              {isMobile ? "Placement Cell" : "The Placement Cell | SRCC"}
+              The Placement Cell
             </span>
             <span
               style={{
-                fontFamily: "'Pinyon Script', cursive",
-                fontSize: isMobile ? "15px" : "17px",
+                fontFamily: "'Cinzel', serif", // Same font as above
+                fontSize: isMobile ? "9.5px" : "11.5px", // Slightly smaller
+                letterSpacing: isMobile ? "0.07em" : "0.10em",
                 color: "#C9A84C",
+                textTransform: "uppercase",
+                fontWeight: 600,
+                marginTop: "2px",
               }}
             >
-              30 Years of Excellence
+              Shri Ram College of Commerce
             </span>
           </div>
+          {/* Mixer Logo moved here */}
+          <img
+            src={MIXER_LOGO}
+            alt="Mixer Logo"
+            style={{
+              width: isMobile ? "40px" : "57px", // Slightly scaled down from the top-right size for better fit here
+              height: isMobile ? "40px" : "57px",
+              objectFit: "contain",
+              marginLeft: isMobile ? "-1px" : "-3px",
+              filter: "drop-shadow(0 0 10px rgba(201,168,76,0.35))",
+            }}
+          />
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "12px" : "2rem", minWidth: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "16px" : "3rem", minWidth: 0 }}>
           {isMobile ? (
             <>
               <div
@@ -314,11 +334,12 @@ export default function ScrollStoryV2() {
                   transform: `translateY(${showCountdownInHeader ? "0px" : "4px"})`,
                   transition: "opacity 0.35s ease, transform 0.35s ease",
                   fontFamily: "'Cinzel', serif",
-                  fontSize: isCompactMobile ? "10px" : "12px",
+                  fontSize: isCompactMobile ? "11px" : "13px", // Slightly bigger
                   color: "#C9A84C",
-                  letterSpacing: isCompactMobile ? "0.05em" : "0.08em",
+                  letterSpacing: isCompactMobile ? "0.06em" : "0.1em",
                   whiteSpace: "nowrap",
                   textAlign: "right",
+                  fontWeight: 600,
                 }}
               >
                 {`${String(countdown.days).padStart(2, "0")}:${String(countdown.hours).padStart(
@@ -332,6 +353,10 @@ export default function ScrollStoryV2() {
                 aria-expanded={menuOpen}
                 className={`mobile-menu-button${menuOpen ? " mobile-menu-button-open" : ""}`}
                 onClick={() => setMenuOpen((open) => !open)}
+                style={{
+                  width: "48px", // Slightly bigger button
+                  height: "48px",
+                }}
               >
                 <span />
                 <span />
@@ -346,10 +371,11 @@ export default function ScrollStoryV2() {
                     opacity: showCountdownInHeader ? 1 : 0,
                     transition: "opacity 0.5s",
                     fontFamily: "'Cinzel', serif",
-                    fontSize: "17px",
+                    fontSize: "19px", // Slightly bigger
                     color: "#C9A84C",
-                    letterSpacing: "0.1em",
+                    letterSpacing: "0.12em",
                     whiteSpace: "nowrap",
+                    fontWeight: 600,
                   }}
                 >
                   {`${String(countdown.days).padStart(2, "0")}:${String(countdown.hours).padStart(
@@ -358,17 +384,17 @@ export default function ScrollStoryV2() {
                   )}:${String(countdown.minutes).padStart(2, "0")}:${String(countdown.seconds).padStart(2, "0")}`}
                 </div>
               )}
-              <nav style={{ display: "flex", gap: "28px", flexWrap: "wrap", justifyContent: "flex-end" }}>
-                <a href="./memory-wall.html" className="nav-link">
+              <nav style={{ display: "flex", gap: "36px", flexWrap: "wrap", justifyContent: "flex-end" }}>
+                <a href="./memory-wall.html" className="nav-link" style={{ fontSize: "11px" }}>
                   Memory Wall
                 </a>
-                <a href="#birdseye-section" className="nav-link">
+                <a href="#birdseye-section" className="nav-link" style={{ fontSize: "11px" }}>
                   Birdseye
                 </a>
-                <a href={GALLERY_PAGE} className="nav-link">
+                <a href={GALLERY_PAGE} className="nav-link" style={{ fontSize: "11px" }}>
                   PC Gallery
                 </a>
-                <a href="#quiz" className="nav-link">
+                <a href="#quiz" className="nav-link" style={{ fontSize: "11px" }}>
                   Quiz
                 </a>
               </nav>
@@ -380,34 +406,34 @@ export default function ScrollStoryV2() {
           <div
             style={{
               flexShrink: 0,
-              borderTop: "1px solid rgba(201,168,76,0.12)",
-              padding: "5px 16px 7px",
+              borderTop: "1px solid rgba(201,168,76,0.18)",
+              padding: "6px 20px 8px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: "10px",
-              background: "linear-gradient(180deg, rgba(201,168,76,0.04), transparent)",
+              gap: "12px",
+              background: "linear-gradient(180deg, rgba(201,168,76,0.06), transparent)",
             }}
           >
             <span
               style={{
                 fontFamily: "'Cinzel', serif",
-                fontSize: isMobile ? "7px" : "8px",
-                letterSpacing: "0.32em",
-                color: "rgba(201,168,76,0.78)",
+                fontSize: isMobile ? "8px" : "9px",
+                letterSpacing: "0.35em",
+                color: "rgba(201,168,76,0.85)",
                 textTransform: "uppercase",
               }}
             >
-              The Placement Cell · SRCC
+              The Placement Cell, SRCC
             </span>
-            <span style={{ color: "rgba(201,168,76,0.25)", fontSize: "8px" }}>✦</span>
+            <span style={{ color: "rgba(201,168,76,0.3)", fontSize: "10px" }}>✦</span>
             <span
               style={{
                 fontFamily: "'Cormorant Garamond', serif",
                 fontStyle: "italic",
-                fontSize: isMobile ? "10px" : "11px",
-                color: "rgba(246,232,188,0.85)",
-                letterSpacing: "0.06em",
+                fontSize: isMobile ? "11px" : "12px",
+                color: "rgba(246,232,188,0.9)",
+                letterSpacing: "0.08em",
               }}
             >
               Campus bird&rsquo;s-eye
@@ -551,11 +577,12 @@ export default function ScrollStoryV2() {
               alignItems: "center",
               justifyContent: "center",
               padding: isMobile ? "0 18px" : "0 24px",
+              marginTop: isMobile ? "-4vh" : "-2vh", // Restore original centered look
               textAlign: "center",
               pointerEvents: "none",
             }}
           >
-            <div style={{ height: isMobile ? "84px" : "110px" }} />
+            <div style={{ height: isMobile ? "24px" : "32px" }} /> {/* Reduced from 64/80 */}
             <div
               ref={contentRef}
               style={{
@@ -564,12 +591,12 @@ export default function ScrollStoryV2() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                gap: isMobile ? "12px" : "16px",
+                gap: isMobile ? "8px" : "12px", // Reduced from 12/16
                 maxWidth: isMobile ? "340px" : "none",
                 transform: "translate3d(0,0,0)",
               }}
             >
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2px" }}> {/* Reduced from 4px */}
                 <div
                   style={{
                     fontFamily: "'Times New Roman', Times, serif",
@@ -629,19 +656,6 @@ export default function ScrollStoryV2() {
                 }}
               >
                 30 Years of Excellence
-              </div>
-
-              <div
-                style={{
-                  fontFamily: "'Cinzel', serif",
-                  fontSize: isMobile ? "10px" : "clamp(8px, 1vw, 11px)",
-                  color: "rgba(201,168,76,0.6)",
-                  letterSpacing: isMobile ? "0.18em" : "0.3em",
-                  textTransform: "uppercase",
-                  lineHeight: 1.5,
-                }}
-              >
-                Est. 1995 | A Century of SRCC | 1926 - 2026
               </div>
             </div>
           </div>
@@ -716,7 +730,7 @@ export default function ScrollStoryV2() {
                   willChange: "transform, opacity",
                 }}
               >
-                3rd Alumni Mixer
+                Alumni Mixer 3.0
               </div>
 
               <div
@@ -785,7 +799,7 @@ export default function ScrollStoryV2() {
                   willChange: "transform, opacity",
                 }}
               >
-                18 April 2026 | 4:00 P.M. | SRCC Campus
+                25 April 2026 • 4:00 P.M. • PB Lawns, SRCC
               </div>
             </div>
           </div>

@@ -18,7 +18,7 @@ const landingOptions = [
     image: assetUrl("gallery-button.JPG"),
     status: "Open",
     description:
-      "A collection of The Placement Cell's memories - captured through the lens.",
+      "A collection of The Placement Cell's memories - captured through the lens!",
     href: `${import.meta.env.BASE_URL}pc-gallery.html`,
   },
   {
@@ -27,7 +27,7 @@ const landingOptions = [
     image: assetUrl("srcc-aerial.jpg"),
     status: "Explore",
     description:
-      "An aerial view of SRCC campus - explore key locations and relive your memories.",
+      "An aerial view of SRCC campus - revisit key locations and relive your memories!",
     href: `${import.meta.env.BASE_URL}Birdseye%20v2%20(2).html`,
   },
 ];

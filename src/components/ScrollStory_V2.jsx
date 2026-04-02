@@ -11,6 +11,9 @@ const BG_CORRIDOR = assetUrl("srcc-corridor.jpg");
 
 const TOTAL = 5;
 
+// DEBUG: Set to 1, 2, or 3 to preview different countdown designs
+const COUNTDOWN_STYLE = 3;
+
 export default function ScrollStoryV2() {
   const clockBgRef = useRef(null);
   const corridorBgRef = useRef(null);
@@ -680,9 +683,6 @@ export default function ScrollStoryV2() {
               <div
                 ref={countdownRef}
                 style={{
-                  display: "grid",
-                  gridTemplateColumns: isMobile ? "repeat(2, minmax(0, 1fr))" : "repeat(4, minmax(0, 1fr))",
-                  gap: isCompactMobile ? "0.65rem" : isMobile ? "0.9rem" : "2rem",
                   marginTop: isMobile ? "1rem" : "2rem",
                   fontFamily: "'Cinzel', serif",
                   opacity: 0,
@@ -690,76 +690,189 @@ export default function ScrollStoryV2() {
                   willChange: "transform, opacity",
                 }}
               >
-                {[
-                  { value: countdown.days, label: "Days" },
-                  { value: countdown.hours, label: "Hours" },
-                  { value: countdown.minutes, label: "Minutes" },
-                  { value: countdown.seconds, label: "Seconds" },
-                ].map((item, idx) => (
-                  <div
-                    key={item.label}
-                    style={{
-                      minWidth: isMobile ? "0" : "104px",
-                      padding: isMobile ? "16px 12px 14px" : "0",
-                      border: "1px solid rgba(201,168,76,0.25)",
-                      background: "rgba(12, 6, 2, 0.55)",
-                      backdropFilter: "blur(8px)",
-                      borderRadius: "8px",
-                      position: "relative",
-                      boxShadow: "0 4px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(201,168,76,0.15)",
-                    }}
-                  >
-                    {idx > 0 && (
-                      <span
-                        style={{
-                          position: "absolute",
-                          left: isMobile ? "-10px" : "-14px",
-                          top: "50%",
-                          transform: "translateY(-50%)",
-                          color: "#C9A84C",
-                          fontSize: isMobile ? "1.2rem" : "1.5rem",
-                          fontFamily: "'Cinzel', serif",
-                          opacity: 0.7,
-                        }}
-                      >
-                        :
-                      </span>
-                    )}
-                    <div
-                      style={{
+                {/* ─── COUNTDOWN STYLE 1: Minimal Elegant ─── */}
+                {COUNTDOWN_STYLE === 1 && (
+                  <div style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: isMobile ? "6px" : "12px",
+                  }}>
+                    {[
+                      { value: countdown.days, label: "Days" },
+                      { value: countdown.hours, label: "Hours" },
+                      { value: countdown.minutes, label: "Min" },
+                      { value: countdown.seconds, label: "Sec" },
+                    ].map((item, idx) => (
+                      <div key={item.label} style={{ textAlign: "center" }}>
+                        <div style={{
+                          fontSize: isCompactMobile ? "2rem" : isMobile ? "2.6rem" : "3.5rem",
+                          color: "#F6E8BC",
+                          lineHeight: 1,
+                          fontWeight: 600,
+                          letterSpacing: "0.05em",
+                          textShadow: "0 0 30px rgba(201,168,76,0.4), 0 2px 10px rgba(0,0,0,0.9)",
+                        }}>
+                          {String(item.value).padStart(2, "0")}
+                        </div>
+                        <div style={{
+                          fontSize: isMobile ? "0.5rem" : "0.65rem",
+                          color: "rgba(201,168,76,0.6)",
+                          letterSpacing: "0.2em",
+                          textTransform: "uppercase",
+                          marginTop: "4px",
+                        }}>
+                          {item.label}
+                        </div>
+                        {idx < 3 && (
+                          <div style={{
+                            position: "absolute",
+                            right: isMobile ? "-4px" : "-8px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            color: "#C9A84C",
+                            fontSize: isMobile ? "1rem" : "1.4rem",
+                            opacity: 0.5,
+                          }}>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* ─── COUNTDOWN STYLE 2: Vintage Flip Clock ─── */}
+                {COUNTDOWN_STYLE === 2 && (
+                  <div style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    gap: isMobile ? "8px" : "16px",
+                  }}>
+                    {[
+                      { value: countdown.days, label: "Days" },
+                      { value: countdown.hours, label: "Hours" },
+                      { value: countdown.minutes, label: "Minutes" },
+                      { value: countdown.seconds, label: "Seconds" },
+                    ].map((item, idx) => (
+                      <div key={item.label} style={{
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontSize: isCompactMobile ? "1.9rem" : isMobile ? "2.3rem" : "3.2rem",
-                          color: "#F6E8BC",
-                          lineHeight: 1,
-                          fontFamily: "'Cinzel', serif",
-                          fontWeight: 600,
-                          textShadow: "0 0 20px rgba(201,168,76,0.3)",
-                        }}
-                      >
-                        {item.value}
-                      </span>
-                      <span
-                        style={{
-                          display: "block",
+                        gap: isMobile ? "6px" : "10px",
+                      }}>
+                        <div style={{
+                          padding: isMobile ? "12px 16px" : "18px 24px",
+                          background: "rgba(8, 4, 1, 0.7)",
+                          border: "1px solid rgba(201,168,76,0.3)",
+                          position: "relative",
+                          boxShadow: "0 4px 20px rgba(0,0,0,0.5), inset 0 0 20px rgba(201,168,76,0.05)",
+                        }}>
+                          {/* Ornate corner accents */}
+                          <div style={{ position: "absolute", top: "3px", left: "3px", width: "8px", height: "8px", borderTop: "1px solid #C9A84C", borderLeft: "1px solid #C9A84C", opacity: 0.6 }} />
+                          <div style={{ position: "absolute", top: "3px", right: "3px", width: "8px", height: "8px", borderTop: "1px solid #C9A84C", borderRight: "1px solid #C9A84C", opacity: 0.6 }} />
+                          <div style={{ position: "absolute", bottom: "3px", left: "3px", width: "8px", height: "8px", borderBottom: "1px solid #C9A84C", borderLeft: "1px solid #C9A84C", opacity: 0.6 }} />
+                          <div style={{ position: "absolute", bottom: "3px", right: "3px", width: "8px", height: "8px", borderBottom: "1px solid #C9A84C", borderRight: "1px solid #C9A84C", opacity: 0.6 }} />
+                          
+                          <div style={{
+                            fontSize: isCompactMobile ? "1.8rem" : isMobile ? "2.2rem" : "3rem",
+                            color: "#F6E8BC",
+                            lineHeight: 1,
+                            fontWeight: 400,
+                            fontFamily: "'Times New Roman', serif",
+                            letterSpacing: "0.1em",
+                            textShadow: "0 0 15px rgba(201,168,76,0.3)",
+                          }}>
+                            {String(item.value).padStart(2, "0")}
+                          </div>
+                        </div>
+                        <div style={{
+                          fontSize: isMobile ? "0.55rem" : "0.7rem",
                           color: "rgba(201,168,76,0.7)",
-                          fontSize: isMobile ? "0.6rem" : "0.75rem",
-                          letterSpacing: isMobile ? "0.12em" : "0.2em",
+                          letterSpacing: "0.15em",
                           textTransform: "uppercase",
-                          marginTop: "6px",
-                          fontFamily: "'Cinzel', serif",
-                        }}
-                      >
-                        {item.label}
-                      </span>
+                        }}>
+                          {item.label}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* ─── COUNTDOWN STYLE 3: Art Deco Geometric ─── */}
+                {COUNTDOWN_STYLE === 3 && (
+                  <div>
+                    <div style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: isMobile ? "4px" : "8px",
+                    }}>
+                      {[
+                        { value: countdown.days, label: "Days" },
+                        { value: countdown.hours, label: "Hours" },
+                        { value: countdown.minutes, label: "Min" },
+                        { value: countdown.seconds, label: "Sec" },
+                      ].map((item, idx) => (
+                        <div key={item.label} style={{ textAlign: "center", position: "relative" }}>
+                          {/* Deco accent lines above */}
+                          <div style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            gap: "2px",
+                            marginBottom: "4px",
+                          }}>
+                            <div style={{ width: "12px", height: "1px", background: "linear-gradient(90deg, transparent, #C9A84C)", opacity: 0.5 }} />
+                            <div style={{ width: "4px", height: "1px", background: "#C9A84C", opacity: 0.7 }} />
+                            <div style={{ width: "12px", height: "1px", background: "linear-gradient(90deg, #C9A84C, transparent)", opacity: 0.5 }} />
+                          </div>
+                          
+                          <div style={{
+                            padding: isMobile ? "10px 14px" : "14px 20px",
+                            background: "linear-gradient(135deg, rgba(201,168,76,0.08) 0%, rgba(201,168,76,0.02) 100%)",
+                            border: "1px solid rgba(201,168,76,0.4)",
+                            position: "relative",
+                            clipPath: "polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px)",
+                          }}>
+                            <div style={{
+                              fontSize: isCompactMobile ? "1.9rem" : isMobile ? "2.4rem" : "3.2rem",
+                              color: "#F6E8BC",
+                              lineHeight: 1,
+                              fontWeight: 600,
+                              letterSpacing: "0.08em",
+                              textShadow: "0 0 25px rgba(201,168,76,0.5), 0 0 50px rgba(201,168,76,0.2)",
+                            }}>
+                              {String(item.value).padStart(2, "0")}
+                            </div>
+                          </div>
+                          
+                          <div style={{
+                            fontSize: isMobile ? "0.5rem" : "0.65rem",
+                            color: "rgba(201,168,76,0.8)",
+                            letterSpacing: "0.18em",
+                            textTransform: "uppercase",
+                            marginTop: "6px",
+                          }}>
+                            {item.label}
+                          </div>
+                          
+                          {/* Separator diamond */}
+                          {idx < 3 && (
+                            <div style={{
+                              position: "absolute",
+                              right: isMobile ? "-10px" : "-18px",
+                              top: "50%",
+                              transform: "translateY(-50%)",
+                              color: "#C9A84C",
+                              fontSize: isMobile ? "0.6rem" : "0.8rem",
+                            }}>
+                              ◆
+                            </div>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   </div>
-                ))}
+                )}
               </div>
 
               <div

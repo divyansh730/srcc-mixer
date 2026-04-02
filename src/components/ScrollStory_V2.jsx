@@ -11,9 +11,6 @@ const BG_CORRIDOR = assetUrl("srcc-corridor.jpg");
 
 const TOTAL = 5;
 
-// DEBUG: Set to 1, 2, or 3 to preview different countdown designs
-const COUNTDOWN_STYLE = 3;
-
 export default function ScrollStoryV2() {
   const clockBgRef = useRef(null);
   const corridorBgRef = useRef(null);
@@ -683,196 +680,166 @@ export default function ScrollStoryV2() {
               <div
                 ref={countdownRef}
                 style={{
-                  marginTop: isMobile ? "1rem" : "2rem",
+                  marginTop: isMobile ? "1.2rem" : "2.5rem",
                   fontFamily: "'Cinzel', serif",
                   opacity: 0,
                   transform: "translate3d(0, 32px, 0)",
                   willChange: "transform, opacity",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
                 }}
               >
-                {/* ─── COUNTDOWN STYLE 1: Minimal Elegant ─── */}
-                {COUNTDOWN_STYLE === 1 && (
-                  <div style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: isMobile ? "6px" : "12px",
-                  }}>
-                    {[
-                      { value: countdown.days, label: "Days" },
-                      { value: countdown.hours, label: "Hours" },
-                      { value: countdown.minutes, label: "Min" },
-                      { value: countdown.seconds, label: "Sec" },
-                    ].map((item, idx) => (
-                      <div key={item.label} style={{ textAlign: "center" }}>
-                        <div style={{
-                          fontSize: isCompactMobile ? "2rem" : isMobile ? "2.6rem" : "3.5rem",
-                          color: "#F6E8BC",
-                          lineHeight: 1,
-                          fontWeight: 600,
-                          letterSpacing: "0.05em",
-                          textShadow: "0 0 30px rgba(201,168,76,0.4), 0 2px 10px rgba(0,0,0,0.9)",
-                        }}>
-                          {String(item.value).padStart(2, "0")}
-                        </div>
-                        <div style={{
-                          fontSize: isMobile ? "0.5rem" : "0.65rem",
-                          color: "rgba(201,168,76,0.6)",
-                          letterSpacing: "0.2em",
-                          textTransform: "uppercase",
-                          marginTop: "4px",
-                        }}>
-                          {item.label}
-                        </div>
-                        {idx < 3 && (
-                          <div style={{
-                            position: "absolute",
-                            right: isMobile ? "-4px" : "-8px",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                            color: "#C9A84C",
-                            fontSize: isMobile ? "1rem" : "1.4rem",
-                            opacity: 0.5,
-                          }}>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
+                {/* ─── HOURGLASS COUNTDOWN ─── */}
+                <svg
+                  width={isMobile ? "100" : "140"}
+                  height={isMobile ? "140" : "200"}
+                  viewBox="0 0 100 160"
+                  style={{ filter: "drop-shadow(0 0 20px rgba(201,168,76,0.3))" }}
+                >
+                  {/* Glass bulbs */}
+                  <defs>
+                    <linearGradient id="sandGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#D4AF37" />
+                      <stop offset="50%" stopColor="#C9A84C" />
+                      <stop offset="100%" stopColor="#A08030" />
+                    </linearGradient>
+                    <linearGradient id="glassGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="rgba(255,255,255,0.08)" />
+                      <stop offset="50%" stopColor="rgba(255,255,255,0.02)" />
+                      <stop offset="100%" stopColor="rgba(255,255,255,0.08)" />
+                    </linearGradient>
+                    <clipPath id="topBulb">
+                      <path d="M 15 8 Q 15 2 22 2 L 78 2 Q 85 2 85 8 L 85 75 Q 85 80 50 95 Q 15 80 15 75 Z" />
+                    </clipPath>
+                    <clipPath id="bottomBulb">
+                      <path d="M 15 152 Q 15 158 22 158 L 78 158 Q 85 158 85 152 L 85 85 Q 85 80 50 65 Q 15 80 15 85 Z" />
+                    </clipPath>
+                  </defs>
 
-                {/* ─── COUNTDOWN STYLE 2: Vintage Flip Clock ─── */}
-                {COUNTDOWN_STYLE === 2 && (
-                  <div style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    gap: isMobile ? "8px" : "16px",
-                  }}>
-                    {[
-                      { value: countdown.days, label: "Days" },
-                      { value: countdown.hours, label: "Hours" },
-                      { value: countdown.minutes, label: "Minutes" },
-                      { value: countdown.seconds, label: "Seconds" },
-                    ].map((item, idx) => (
-                      <div key={item.label} style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        gap: isMobile ? "6px" : "10px",
-                      }}>
-                        <div style={{
-                          padding: isMobile ? "12px 16px" : "18px 24px",
-                          background: "rgba(8, 4, 1, 0.7)",
-                          border: "1px solid rgba(201,168,76,0.3)",
-                          position: "relative",
-                          boxShadow: "0 4px 20px rgba(0,0,0,0.5), inset 0 0 20px rgba(201,168,76,0.05)",
-                        }}>
-                          {/* Ornate corner accents */}
-                          <div style={{ position: "absolute", top: "3px", left: "3px", width: "8px", height: "8px", borderTop: "1px solid #C9A84C", borderLeft: "1px solid #C9A84C", opacity: 0.6 }} />
-                          <div style={{ position: "absolute", top: "3px", right: "3px", width: "8px", height: "8px", borderTop: "1px solid #C9A84C", borderRight: "1px solid #C9A84C", opacity: 0.6 }} />
-                          <div style={{ position: "absolute", bottom: "3px", left: "3px", width: "8px", height: "8px", borderBottom: "1px solid #C9A84C", borderLeft: "1px solid #C9A84C", opacity: 0.6 }} />
-                          <div style={{ position: "absolute", bottom: "3px", right: "3px", width: "8px", height: "8px", borderBottom: "1px solid #C9A84C", borderRight: "1px solid #C9A84C", opacity: 0.6 }} />
-                          
-                          <div style={{
-                            fontSize: isCompactMobile ? "1.8rem" : isMobile ? "2.2rem" : "3rem",
-                            color: "#F6E8BC",
-                            lineHeight: 1,
-                            fontWeight: 400,
-                            fontFamily: "'Times New Roman', serif",
-                            letterSpacing: "0.1em",
-                            textShadow: "0 0 15px rgba(201,168,76,0.3)",
-                          }}>
-                            {String(item.value).padStart(2, "0")}
-                          </div>
-                        </div>
-                        <div style={{
-                          fontSize: isMobile ? "0.55rem" : "0.7rem",
-                          color: "rgba(201,168,76,0.7)",
-                          letterSpacing: "0.15em",
-                          textTransform: "uppercase",
-                        }}>
-                          {item.label}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                  {/* Top bulb glass */}
+                  <path
+                    d="M 15 8 Q 15 2 22 2 L 78 2 Q 85 2 85 8 L 85 75 Q 85 80 50 95 Q 15 80 15 75 Z"
+                    fill="url(#glassGradient)"
+                    stroke="rgba(201,168,76,0.4)"
+                    strokeWidth="1"
+                  />
 
-                {/* ─── COUNTDOWN STYLE 3: Art Deco Geometric ─── */}
-                {COUNTDOWN_STYLE === 3 && (
-                  <div>
-                    <div style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      gap: isMobile ? "4px" : "8px",
-                    }}>
-                      {[
-                        { value: countdown.days, label: "Days" },
-                        { value: countdown.hours, label: "Hours" },
-                        { value: countdown.minutes, label: "Min" },
-                        { value: countdown.seconds, label: "Sec" },
-                      ].map((item, idx) => (
-                        <div key={item.label} style={{ textAlign: "center", position: "relative" }}>
-                          {/* Deco accent lines above */}
-                          <div style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            gap: "2px",
-                            marginBottom: "4px",
-                          }}>
-                            <div style={{ width: "12px", height: "1px", background: "linear-gradient(90deg, transparent, #C9A84C)", opacity: 0.5 }} />
-                            <div style={{ width: "4px", height: "1px", background: "#C9A84C", opacity: 0.7 }} />
-                            <div style={{ width: "12px", height: "1px", background: "linear-gradient(90deg, #C9A84C, transparent)", opacity: 0.5 }} />
-                          </div>
-                          
-                          <div style={{
-                            padding: isMobile ? "10px 14px" : "14px 20px",
-                            background: "linear-gradient(135deg, rgba(201,168,76,0.08) 0%, rgba(201,168,76,0.02) 100%)",
-                            border: "1px solid rgba(201,168,76,0.4)",
-                            position: "relative",
-                            clipPath: "polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px)",
-                          }}>
-                            <div style={{
-                              fontSize: isCompactMobile ? "1.9rem" : isMobile ? "2.4rem" : "3.2rem",
-                              color: "#F6E8BC",
-                              lineHeight: 1,
-                              fontWeight: 600,
-                              letterSpacing: "0.08em",
-                              textShadow: "0 0 25px rgba(201,168,76,0.5), 0 0 50px rgba(201,168,76,0.2)",
-                            }}>
-                              {String(item.value).padStart(2, "0")}
-                            </div>
-                          </div>
-                          
-                          <div style={{
-                            fontSize: isMobile ? "0.5rem" : "0.65rem",
-                            color: "rgba(201,168,76,0.8)",
-                            letterSpacing: "0.18em",
-                            textTransform: "uppercase",
-                            marginTop: "6px",
-                          }}>
-                            {item.label}
-                          </div>
-                          
-                          {/* Separator diamond */}
-                          {idx < 3 && (
-                            <div style={{
-                              position: "absolute",
-                              right: isMobile ? "-10px" : "-18px",
-                              top: "50%",
-                              transform: "translateY(-50%)",
-                              color: "#C9A84C",
-                              fontSize: isMobile ? "0.6rem" : "0.8rem",
-                            }}>
-                              ◆
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
+                  {/* Bottom bulb glass */}
+                  <path
+                    d="M 15 152 Q 15 158 22 158 L 78 158 Q 85 158 85 152 L 85 85 Q 85 80 50 65 Q 15 80 15 85 Z"
+                    fill="url(#glassGradient)"
+                    stroke="rgba(201,168,76,0.4)"
+                    strokeWidth="1"
+                  />
+
+                  {/* Top sand (decreasing) */}
+                  <g clipPath="url(#topBulb)">
+                    {(() => {
+                      const totalMs = 22 * 24 * 60 * 60 * 1000; // ~22 days total
+                      const targetDate = new Date("2026-04-25T16:00:00");
+                      const now = new Date();
+                      const remaining = Math.max(0, targetDate.getTime() - now.getTime());
+                      const sandHeight = (remaining / totalMs) * 70;
+                      
+                      return (
+                        <rect
+                          x="15"
+                          y={80 - Math.min(sandHeight, 70)}
+                          width="70"
+                          height={Math.min(sandHeight, 70)}
+                          fill="url(#sandGradient)"
+                          opacity="0.9"
+                        />
+                      );
+                    })()}
+                  </g>
+
+                  {/* Bottom sand (increasing) */}
+                  <g clipPath="url(#bottomBulb)">
+                    {(() => {
+                      const totalMs = 22 * 24 * 60 * 60 * 1000;
+                      const targetDate = new Date("2026-04-25T16:00:00");
+                      const now = new Date();
+                      const remaining = Math.max(0, targetDate.getTime() - now.getTime());
+                      const sandHeight = ((totalMs - remaining) / totalMs) * 70;
+                      
+                      return (
+                        <rect
+                          x="15"
+                          y={85}
+                          width="70"
+                          height={Math.min(sandHeight, 70)}
+                          fill="url(#sandGradient)"
+                          opacity="0.9"
+                        />
+                      );
+                    })()}
+                  </g>
+
+                  {/* Sand particles falling */}
+                  <g opacity="0.8">
+                    {[...Array(8)].map((_, i) => (
+                      <circle
+                        key={i}
+                        r="1.2"
+                        fill="#D4AF37"
+                      >
+                        <animateMotion
+                          dur={`${1.5 + (i * 0.2)}s`}
+                          repeatCount="indefinite"
+                          path="M 50 80 L 50 95"
+                        />
+                        <animate
+                          attributeName="opacity"
+                          values="0;1;1;0"
+                          dur={`${1.5 + (i * 0.2)}s`}
+                          repeatCount="indefinite"
+                        />
+                      </circle>
+                    ))}
+                  </g>
+
+                  {/* Frame */}
+                  <line x1="10" y1="10" x2="10" y2="25" stroke="#C9A84C" strokeWidth="2" strokeLinecap="round" />
+                  <line x1="90" y1="10" x2="90" y2="25" stroke="#C9A84C" strokeWidth="2" strokeLinecap="round" />
+                  <line x1="10" y1="150" x2="10" y2="135" stroke="#C9A84C" strokeWidth="2" strokeLinecap="round" />
+                  <line x1="90" y1="150" x2="90" y2="135" stroke="#C9A84C" strokeWidth="2" strokeLinecap="round" />
+                  
+                  {/* Decorative knobs */}
+                  <circle cx="50" cy="6" r="3" fill="#C9A84C" />
+                  <circle cx="50" cy="154" r="3" fill="#C9A84C" />
+
+                  {/* Center neck decoration */}
+                  <ellipse cx="50" cy="80" rx="3" ry="1.5" fill="rgba(201,168,76,0.6)" />
+                  <ellipse cx="50" cy="80" rx="2" ry="1" fill="#D4AF37" />
+                </svg>
+
+                {/* Time remaining text */}
+                <div style={{
+                  marginTop: isMobile ? "1rem" : "1.5rem",
+                  textAlign: "center",
+                }}>
+                  <div style={{
+                    fontSize: isCompactMobile ? "1.4rem" : isMobile ? "1.8rem" : "2.2rem",
+                    color: "#F6E8BC",
+                    fontFamily: "'Cinzel', serif",
+                    fontWeight: 600,
+                    letterSpacing: "0.1em",
+                    textShadow: "0 0 20px rgba(201,168,76,0.4)",
+                  }}>
+                    {`${String(countdown.days).padStart(2, "0")}d : ${String(countdown.hours).padStart(2, "0")}h : ${String(countdown.minutes).padStart(2, "0")}m`}
                   </div>
-                )}
+                  <div style={{
+                    marginTop: "0.4rem",
+                    fontSize: isMobile ? "0.55rem" : "0.65rem",
+                    color: "rgba(201,168,76,0.6)",
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                  }}>
+                    until April 25th
+                  </div>
+                </div>
               </div>
 
               <div

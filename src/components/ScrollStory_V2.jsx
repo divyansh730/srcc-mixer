@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`;
 const GALLERY_PAGE = `${import.meta.env.BASE_URL}pc-gallery.html`;
+const BIRDSEYE_PAGE = `${import.meta.env.BASE_URL}Birdseye%20v2%20(2).html`;
 const SRCC_LOGO = assetUrl("srcc-logo.png");
 const MIXER_LOGO = assetUrl("Mixer logo.png");
 const BG_CLOCK = assetUrl("srcc-clock.jpg");
@@ -359,7 +360,7 @@ export default function ScrollStoryV2() {
                 <a href="./memory-wall.html" className="nav-link" style={{ fontSize: "11px" }}>
                   Memory Wall
                 </a>
-                <a href="#birdseye-section" className="nav-link" style={{ fontSize: "11px" }}>
+                <a href={BIRDSEYE_PAGE} className="nav-link" style={{ fontSize: "11px" }}>
                   Birdseye
                 </a>
                 <a href={GALLERY_PAGE} className="nav-link" style={{ fontSize: "11px" }}>
@@ -383,7 +384,7 @@ export default function ScrollStoryV2() {
           <a href="./memory-wall.html" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
             Memory Wall
           </a>
-          <a href="#birdseye-section" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
+          <a href={BIRDSEYE_PAGE} className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
             Birdseye
           </a>
           <a href={GALLERY_PAGE} className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
@@ -741,4 +742,3 @@ export default function ScrollStoryV2() {
     </>
   );
 }
-

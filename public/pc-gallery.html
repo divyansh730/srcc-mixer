@@ -738,6 +738,11 @@
     border-color: var(--gold); 
     box-shadow: 0 0 30px rgba(201, 168, 76, 0.1);
   }
+  .file-drop-zone.drag-over {
+    background: rgba(201, 168, 76, 0.08);
+    border-color: var(--gold);
+    box-shadow: 0 0 36px rgba(201, 168, 76, 0.16);
+  }
   .file-drop-zone p { font-family: 'EB Garamond', serif; font-style: italic; font-size: 18px; color: rgba(245,237,215,0.4); }
 
   #preview-container {
@@ -1042,6 +1047,23 @@
     }
   }
 
+  async function removeUserPhoto(userPhoto) {
+    if (!userPhoto?.id) {
+      window.showToast('Could not remove photo');
+      return;
+    }
+
+    if (!confirm('Remove this uploaded photo from the gallery?')) return;
+
+    try {
+      await deleteDoc(doc(db, 'gallery_photos', userPhoto.id));
+      window.showToast('Uploaded photo removed');
+    } catch (e) {
+      console.error('Delete failed', e);
+      window.showToast('Failed to remove photo');
+    }
+  }
+
   /* ── RENDER ── */
   function renderPhoto(pol, src) {
     const slot = pol.querySelector('.photo-slot');
@@ -1053,6 +1075,10 @@
 
     img.addEventListener('click', ev => {
       ev.stopPropagation();
+      if (isOwner && pol.classList.contains('user-contributed') && pol._userPhoto) {
+        removeUserPhoto(pol._userPhoto);
+        return;
+      }
       window.openLightbox(src);
     });
   }
@@ -1066,17 +1092,7 @@
   async function loadImage(pol, file) {
     window.showToast('Uploading...');
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', UPLOAD_PRESET);
-
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-        { method: 'POST', body: formData }
-      );
-
-      if (!response.ok) throw new Error('Upload failed');
-      const data = await response.json();
+      const data = await uploadImageToCloudinary(file);
 
       photos[pol.dataset.index] = data.secure_url;
       renderPhoto(pol, data.secure_url);
@@ -1084,7 +1100,7 @@
       window.showToast('Photo saved');
     } catch (e) {
       console.error(e);
-      window.showToast('Upload failed');
+      window.showToast(e.message || 'Upload failed');
     }
   }
 
@@ -1105,8 +1121,14 @@
     pol.appendChild(slot);
 
     if (userPhoto) {
+      pol._userPhoto = userPhoto;
       renderPhoto(pol, userPhoto.url);
       pol.classList.add('user-contributed');
+      pol.addEventListener('click', function(e) {
+        if (!isOwner) return;
+        e.stopPropagation();
+        removeUserPhoto(userPhoto);
+      });
     } else {
       const fileInput = document.createElement('input');
       fileInput.type = 'file';
@@ -1176,7 +1198,18 @@
 
   window.handleFileSelect = (input) => {
     const file = input.files[0];
-    if (file) {
+    if (file) previewUploadFile(file, input);
+  };
+
+  function previewUploadFile(file, input = document.getElementById('user-photo-input')) {
+    try {
+      validateImageFile(file);
+      if (input && typeof DataTransfer !== 'undefined') {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        input.files = dt.files;
+      }
+
       const reader = new FileReader();
       reader.onload = (e) => {
         document.getElementById('preview-img').src = e.target.result;
@@ -1184,8 +1217,11 @@
         document.getElementById('file-hint').style.display = 'none';
       };
       reader.readAsDataURL(file);
+    } catch (error) {
+      window.showToast(error.message || 'Invalid file');
+      resetUploadForm();
     }
-  };
+  }
 
   function resetUploadForm() {
     document.getElementById('user-photo-input').value = '';
@@ -1196,34 +1232,76 @@
     document.getElementById('gallery-submit-btn').textContent = 'Add to Gallery';
   }
 
-  const CLOUD_NAME = 'dvdnqska5';
-  const UPLOAD_PRESET = 'srcc_gallery_unsigned';
+  const CLOUD_NAME = 'dcqcuq29f';
+  const UPLOAD_PRESET = 'srcc_gallery';
+  const MAX_UPLOAD_MB = 10;
+
+  function normalizeCloudinaryError(payload, fallback = 'Upload failed') {
+    if (!payload) return fallback;
+    if (typeof payload === 'string') return payload;
+    if (payload.error?.message) return payload.error.message;
+    if (payload.message) return payload.message;
+    return fallback;
+  }
+
+  function validateImageFile(file) {
+    if (!file) {
+      throw new Error('Please select a photograph first.');
+    }
+    if (!file.type || !file.type.startsWith('image/')) {
+      throw new Error('Please upload a valid image file.');
+    }
+    if (file.size > MAX_UPLOAD_MB * 1024 * 1024) {
+      throw new Error(`Please upload an image smaller than ${MAX_UPLOAD_MB} MB.`);
+    }
+  }
+
+  async function uploadImageToCloudinary(file) {
+    validateImageFile(file);
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', UPLOAD_PRESET);
+    formData.append('folder', 'srcc-gallery');
+
+    let response;
+    try {
+      response = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+        { method: 'POST', body: formData }
+      );
+    } catch (networkError) {
+      throw new Error('Could not reach Cloudinary. Check your internet connection and try again.');
+    }
+
+    let payload = null;
+    try {
+      payload = await response.json();
+    } catch {
+      payload = null;
+    }
+
+    if (!response.ok) {
+      throw new Error(normalizeCloudinaryError(payload, 'Cloudinary upload failed.'));
+    }
+
+    if (!payload?.secure_url) {
+      throw new Error('Cloudinary did not return an uploaded image URL.');
+    }
+
+    return payload;
+  }
 
   window.submitUserPhoto = async () => {
     const fileInput = document.getElementById('user-photo-input');
     const submitBtn = document.getElementById('gallery-submit-btn');
-
-    if (!fileInput.files[0]) {
-      alert("Please select a photograph first.");
-      return;
-    }
+    const file = fileInput.files[0];
 
     submitBtn.disabled = true;
     submitBtn.textContent = 'Uploading...';
 
     try {
-      const file = fileInput.files[0];
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', UPLOAD_PRESET);
-
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-        { method: 'POST', body: formData }
-      );
-
-      if (!response.ok) throw new Error('Upload failed');
-      const data = await response.json();
+      const data = await uploadImageToCloudinary(file);
 
       await addDoc(galleryCol, {
         url: data.secure_url,
@@ -1234,8 +1312,8 @@
       window.showToast("Photo added to gallery!");
       window.closeUploadModal();
     } catch (e) {
-      console.error(e);
-      alert("Upload failed. Check connection or file size.");
+      console.error('Upload error:', e);
+      window.showToast(e.message || 'Upload failed');
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = 'Add to Gallery';
@@ -1257,6 +1335,31 @@
       if (isOwner) pol.classList.add('owner-mode');
     }
   };
+
+  function initUploadDropZone() {
+    const dropZone = document.querySelector('.file-drop-zone');
+    const input = document.getElementById('user-photo-input');
+    if (!dropZone || !input) return;
+
+    ['dragenter', 'dragover'].forEach((eventName) => {
+      dropZone.addEventListener(eventName, (event) => {
+        event.preventDefault();
+        dropZone.classList.add('drag-over');
+      });
+    });
+
+    ['dragleave', 'dragend', 'drop'].forEach((eventName) => {
+      dropZone.addEventListener(eventName, (event) => {
+        event.preventDefault();
+        dropZone.classList.remove('drag-over');
+      });
+    });
+
+    dropZone.addEventListener('drop', (event) => {
+      const file = event.dataTransfer?.files?.[0];
+      if (file) previewUploadFile(file, input);
+    });
+  }
 
   /* ── LISTENERS ── */
   const q = query(galleryCol, orderBy("createdAt", "desc"));
@@ -1284,6 +1387,7 @@
   async function init() {
     loading.style.display = 'none';
     grid.style.display = 'grid';
+    initUploadDropZone();
 
     // Scroll Position Persistence
     const savedPos = localStorage.getItem('srcc_gallery_scroll_pos');
@@ -1301,3 +1405,5 @@
 </script>
 </body>
 </html>
+
+

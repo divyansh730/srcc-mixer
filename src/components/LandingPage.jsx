@@ -22,13 +22,13 @@ const landingOptions = [
     href: `${import.meta.env.BASE_URL}pc-gallery.html`,
   },
   {
-    id: "quiz",
-    title: "Quiz",
-    image: assetUrl("srcc-clock.jpg"),
-    status: "Coming Soon",
+    id: "campus-birdseye",
+    title: "Campus Birdseye",
+    image: assetUrl("srcc-aerial.jpg"),
+    status: "Explore",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean varius ante ac eros tincidunt, non feugiat justo tempus.",
-    href: "#quiz",
+      "An aerial view of SRCC campus - explore key locations and relive your memories.",
+    href: `${import.meta.env.BASE_URL}Birdseye%20v2%20(2).html`,
   },
 ];
 

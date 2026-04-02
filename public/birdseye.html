@@ -48,7 +48,64 @@
       object-position: center;
       /* Slight Ken Burns drift for life */
       animation: kenBurns 40s ease-in-out infinite alternate;
-      filter: brightness(0.78) saturate(0.9);
+      filter: sepia(0.68) saturate(0.64) hue-rotate(-12deg) brightness(0.6) contrast(1.08);
+    }
+
+    #campus-bg-color {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      animation: kenBurns 40s ease-in-out infinite alternate;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      -webkit-mask-image:
+        radial-gradient(circle at var(--reveal-x, 50%) var(--reveal-y, 50%),
+          rgba(0,0,0,0.98) 0%,
+          rgba(0,0,0,0.98) 10%,
+          rgba(0,0,0,0.78) 15%,
+          rgba(0,0,0,0.42) 20%,
+          transparent 26%),
+        radial-gradient(circle at calc(var(--reveal-x, 50%) + 2.8%) calc(var(--reveal-y, 50%) - 2.1%),
+          rgba(0,0,0,0.54) 0%,
+          rgba(0,0,0,0.22) 9%,
+          transparent 15%),
+        radial-gradient(circle at calc(var(--reveal-x, 50%) - 3.4%) calc(var(--reveal-y, 50%) + 2.2%),
+          rgba(0,0,0,0.48) 0%,
+          rgba(0,0,0,0.18) 8%,
+          transparent 14%),
+        radial-gradient(circle at calc(var(--reveal-x, 50%) + 1.1%) calc(var(--reveal-y, 50%) + 3.8%),
+          rgba(0,0,0,0.36) 0%,
+          transparent 11%);
+      mask-image:
+        radial-gradient(circle at var(--reveal-x, 50%) var(--reveal-y, 50%),
+          rgba(0,0,0,0.98) 0%,
+          rgba(0,0,0,0.98) 10%,
+          rgba(0,0,0,0.78) 15%,
+          rgba(0,0,0,0.42) 20%,
+          transparent 26%),
+        radial-gradient(circle at calc(var(--reveal-x, 50%) + 2.8%) calc(var(--reveal-y, 50%) - 2.1%),
+          rgba(0,0,0,0.54) 0%,
+          rgba(0,0,0,0.22) 9%,
+          transparent 15%),
+        radial-gradient(circle at calc(var(--reveal-x, 50%) - 3.4%) calc(var(--reveal-y, 50%) + 2.2%),
+          rgba(0,0,0,0.48) 0%,
+          rgba(0,0,0,0.18) 8%,
+          transparent 14%),
+        radial-gradient(circle at calc(var(--reveal-x, 50%) + 1.1%) calc(var(--reveal-y, 50%) + 3.8%),
+          rgba(0,0,0,0.36) 0%,
+          transparent 11%);
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+    }
+
+    #stage.reveal-active #campus-bg-color {
+      opacity: 0.92;
+      animation: kenBurns 40s ease-in-out infinite alternate;
     }
 
     @keyframes kenBurns {
@@ -107,7 +164,7 @@
 
     #wordmark .est {
       font-family: 'Cinzel', serif;
-      font-size: clamp(9px, 0.75vw, 11px);
+      font-size: clamp(10px, 0.9vw, 13px);
       letter-spacing: 0.25em;
       color: var(--gold);
       margin-top: 4px;
@@ -543,7 +600,7 @@
       #stage { height: 100dvh; }
       #wordmark { padding: 16px 20px; }
       #wordmark .college-name { font-size: 16px; }
-      #wordmark .est { font-size: 8px; }
+      #wordmark .est { font-size: 9px; }
       .ring-3 { display: none; }
       .pulse-point { width: 14px; height: 14px; }
       .dot { width: 8px; height: 8px; }
@@ -596,6 +653,7 @@
 
     <!-- ── Campus Aerial Background ── -->
     <img id="campus-bg" src="./srcc-aerial.jpg">
+    <img id="campus-bg-color" src="./srcc-aerial.jpg" aria-hidden="true">
 
     <!-- Atmospheric layers -->
     <div id="vignette"></div>
@@ -724,6 +782,8 @@
   <script>
     const overlay   = document.getElementById('modal-overlay');
     const modalBox  = document.getElementById('modal-box');
+    const stage     = document.getElementById('stage');
+    const campusBgColor = document.getElementById('campus-bg-color');
     const video     = document.getElementById('modal-video');
     const iframe    = document.getElementById('modal-iframe');
     const closeBtn  = document.getElementById('modal-close');
@@ -731,6 +791,17 @@
     const elEyebrow  = document.getElementById('modal-eyebrow');
     const elSubtitle = document.getElementById('modal-subtitle');
     const elDesc     = document.getElementById('modal-desc');
+
+    function setReveal(point) {
+      if (!point) return;
+      campusBgColor.style.setProperty('--reveal-x', point.style.left || '50%');
+      campusBgColor.style.setProperty('--reveal-y', point.style.top || '50%');
+      stage.classList.add('reveal-active');
+    }
+
+    function clearReveal() {
+      stage.classList.remove('reveal-active');
+    }
 
     /* ── Stagger ring animation delays ── */
     document.querySelectorAll('.pulse-point').forEach((point, i) => {
@@ -847,6 +918,8 @@
     }
 
     document.querySelectorAll('.pulse-point').forEach(point => {
+      point.addEventListener('mouseenter', () => setReveal(point));
+      point.addEventListener('mouseleave', clearReveal);
       point.addEventListener('mousedown', e => startDrag(e, point));
       point.addEventListener('touchstart', e => startDrag(e, point), { passive: false });
       point.addEventListener('click', e => {

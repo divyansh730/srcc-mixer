@@ -33,7 +33,7 @@ export default function BirdseyeSection() {
         position: "relative",
         background: "linear-gradient(180deg, #0D0602 0%, #0A0500 55%, #080402 100%)",
         padding: "16px 8px 0", // Reduced padding for mobile
-        marginTop: "-8px",
+        marginTop: "-20px",
         borderTop: "1px solid rgba(201, 168, 76, 0.1)",
       }}
     >
@@ -60,8 +60,8 @@ export default function BirdseyeSection() {
         <h2
           className="landing-welcome-title"
           style={{
-            fontSize: "clamp(32px, 6vw, 60px)", // Slightly smaller
-            marginBottom: 0,
+            fontSize: "clamp(38px, 6vw, 70px)", // Slightly smaller
+            marginBottom: 20,
           }}
         >
           Campus Bird&rsquo;s-Eye

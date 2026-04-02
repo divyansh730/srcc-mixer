@@ -87,6 +87,13 @@
     justify-content: center;
     gap: 20px;
     margin-bottom: 20;
+    opacity: 0;
+    animation: titleReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+  }
+
+  @keyframes titleReveal {
+    0% { opacity: 0; transform: translateY(30px); filter: blur(3px); }
+    100% { opacity: 1; transform: translateY(0); filter: blur(0); }
   }
 
   .gh-the {
@@ -96,6 +103,13 @@
     letter-spacing: 0.07em;
     font-weight: 400;
     line-height: 0;
+    opacity: 0;
+    animation: fadeSlideLeft 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+  }
+
+  @keyframes fadeSlideLeft {
+    0% { opacity: 0; transform: translateX(-20px); }
+    100% { opacity: 1; transform: translateX(0); }
   }
 
   .gh-gallery {
@@ -103,6 +117,38 @@
     font-size: 84px;
     color: var(--gold);
     line-height: 0;
+    opacity: 0;
+    animation: fadeSlideRight 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards, subtleGlowGold 4s ease-in-out 1.5s infinite;
+  }
+
+  @keyframes fadeSlideRight {
+    0% { opacity: 0; transform: translateX(20px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes subtleGlowGold {
+    0%, 100% { text-shadow: 0 0 25px rgba(201, 168, 76, 0.3); }
+    50% { text-shadow: 0 0 40px rgba(201, 168, 76, 0.55), 0 0 70px rgba(201, 168, 76, 0.2); }
+  }
+
+  .gallery-description {
+    opacity: 0;
+    animation: fadeSlideUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
+  }
+
+  @keyframes fadeSlideUp {
+    0% { opacity: 0; transform: translateY(15px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .gold-divider {
+    opacity: 0;
+    animation: fadeIn 0.8s ease 1s forwards;
+  }
+
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
   }
 
   .gallery-description {
@@ -888,7 +934,6 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
   const firebaseConfig = { 
     apiKey: "AIzaSyAAbJeb6hQFc78RGgzY-eoftS5zrx-pRv0", 
@@ -902,7 +947,6 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-  const storage = getStorage(app);
   const galleryCol = collection(db, "gallery_photos");
   const settingsDocRef = doc(db, "gallery_settings", "overrides");
 
@@ -1020,16 +1064,24 @@
 
   /* ── LOAD FROM FILE (Owner) ── */
   async function loadImage(pol, file) {
-    window.showToast('Uploading to database...');
+    window.showToast('Uploading...');
     try {
-      const storageRef = ref(storage, `owner_overrides/${pol.dataset.index}_${Date.now()}_${file.name}`);
-      const snapshot = await uploadBytes(storageRef, file);
-      const downloadURL = await getDownloadURL(snapshot.ref);
-      
-      photos[pol.dataset.index] = downloadURL;
-      renderPhoto(pol, downloadURL);
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', UPLOAD_PRESET);
+
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+        { method: 'POST', body: formData }
+      );
+
+      if (!response.ok) throw new Error('Upload failed');
+      const data = await response.json();
+
+      photos[pol.dataset.index] = data.secure_url;
+      renderPhoto(pol, data.secure_url);
       await saveOverrides();
-      window.showToast('Photo saved to database');
+      window.showToast('Photo saved');
     } catch (e) {
       console.error(e);
       window.showToast('Upload failed');
@@ -1144,6 +1196,9 @@
     document.getElementById('gallery-submit-btn').textContent = 'Add to Gallery';
   }
 
+  const CLOUD_NAME = 'dvdnqska5';
+  const UPLOAD_PRESET = 'srcc_gallery_unsigned';
+
   window.submitUserPhoto = async () => {
     const fileInput = document.getElementById('user-photo-input');
     const submitBtn = document.getElementById('gallery-submit-btn');
@@ -1158,12 +1213,21 @@
 
     try {
       const file = fileInput.files[0];
-      const storageRef = ref(storage, `gallery/${Date.now()}_${file.name}`);
-      const snapshot = await uploadBytes(storageRef, file);
-      const downloadURL = await getDownloadURL(snapshot.ref);
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', UPLOAD_PRESET);
+
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+        { method: 'POST', body: formData }
+      );
+
+      if (!response.ok) throw new Error('Upload failed');
+      const data = await response.json();
 
       await addDoc(galleryCol, {
-        url: downloadURL,
+        url: data.secure_url,
+        publicId: data.public_id,
         createdAt: new Date()
       });
 

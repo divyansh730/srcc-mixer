@@ -55,18 +55,12 @@
     }
 
     header {
-      padding: 0 20px 0; /* Minimized to the extreme */
+      padding: 0 0 0; /* Minimized to the extreme */
       text-align: center;
       position: relative;
       z-index: 10;
-      opacity: 0;
-      animation: floatUpTitle 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      margin-top: -10px; /* Pull header up */
-    }
-
-    @keyframes floatUpTitle {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+      margin-top: -40px; /* Pull header up */
+      padding-bottom: 20px;
     }
 
     .wall-title {
@@ -76,6 +70,28 @@
       text-shadow: 0 0 35px rgba(212, 175, 55, 0.25);
       font-weight: 400;
       margin-bottom: 0; /* Reduced from 5px */
+      opacity: 0;
+      animation: shimmerIn 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards, subtleGlow 4s ease-in-out 1.7s infinite;
+    }
+
+    @keyframes shimmerIn {
+      0% { opacity: 0; transform: translateY(25px) scale(0.96); filter: blur(4px); }
+      100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    }
+
+    @keyframes subtleGlow {
+      0%, 100% { text-shadow: 0 0 35px rgba(212, 175, 55, 0.25); }
+      50% { text-shadow: 0 0 50px rgba(212, 175, 55, 0.45), 0 0 80px rgba(212, 175, 55, 0.2); }
+    }
+
+    .wall-description {
+      opacity: 0;
+      animation: fadeSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+    }
+
+    @keyframes fadeSlideUp {
+      0% { opacity: 0; transform: translateY(15px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
 
     .wall-description {
@@ -84,8 +100,8 @@
       font-size: clamp(16px, 2.2vw, 22px); /* Slightly bigger */
       color: rgba(246, 232, 188, 0.75);
       letter-spacing: 0.05em;
-      margin-bottom: 5px; /* Reduced from 10px */
-      max-width: 700px;
+      margin-bottom: -55px; /* Reduced from 10px */
+      max-width: 800px;
       margin-left: auto;
       margin-right: auto;
     }
@@ -543,7 +559,7 @@
 
   <header>
     <h1 class="wall-title">Memory Wall</h1>
-    <p class="wall-description">A collection of shared memories from alumni across decades. Etch your own legacy below.</p>
+    <p class="wall-description">A collection of shared memories from alumni across decades. Etch your own legacy below!</p>
   </header>
 
   <main id="wall-container">

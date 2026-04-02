@@ -635,7 +635,7 @@ export default function ScrollStoryV2() {
                     background: "linear-gradient(90deg, transparent, #C9A84C)",
                   }}
                 />
-                <span style={{ color: "#C9A84C", fontSize: isMobile ? "11px" : "13px" }}>*</span>
+                <span style={{ color: "#C9A84C", fontSize: isMobile ? "11px" : "13px" }}>✦</span>
                 <div
                   style={{
                     width: isMobile ? "44px" : "80px",

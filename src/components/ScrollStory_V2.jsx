@@ -302,8 +302,8 @@ export default function ScrollStoryV2() {
             src={MIXER_LOGO}
             alt="Mixer Logo"
             style={{
-              width: isMobile ? (isVeryCompactMobile ? "28px" : "32px") : "57px",
-              height: isMobile ? (isVeryCompactMobile ? "28px" : "32px") : "57px",
+              width: "57px",
+              height: "57px",
               objectFit: "contain",
               flexShrink: 0,
               marginLeft: isMobile ? "0" : "-3px",
@@ -372,9 +372,6 @@ export default function ScrollStoryV2() {
                 </div>
               )}
               <nav style={{ display: "flex", gap: "36px", flexWrap: "wrap", justifyContent: "flex-end" }}>
-                <a href="#mixer" className="nav-link" style={{ fontSize: "11px" }}>
-                  Memory Lane
-                </a>
                 <a href={MEMORY_WALL_PAGE} className="nav-link" style={{ fontSize: "11px" }}>
                   Memory Wall
                 </a>
@@ -396,9 +393,6 @@ export default function ScrollStoryV2() {
           className={`mobile-menu-panel${menuOpen ? " mobile-menu-panel-open" : ""}`}
           style={{ top: `${headerTotalHeight}px` }}
         >
-          <a href="#mixer" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
-            Memory Lane
-          </a>
           <a href={MEMORY_WALL_PAGE} className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
             Memory Wall
           </a>
@@ -680,7 +674,7 @@ export default function ScrollStoryV2() {
                   willChange: "transform, opacity",
                 }}
               >
-                Alumni Mixer 3.0
+                Alumni Mixer 2026
               </div>
 
               <div
@@ -701,40 +695,69 @@ export default function ScrollStoryV2() {
                   { value: countdown.hours, label: "Hours" },
                   { value: countdown.minutes, label: "Minutes" },
                   { value: countdown.seconds, label: "Seconds" },
-                ].map((item) => (
+                ].map((item, idx) => (
                   <div
                     key={item.label}
                     style={{
                       minWidth: isMobile ? "0" : "104px",
-                      padding: isMobile ? "12px 8px 10px" : "0",
-                      border: isMobile ? "1px solid rgba(201,168,76,0.16)" : "none",
-                      background: isMobile ? "rgba(8, 4, 1, 0.36)" : "transparent",
-                      backdropFilter: isMobile ? "blur(6px)" : "none",
-                      borderRadius: isMobile ? "6px" : "0",
+                      padding: isMobile ? "16px 12px 14px" : "0",
+                      border: "1px solid rgba(201,168,76,0.25)",
+                      background: "rgba(12, 6, 2, 0.55)",
+                      backdropFilter: "blur(8px)",
+                      borderRadius: "8px",
+                      position: "relative",
+                      boxShadow: "0 4px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(201,168,76,0.15)",
                     }}
                   >
-                    <span
+                    {idx > 0 && (
+                      <span
+                        style={{
+                          position: "absolute",
+                          left: isMobile ? "-10px" : "-14px",
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          color: "#C9A84C",
+                          fontSize: isMobile ? "1.2rem" : "1.5rem",
+                          fontFamily: "'Cinzel', serif",
+                          opacity: 0.7,
+                        }}
+                      >
+                        :
+                      </span>
+                    )}
+                    <div
                       style={{
-                        display: "block",
-                        fontSize: isCompactMobile ? "1.8rem" : isMobile ? "2.1rem" : "3rem",
-                        color: "#F6E8BC",
-                        lineHeight: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
                       }}
                     >
-                      {item.value}
-                    </span>
-                    <span
-                      style={{
-                        display: "block",
-                        color: "rgba(218, 224, 234, 0.6)",
-                        fontSize: isMobile ? "0.58rem" : "0.8rem",
-                        letterSpacing: isMobile ? "0.1em" : "0.2em",
-                        textTransform: "uppercase",
-                        marginTop: "4px",
-                      }}
-                    >
-                      {item.label}
-                    </span>
+                      <span
+                        style={{
+                          fontSize: isCompactMobile ? "1.9rem" : isMobile ? "2.3rem" : "3.2rem",
+                          color: "#F6E8BC",
+                          lineHeight: 1,
+                          fontFamily: "'Cinzel', serif",
+                          fontWeight: 600,
+                          textShadow: "0 0 20px rgba(201,168,76,0.3)",
+                        }}
+                      >
+                        {item.value}
+                      </span>
+                      <span
+                        style={{
+                          display: "block",
+                          color: "rgba(201,168,76,0.7)",
+                          fontSize: isMobile ? "0.6rem" : "0.75rem",
+                          letterSpacing: isMobile ? "0.12em" : "0.2em",
+                          textTransform: "uppercase",
+                          marginTop: "6px",
+                          fontFamily: "'Cinzel', serif",
+                        }}
+                      >
+                        {item.label}
+                      </span>
+                    </div>
                   </div>
                 ))}
               </div>

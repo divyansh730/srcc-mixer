@@ -37,6 +37,26 @@
       overflow: hidden;
     }
 
+    /* ── Mobile Pan/Zoom Container ── */
+    #zoom-container {
+      position: absolute;
+      inset: 0;
+      transform-origin: 0 0;
+      transition: transform 0.05s linear;
+      will-change: transform;
+    }
+
+    #zoom-container.dragging {
+      transition: none;
+    }
+
+    @media (max-width: 768px) {
+      #stage {
+        overflow: hidden;
+        touch-action: none;
+      }
+    }
+
     /* ── Campus Aerial Image ── */
     #campus-bg {
       position: absolute;
@@ -834,6 +854,8 @@
 
   <div id="stage">
 
+    <!-- ── Zoom Container for Mobile Pan/Zoom ── -->
+    <div id="zoom-container">
     <!-- ── Campus Aerial Background ── -->
     <img id="campus-bg" src="./srcc-aerial.jpg" alt="SRCC Campus Aerial View">
 
@@ -954,6 +976,7 @@
       <div class="scroll-line"></div>
     </div>
 
+    </div><!-- /zoom-container -->
   </div><!-- /stage -->  <div id="admin-toolbar">
     <span>Admin Tools</span>
     <button class="btn" type="button" onclick="setAdminMode('move')">Move</button>
@@ -1651,5 +1674,131 @@
       }
     });
   </script>
-</body></html>
+
+  <!-- Mobile Pan/Zoom Script -->
+  <script>
+    (function() {
+      if (window.innerWidth > 768) return;
+
+      const container = document.getElementById('zoom-container');
+      const stage = document.getElementById('stage');
+      if (!container || !stage) return;
+
+      let scale = 1.5;
+      let translateX = 0;
+      let translateY = 0;
+      const MIN_SCALE = 1;
+      const MAX_SCALE = 3;
+
+      function updateTransform() {
+        container.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+      }
+
+      let isDragging = false;
+      let startX, startY;
+      let lastTouchDist = 0;
+      let lastTouchMidX = 0;
+      let lastTouchMidY = 0;
+
+      function getDistance(t1, t2) {
+        const dx = t1.clientX - t2.clientX;
+        const dy = t1.clientY - t2.clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+      }
+
+      function getMidpoint(t1, t2) {
+        return {
+          x: (t1.clientX + t2.clientX) / 2,
+          y: (t1.clientY + t2.clientY) / 2
+        };
+      }
+
+      stage.addEventListener('touchstart', function(e) {
+        if (e.touches.length === 1) {
+          isDragging = true;
+          startX = e.touches[0].clientX - translateX;
+          startY = e.touches[0].clientY - translateY;
+          container.classList.add('dragging');
+        } else if (e.touches.length === 2) {
+          isDragging = false;
+          lastTouchDist = getDistance(e.touches[0], e.touches[1]);
+          const mid = getMidpoint(e.touches[0], e.touches[1]);
+          lastTouchMidX = mid.x;
+          lastTouchMidY = mid.y;
+        }
+        e.preventDefault();
+      }, { passive: false });
+
+      stage.addEventListener('touchmove', function(e) {
+        if (e.touches.length === 1 && isDragging) {
+          translateX = e.touches[0].clientX - startX;
+          translateY = e.touches[0].clientY - startY;
+          updateTransform();
+        } else if (e.touches.length === 2) {
+          const dist = getDistance(e.touches[0], e.touches[1]);
+          const mid = getMidpoint(e.touches[0], e.touches[1]);
+          
+          const scaleFactor = dist / lastTouchDist;
+          const newScale = Math.min(Math.max(scale * scaleFactor, MIN_SCALE), MAX_SCALE);
+          
+          const scaleChange = newScale / scale;
+          translateX = mid.x - (mid.x - translateX) * scaleChange;
+          translateY = mid.y - (mid.y - translateY) * scaleChange;
+          
+          scale = newScale;
+          lastTouchDist = dist;
+          lastTouchMidX = mid.x;
+          lastTouchMidY = mid.y;
+          
+          updateTransform();
+        }
+        e.preventDefault();
+      }, { passive: false });
+
+      stage.addEventListener('touchend', function(e) {
+        if (e.touches.length === 0) {
+          isDragging = false;
+          container.classList.remove('dragging');
+        } else if (e.touches.length === 1) {
+          startX = e.touches[0].clientX - translateX;
+          startY = e.touches[0].clientY - translateY;
+          isDragging = true;
+        }
+      });
+
+      // Mouse support for testing on desktop
+      let isMouseDragging = false;
+      let mouseStartX, mouseStartY;
+
+      stage.addEventListener('mousedown', function(e) {
+        isMouseDragging = true;
+        mouseStartX = e.clientX - translateX;
+        mouseStartY = e.clientY - translateY;
+        container.classList.add('dragging');
+      });
+
+      window.addEventListener('mousemove', function(e) {
+        if (!isMouseDragging) return;
+        translateX = e.clientX - mouseStartX;
+        translateY = e.clientY - mouseStartY;
+        updateTransform();
+      });
+
+      window.addEventListener('mouseup', function() {
+        isMouseDragging = false;
+        container.classList.remove('dragging');
+      });
+
+      stage.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? 0.9 : 1.1;
+        scale = Math.min(Math.max(scale * delta, MIN_SCALE), MAX_SCALE);
+        updateTransform();
+      }, { passive: false });
+
+      // Initial transform
+      updateTransform();
+    })();
+  </script>
+
 

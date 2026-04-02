@@ -68,6 +68,7 @@ function getFrameMetrics(isMobile) {
     imageInsetY: isMobile ? 2 : 3,
     gateHeight: isMobile ? 76 : 104,
     frameGap: 0,
+    stripInsetY: isMobile ? 2 : 3,
   };
 }
 
@@ -285,7 +286,7 @@ function Strip({ direction, isMobile, shuffledPhotos }) {
           display: "flex",
           width: "max-content",
           gap: `${metrics.frameGap}px`,
-          padding: "0",
+          padding: `${metrics.stripInsetY}px 0`,
           willChange: "transform",
         }}
       >
@@ -353,7 +354,7 @@ export default function FilmStrip() {
             textShadow: "0 0 30px rgba(201,168,76,0.4), 0 0 60px rgba(201,168,76,0.15)",
           }}
         >
-          The Past Two Editions
+          The Past Editions
         </span>
         <div
           style={{

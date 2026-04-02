@@ -21,7 +21,6 @@ export default function ScrollStoryV2() {
   const mlSubRef = useRef(null);
 
   const [showCountdownInHeader, setShowCountdownInHeader] = useState(false);
-  const [birdseyeInView, setBirdseyeInView] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [viewportWidth, setViewportWidth] = useState(() =>
     typeof window === "undefined" ? 1440 : window.innerWidth
@@ -36,8 +35,7 @@ export default function ScrollStoryV2() {
   const isMobile = viewportWidth <= 768;
   const isCompactMobile = viewportWidth <= 480;
   const mainHeaderBarHeight = isMobile ? 76 : 68; // Increased from 76/68
-  const birdseyeInViewHeight = birdseyeInView ? 34 : 0; // Slightly taller sub-row
-  const headerTotalHeight = mainHeaderBarHeight + birdseyeInViewHeight;
+  const headerTotalHeight = mainHeaderBarHeight;
   const logoEndSize = isMobile ? 36 : 42; // Increased from 28/34
   const logoEndX = isMobile ? 20 : 48; // Increased from 16/40
   const logoEndY = (mainHeaderBarHeight - logoEndSize) / 2;
@@ -71,33 +69,6 @@ export default function ScrollStoryV2() {
       setMenuOpen(false);
     }
   }, [isMobile, menuOpen]);
-
-  useEffect(() => {
-    let io;
-    let cancelled = false;
-
-    const attach = () => {
-      if (cancelled) return;
-      const el = document.getElementById("birdseye-section");
-      if (!el) {
-        requestAnimationFrame(attach);
-        return;
-      }
-      io = new IntersectionObserver(
-        ([e]) => {
-          if (e) setBirdseyeInView(e.isIntersecting);
-        },
-        { root: null, rootMargin: "-48px 0px -35% 0px", threshold: [0, 0.08] }
-      );
-      io.observe(el);
-    };
-
-    requestAnimationFrame(attach);
-    return () => {
-      cancelled = true;
-      io?.disconnect();
-    };
-  }, []);
 
   useEffect(() => {
     let winH = window.innerHeight;
@@ -402,44 +373,6 @@ export default function ScrollStoryV2() {
           )}
         </div>
         </div>
-        {birdseyeInView && (
-          <div
-            style={{
-              flexShrink: 0,
-              borderTop: "1px solid rgba(201,168,76,0.18)",
-              padding: "6px 20px 8px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "12px",
-              background: "linear-gradient(180deg, rgba(201,168,76,0.06), transparent)",
-            }}
-          >
-            <span
-              style={{
-                fontFamily: "'Cinzel', serif",
-                fontSize: isMobile ? "8px" : "9px",
-                letterSpacing: "0.35em",
-                color: "rgba(201,168,76,0.85)",
-                textTransform: "uppercase",
-              }}
-            >
-              The Placement Cell, SRCC
-            </span>
-            <span style={{ color: "rgba(201,168,76,0.3)", fontSize: "10px" }}>✦</span>
-            <span
-              style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontStyle: "italic",
-                fontSize: isMobile ? "11px" : "12px",
-                color: "rgba(246,232,188,0.9)",
-                letterSpacing: "0.08em",
-              }}
-            >
-              Campus bird&rsquo;s-eye
-            </span>
-          </div>
-        )}
       </header>
 
       {isMobile && (
@@ -514,8 +447,8 @@ export default function ScrollStoryV2() {
                 inset: 0,
                 backgroundImage: `url('${BG_CLOCK}')`,
                 backgroundSize: "cover",
-                backgroundPosition: isMobile ? "center center" : "center 35%",
-                filter: "sepia(0.5) brightness(0.45) contrast(1.05)",
+                backgroundPosition: isMobile ? "center center" : "center 50%",
+                filter: "sepia(0.5) brightness(0.65) contrast(.98)",
                 transform: "translate3d(0,0,0)",
               }}
             />
@@ -681,9 +614,9 @@ export default function ScrollStoryV2() {
                 fontFamily: "'Cinzel', serif",
                 fontSize: isMobile ? "8px" : "9px",
                 letterSpacing: isMobile ? "0.24em" : "0.4em",
-                color: "rgba(201,168,76,0.85)",
+                color: "#C9A84C",
                 textTransform: "uppercase",
-                textShadow: "0 0 16px rgba(201,168,76,0.5)",
+                textShadow: "0 0 10px rgba(201,168,76,0.5)",
               }}
             >
               Scroll to Enter
@@ -808,3 +741,4 @@ export default function ScrollStoryV2() {
     </>
   );
 }
+

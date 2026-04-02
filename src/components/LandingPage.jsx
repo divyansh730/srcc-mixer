@@ -6,7 +6,7 @@ const landingOptions = [
   {
     id: "memory-wall",
     title: "Memory Wall",
-    image: assetUrl("srcc-clock.jpg"),
+    image: assetUrl("memory-wall-button.JPG"),
     status: "Open",
     description:
       "A wall of shared memories from alumni across decades - etch your own!",
@@ -15,7 +15,7 @@ const landingOptions = [
   {
     id: "pc-gallery",
     title: "PC Gallery",
-    image: assetUrl("srcc-corridor.jpg"),
+    image: assetUrl("gallery-button.JPG"),
     status: "Open",
     description:
       "A collection of The Placement Cell's memories - captured through the lens.",

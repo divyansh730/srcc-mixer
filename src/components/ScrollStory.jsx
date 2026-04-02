@@ -209,7 +209,10 @@ export default function ScrollStory() {
             <div style={{
               position: "absolute", inset: 0,
               backgroundImage: `url('${BG_CLOCK}')`,
-              backgroundSize: "cover", backgroundPosition: "center 35%",
+              backgroundSize: "contain",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center center",
+              backgroundColor: "#080300",
               filter: "sepia(0.5) brightness(0.45) contrast(1.05)",
               transform: "translate3d(0,0,0)"
             }} />
@@ -236,12 +239,6 @@ export default function ScrollStory() {
             position: "absolute", inset: 0, zIndex: 1,
             background: "radial-gradient(ellipse at 50% 36%, transparent 10%, rgba(2,1,0,0.44) 52%, rgba(1,0,0,0.9) 100%)",
             pointerEvents: "none"
-          }} />
-
-          {/* Lines */}
-          <div style={{
-            position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
-            backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(201,168,76,0.018) 60px)"
           }} />
 
           {/* HERO TEXT */}

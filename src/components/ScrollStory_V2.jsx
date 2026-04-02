@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`;
+const MEMORY_WALL_PAGE = `${import.meta.env.BASE_URL}memory-wall.html`;
 const GALLERY_PAGE = `${import.meta.env.BASE_URL}pc-gallery.html`;
 const BIRDSEYE_PAGE = `${import.meta.env.BASE_URL}Birdseye%20v2%20(2).html`;
 const SRCC_LOGO = assetUrl("srcc-logo.png");
@@ -35,12 +36,12 @@ export default function ScrollStoryV2() {
 
   const isMobile = viewportWidth <= 768;
   const isCompactMobile = viewportWidth <= 480;
-  const mainHeaderBarHeight = isMobile ? 76 : 68; // Increased from 76/68
+  const isVeryCompactMobile = viewportWidth <= 390;
+  const mainHeaderBarHeight = isMobile ? 72 : 68;
   const headerTotalHeight = mainHeaderBarHeight;
-  const logoEndSize = isMobile ? 36 : 42; // Increased from 28/34
-  const logoEndX = isMobile ? 20 : 48; // Increased from 16/40
+  const logoEndSize = isMobile ? 34 : 42;
+  const logoEndX = isMobile ? 16 : 48;
   const logoEndY = (mainHeaderBarHeight - logoEndSize) / 2;
-  const mixerLogoSize = isMobile ? 65 : 77; // Scaled up Mixer Logo size for header
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -240,75 +241,88 @@ export default function ScrollStoryV2() {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            padding: isMobile ? "0 20px" : "0 48px", // Increased padding
-            gap: isMobile ? "14px" : "32px", // Increased gap
+            padding: isMobile ? "0 14px" : "0 48px",
+            gap: isMobile ? "10px" : "32px",
             minHeight: `${mainHeaderBarHeight}px`,
             flexShrink: 0,
           }}
         >
-        <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "12px" : "16px", minWidth: 0 }}> {/* Adjusted gap */}
+        <a
+          href="#top"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: isMobile ? "10px" : "16px",
+            minWidth: 0,
+            textDecoration: "none",
+            color: "inherit",
+          }}
+        >
           <img
             src={SRCC_LOGO}
             alt="SRCC"
             style={{
-              width: isMobile ? "34px" : "40px", // Matches logoEndSize
+              width: isMobile ? "34px" : "40px",
               height: isMobile ? "34px" : "40px",
+              flexShrink: 0,
               objectFit: "contain",
-              filter: "drop-shadow(0 0 8px rgba(201,168,76,0.3))", // Stronger shadow
+              filter: "drop-shadow(0 0 8px rgba(201,168,76,0.3))",
             }}
           />
-          <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.2 }}> {/* Adjusted line-height */}
+          <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.15, minWidth: 0 }}>
             <span
               style={{
                 fontFamily: "'Cinzel', serif",
-                fontSize: isMobile ? "14px" : "17px",
-                letterSpacing: isMobile ? "0.1em" : "0.15em",
+                fontSize: isMobile ? (isVeryCompactMobile ? "11px" : "12px") : "17px",
+                letterSpacing: isMobile ? (isVeryCompactMobile ? "0.06em" : "0.08em") : "0.15em",
                 color: "#E2E6ED",
                 textTransform: "uppercase",
                 fontWeight: 600,
+                whiteSpace: "nowrap",
               }}
             >
               The Placement Cell
             </span>
             <span
               style={{
-                fontFamily: "'Cinzel', serif", // Same font as above
-                fontSize: isMobile ? "9.5px" : "11.5px", // Slightly smaller
-                letterSpacing: isMobile ? "0.07em" : "0.10em",
+                fontFamily: "'Cinzel', serif",
+                fontSize: isMobile ? (isVeryCompactMobile ? "7.5px" : "8px") : "11.5px",
+                letterSpacing: isMobile ? (isVeryCompactMobile ? "0.04em" : "0.06em") : "0.10em",
                 color: "#C9A84C",
                 textTransform: "uppercase",
                 fontWeight: 600,
                 marginTop: "2px",
+                whiteSpace: "nowrap",
               }}
             >
               Shri Ram College of Commerce
             </span>
           </div>
-          {/* Mixer Logo moved here */}
           <img
             src={MIXER_LOGO}
             alt="Mixer Logo"
             style={{
-              width: isMobile ? "40px" : "57px", // Slightly scaled down from the top-right size for better fit here
-              height: isMobile ? "40px" : "57px",
+              width: isMobile ? (isVeryCompactMobile ? "28px" : "32px") : "57px",
+              height: isMobile ? (isVeryCompactMobile ? "28px" : "32px") : "57px",
               objectFit: "contain",
-              marginLeft: isMobile ? "-1px" : "-3px",
+              flexShrink: 0,
+              marginLeft: isMobile ? "0" : "-3px",
               filter: "drop-shadow(0 0 10px rgba(201,168,76,0.35))",
             }}
           />
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "16px" : "3rem", minWidth: 0 }}>
+        </a>
+        <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "10px" : "3rem", minWidth: 0 }}>
           {isMobile ? (
             <>
               <div
                 style={{
-                  opacity: showCountdownInHeader ? 1 : 0,
+                  opacity: showCountdownInHeader && !isVeryCompactMobile ? 1 : 0,
                   transform: `translateY(${showCountdownInHeader ? "0px" : "4px"})`,
                   transition: "opacity 0.35s ease, transform 0.35s ease",
                   fontFamily: "'Cinzel', serif",
-                  fontSize: isCompactMobile ? "11px" : "13px", // Slightly bigger
+                  fontSize: isCompactMobile ? "10px" : "12px",
                   color: "#C9A84C",
-                  letterSpacing: isCompactMobile ? "0.06em" : "0.1em",
+                  letterSpacing: isCompactMobile ? "0.04em" : "0.08em",
                   whiteSpace: "nowrap",
                   textAlign: "right",
                   fontWeight: 600,
@@ -326,8 +340,9 @@ export default function ScrollStoryV2() {
                 className={`mobile-menu-button${menuOpen ? " mobile-menu-button-open" : ""}`}
                 onClick={() => setMenuOpen((open) => !open)}
                 style={{
-                  width: "48px", // Slightly bigger button
-                  height: "48px",
+                  width: isVeryCompactMobile ? "42px" : "44px",
+                  height: isVeryCompactMobile ? "42px" : "44px",
+                  flexShrink: 0,
                 }}
               >
                 <span />
@@ -357,7 +372,10 @@ export default function ScrollStoryV2() {
                 </div>
               )}
               <nav style={{ display: "flex", gap: "36px", flexWrap: "wrap", justifyContent: "flex-end" }}>
-                <a href="./memory-wall.html" className="nav-link" style={{ fontSize: "11px" }}>
+                <a href="#mixer" className="nav-link" style={{ fontSize: "11px" }}>
+                  Memory Lane
+                </a>
+                <a href={MEMORY_WALL_PAGE} className="nav-link" style={{ fontSize: "11px" }}>
                   Memory Wall
                 </a>
                 <a href={BIRDSEYE_PAGE} className="nav-link" style={{ fontSize: "11px" }}>
@@ -365,9 +383,6 @@ export default function ScrollStoryV2() {
                 </a>
                 <a href={GALLERY_PAGE} className="nav-link" style={{ fontSize: "11px" }}>
                   PC Gallery
-                </a>
-                <a href="#quiz" className="nav-link" style={{ fontSize: "11px" }}>
-                  Quiz
                 </a>
               </nav>
             </>
@@ -381,7 +396,10 @@ export default function ScrollStoryV2() {
           className={`mobile-menu-panel${menuOpen ? " mobile-menu-panel-open" : ""}`}
           style={{ top: `${headerTotalHeight}px` }}
         >
-          <a href="./memory-wall.html" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
+          <a href="#mixer" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
+            Memory Lane
+          </a>
+          <a href={MEMORY_WALL_PAGE} className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
             Memory Wall
           </a>
           <a href={BIRDSEYE_PAGE} className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
@@ -390,13 +408,11 @@ export default function ScrollStoryV2() {
           <a href={GALLERY_PAGE} className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
             PC Gallery
           </a>
-          <a href="#quiz" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
-            Quiz
-          </a>
         </div>
       )}
 
       <div
+        id="top"
         ref={logoRef}
         style={{
           position: "fixed",
@@ -511,12 +527,12 @@ export default function ScrollStoryV2() {
               alignItems: "center",
               justifyContent: "center",
               padding: isMobile ? "0 18px" : "0 24px",
-              marginTop: isMobile ? "-4vh" : "-2vh", // Restore original centered look
+              marginTop: isMobile ? "-7vh" : "-2vh",
               textAlign: "center",
               pointerEvents: "none",
             }}
           >
-            <div style={{ height: isMobile ? "24px" : "32px" }} /> {/* Reduced from 64/80 */}
+            <div style={{ height: isMobile ? "16px" : "32px" }} />
             <div
               ref={contentRef}
               style={{
@@ -525,18 +541,18 @@ export default function ScrollStoryV2() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                gap: isMobile ? "8px" : "12px", // Reduced from 12/16
-                maxWidth: isMobile ? "340px" : "none",
+                gap: isMobile ? "6px" : "12px",
+                maxWidth: isMobile ? "320px" : "none",
                 transform: "translate3d(0,0,0)",
               }}
             >
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2px" }}> {/* Reduced from 4px */}
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2px" }}>
                 <div
                   style={{
                     fontFamily: "'Times New Roman', Times, serif",
-                    fontSize: isMobile ? "clamp(18px, 7vw, 26px)" : "clamp(20px, 3.4vw, 42px)",
+                    fontSize: isMobile ? "clamp(16px, 6.5vw, 22px)" : "clamp(20px, 3.4vw, 42px)",
                     color: "#DDE3ED",
-                    letterSpacing: isMobile ? "0.08em" : "0.12em",
+                    letterSpacing: isMobile ? "0.07em" : "0.12em",
                     lineHeight: 1.2,
                     fontWeight: 400,
                     textTransform: "uppercase",
@@ -548,9 +564,9 @@ export default function ScrollStoryV2() {
                 <div
                   style={{
                     fontFamily: "'Times New Roman', Times, serif",
-                    fontSize: isMobile ? "clamp(10px, 3.8vw, 14px)" : "clamp(12px, 2vw, 24px)",
+                    fontSize: isMobile ? "clamp(9px, 3.2vw, 12px)" : "clamp(12px, 2vw, 24px)",
                     color: "rgba(221,227,237,0.78)",
-                    letterSpacing: isMobile ? "0.12em" : "0.18em",
+                    letterSpacing: isMobile ? "0.1em" : "0.18em",
                     lineHeight: 1.2,
                     fontWeight: 400,
                     textTransform: "uppercase",
@@ -564,15 +580,15 @@ export default function ScrollStoryV2() {
               <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "8px" : "12px" }}>
                 <div
                   style={{
-                    width: isMobile ? "44px" : "80px",
+                    width: isMobile ? "34px" : "80px",
                     height: "1px",
                     background: "linear-gradient(90deg, transparent, #C9A84C)",
                   }}
                 />
-                <span style={{ color: "#C9A84C", fontSize: isMobile ? "11px" : "13px" }}>✦</span>
+                <span style={{ color: "#C9A84C", fontSize: isMobile ? "10px" : "13px" }}>✦</span>
                 <div
                   style={{
-                    width: isMobile ? "44px" : "80px",
+                    width: isMobile ? "34px" : "80px",
                     height: "1px",
                     background: "linear-gradient(90deg, #C9A84C, transparent)",
                   }}
@@ -582,7 +598,7 @@ export default function ScrollStoryV2() {
               <div
                 style={{
                   fontFamily: "'Pinyon Script', cursive",
-                  fontSize: isMobile ? "clamp(28px, 11vw, 44px)" : "clamp(30px, 5vw, 56px)",
+                  fontSize: isMobile ? "clamp(24px, 10vw, 38px)" : "clamp(30px, 5vw, 56px)",
                   color: "#C9A84C",
                   textShadow: "0 0 30px rgba(201,168,76,0.55), 0 2px 10px rgba(0,0,0,0.9)",
                   lineHeight: 1,
@@ -655,7 +671,7 @@ export default function ScrollStoryV2() {
                 ref={mlTextRef}
                 style={{
                   fontFamily: "'Pinyon Script', cursive",
-                  fontSize: isMobile ? "clamp(34px, 12vw, 52px)" : "clamp(45px, 8.5vw, 80px)",
+                  fontSize: isMobile ? "clamp(30px, 11vw, 44px)" : "clamp(45px, 8.5vw, 80px)",
                   color: "#F6E8BC",
                   textShadow: "0 0 55px rgba(201,168,76,0.38), 0 4px 32px rgba(0,0,0,0.98)",
                   lineHeight: 1,
@@ -672,8 +688,8 @@ export default function ScrollStoryV2() {
                 style={{
                   display: "grid",
                   gridTemplateColumns: isMobile ? "repeat(2, minmax(0, 1fr))" : "repeat(4, minmax(0, 1fr))",
-                  gap: isCompactMobile ? "0.75rem" : isMobile ? "1rem" : "2rem",
-                  marginTop: isMobile ? "1.2rem" : "2rem",
+                  gap: isCompactMobile ? "0.65rem" : isMobile ? "0.9rem" : "2rem",
+                  marginTop: isMobile ? "1rem" : "2rem",
                   fontFamily: "'Cinzel', serif",
                   opacity: 0,
                   transform: "translate3d(0, 32px, 0)",
@@ -689,17 +705,20 @@ export default function ScrollStoryV2() {
                   <div
                     key={item.label}
                     style={{
-                      minWidth: isMobile ? "88px" : "104px",
-                      padding: isMobile ? "10px 8px" : "0",
+                      minWidth: isMobile ? "0" : "104px",
+                      padding: isMobile ? "12px 8px 10px" : "0",
                       border: isMobile ? "1px solid rgba(201,168,76,0.16)" : "none",
                       background: isMobile ? "rgba(8, 4, 1, 0.36)" : "transparent",
                       backdropFilter: isMobile ? "blur(6px)" : "none",
+                      borderRadius: isMobile ? "6px" : "0",
                     }}
                   >
                     <span
                       style={{
-                        fontSize: isCompactMobile ? "2rem" : isMobile ? "2.3rem" : "3rem",
+                        display: "block",
+                        fontSize: isCompactMobile ? "1.8rem" : isMobile ? "2.1rem" : "3rem",
                         color: "#F6E8BC",
+                        lineHeight: 1,
                       }}
                     >
                       {item.value}
@@ -708,9 +727,10 @@ export default function ScrollStoryV2() {
                       style={{
                         display: "block",
                         color: "rgba(218, 224, 234, 0.6)",
-                        fontSize: isMobile ? "0.65rem" : "0.8rem",
-                        letterSpacing: isMobile ? "0.12em" : "0.2em",
+                        fontSize: isMobile ? "0.58rem" : "0.8rem",
+                        letterSpacing: isMobile ? "0.1em" : "0.2em",
                         textTransform: "uppercase",
+                        marginTop: "4px",
                       }}
                     >
                       {item.label}
@@ -723,10 +743,10 @@ export default function ScrollStoryV2() {
                 ref={mlSubRef}
                 style={{
                   fontFamily: "'Times New Roman', Times, serif",
-                  fontSize: isMobile ? "clamp(11px, 3.8vw, 14px)" : "clamp(13px, 1.6vw, 17px)",
+                  fontSize: isMobile ? "clamp(10px, 3.4vw, 13px)" : "clamp(13px, 1.6vw, 17px)",
                   color: "#C8CDD6",
-                  marginTop: isMobile ? "18px" : "28px",
-                  letterSpacing: isMobile ? "0.04em" : "0.07em",
+                  marginTop: isMobile ? "16px" : "28px",
+                  letterSpacing: isMobile ? "0.03em" : "0.07em",
                   lineHeight: 1.6,
                   opacity: 0,
                   transform: "translate3d(0, 32px, 0)",

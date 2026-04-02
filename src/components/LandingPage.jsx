@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 
 const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`;
+const MEMORY_WALL_PAGE = `${import.meta.env.BASE_URL}memory-wall.html`;
+const GALLERY_PAGE = `${import.meta.env.BASE_URL}pc-gallery.html`;
+const BIRDSEYE_PAGE = `${import.meta.env.BASE_URL}Birdseye%20v2%20(2).html`;
 
 const landingOptions = [
   {
@@ -10,7 +13,7 @@ const landingOptions = [
     status: "Open",
     description:
       "A wall of shared memories from alumni across decades - etch your own!",
-    href: "./memory-wall.html",
+    href: MEMORY_WALL_PAGE,
   },
   {
     id: "pc-gallery",
@@ -19,7 +22,7 @@ const landingOptions = [
     status: "Open",
     description:
       "A collection of The Placement Cell's memories - captured through the lens!",
-    href: `${import.meta.env.BASE_URL}pc-gallery.html`,
+    href: GALLERY_PAGE,
   },
   {
     id: "campus-birdseye",
@@ -28,7 +31,7 @@ const landingOptions = [
     status: "Explore",
     description:
       "An aerial view of SRCC campus - revisit key locations and relive your memories!",
-    href: `${import.meta.env.BASE_URL}Birdseye%20v2%20(2).html`,
+    href: BIRDSEYE_PAGE,
   },
 ];
 
@@ -94,7 +97,7 @@ export default function LandingPage() {
       style={{
         background: "linear-gradient(180deg, #0A0500 0%, #0D0602 100%)",
         position: "relative",
-        padding: isMobile ? "56px 18px 48px" : "72px 40px 60px",
+        padding: isMobile ? "48px 16px 44px" : "72px 40px 60px",
       }}
     >
 
@@ -122,7 +125,7 @@ export default function LandingPage() {
               ref={(el) => {
                 cardRefs.current[index] = el;
               }}
-              className="landing-option-card"
+              className={`landing-option-card${isMobile ? " landing-option-card-mobile" : ""}`}
               style={{
                 "--landing-stagger": `${index * 220}ms`,
                 backgroundImage: `url('${option.image}')`,
@@ -132,8 +135,36 @@ export default function LandingPage() {
                 <div className="landing-option-base" />
                 <div className="landing-option-content">
                   <h3>{option.title}</h3>
+                  {isMobile && (
+                    <>
+                      <p
+                        style={{
+                          marginTop: "10px",
+                          fontFamily: "'Cinzel', serif",
+                          fontSize: "9px",
+                          letterSpacing: "0.24em",
+                          color: "rgba(201, 168, 76, 0.75)",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        {option.status}
+                      </p>
+                      <p
+                        style={{
+                          marginTop: "10px",
+                          color: "rgba(244, 234, 210, 0.88)",
+                          fontFamily: "'Cormorant Garamond', serif",
+                          fontSize: "15px",
+                          lineHeight: 1.38,
+                          maxWidth: "20em",
+                        }}
+                      >
+                        {option.description}
+                      </p>
+                    </>
+                  )}
                 </div>
-                <div className={`landing-option-hover${isMobile ? " landing-option-hover-mobile" : ""}`}>
+                <div className="landing-option-hover">
                   <span className="landing-option-hover-line" aria-hidden />
                   <p
                     style={{

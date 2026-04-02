@@ -98,7 +98,7 @@
 
   .gh-the {
     font-family: 'Cinzel', serif;
-    font-size: 70px;
+    font-size: clamp(36px, 8vw, 70px);
     color: var(--cream);
     letter-spacing: 0.07em;
     font-weight: 400;
@@ -114,7 +114,7 @@
 
   .gh-gallery {
     font-family: 'Pinyon Script', cursive;
-    font-size: 84px;
+    font-size: clamp(44px, 10vw, 84px);
     color: var(--gold);
     line-height: 0;
     opacity: 0;
@@ -840,11 +840,20 @@
   }
 
   @media (max-width: 768px) {
+    .mixer-back { margin: 16px 16px 0; padding: 10px 16px; font-size: 9px; }
+    header { margin-bottom: 40px; }
+    .gh-title-row { gap: 12px; margin-bottom: 16px; }
+    .gallery-description { font-size: 15px; margin: 0 20px 12px; }
+    .gold-divider { margin: 0 20px 24px; }
     .upload-form { padding: 35px 20px; width: 94vw; border-radius: 4px; }
     .upload-form h3 { font-size: 15px; margin-bottom: 35px; }
     .submit-photo-btn, .close-upload { padding: 12px 25px; font-size: 10px; }
     #submission-bar-gallery { padding: 35px 20px; }
     .gallery-trigger { width: 85%; padding: 14px 20px; font-size: 10px; }
+    .grid { padding: 0 20px 60px; gap: 16px; }
+    #owner-login-wrap { top: 16px; right: 16px; }
+    #owner-badge { top: 50px; right: 16px; }
+    #auth-box { padding: 32px 24px; min-width: unset; width: 90vw; }
   }
 </style>
 </head>

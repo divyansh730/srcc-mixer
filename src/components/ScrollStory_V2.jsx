@@ -680,166 +680,57 @@ export default function ScrollStoryV2() {
               <div
                 ref={countdownRef}
                 style={{
-                  marginTop: isMobile ? "1.2rem" : "2.5rem",
+                  display: "grid",
+                  gridTemplateColumns: isMobile ? "repeat(2, minmax(0, 1fr))" : "repeat(4, minmax(0, 1fr))",
+                  gap: isCompactMobile ? "0.65rem" : isMobile ? "0.9rem" : "2rem",
+                  marginTop: isMobile ? "1rem" : "2rem",
                   fontFamily: "'Cinzel', serif",
                   opacity: 0,
                   transform: "translate3d(0, 32px, 0)",
                   willChange: "transform, opacity",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
                 }}
               >
-                {/* ─── HOURGLASS COUNTDOWN ─── */}
-                <svg
-                  width={isMobile ? "100" : "140"}
-                  height={isMobile ? "140" : "200"}
-                  viewBox="0 0 100 160"
-                  style={{ filter: "drop-shadow(0 0 20px rgba(201,168,76,0.3))" }}
-                >
-                  {/* Glass bulbs */}
-                  <defs>
-                    <linearGradient id="sandGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stopColor="#D4AF37" />
-                      <stop offset="50%" stopColor="#C9A84C" />
-                      <stop offset="100%" stopColor="#A08030" />
-                    </linearGradient>
-                    <linearGradient id="glassGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="rgba(255,255,255,0.08)" />
-                      <stop offset="50%" stopColor="rgba(255,255,255,0.02)" />
-                      <stop offset="100%" stopColor="rgba(255,255,255,0.08)" />
-                    </linearGradient>
-                    <clipPath id="topBulb">
-                      <path d="M 15 8 Q 15 2 22 2 L 78 2 Q 85 2 85 8 L 85 75 Q 85 80 50 95 Q 15 80 15 75 Z" />
-                    </clipPath>
-                    <clipPath id="bottomBulb">
-                      <path d="M 15 152 Q 15 158 22 158 L 78 158 Q 85 158 85 152 L 85 85 Q 85 80 50 65 Q 15 80 15 85 Z" />
-                    </clipPath>
-                  </defs>
-
-                  {/* Top bulb glass */}
-                  <path
-                    d="M 15 8 Q 15 2 22 2 L 78 2 Q 85 2 85 8 L 85 75 Q 85 80 50 95 Q 15 80 15 75 Z"
-                    fill="url(#glassGradient)"
-                    stroke="rgba(201,168,76,0.4)"
-                    strokeWidth="1"
-                  />
-
-                  {/* Bottom bulb glass */}
-                  <path
-                    d="M 15 152 Q 15 158 22 158 L 78 158 Q 85 158 85 152 L 85 85 Q 85 80 50 65 Q 15 80 15 85 Z"
-                    fill="url(#glassGradient)"
-                    stroke="rgba(201,168,76,0.4)"
-                    strokeWidth="1"
-                  />
-
-                  {/* Top sand (decreasing) */}
-                  <g clipPath="url(#topBulb)">
-                    {(() => {
-                      const totalMs = 22 * 24 * 60 * 60 * 1000; // ~22 days total
-                      const targetDate = new Date("2026-04-25T16:00:00");
-                      const now = new Date();
-                      const remaining = Math.max(0, targetDate.getTime() - now.getTime());
-                      const sandHeight = (remaining / totalMs) * 70;
-                      
-                      return (
-                        <rect
-                          x="15"
-                          y={80 - Math.min(sandHeight, 70)}
-                          width="70"
-                          height={Math.min(sandHeight, 70)}
-                          fill="url(#sandGradient)"
-                          opacity="0.9"
-                        />
-                      );
-                    })()}
-                  </g>
-
-                  {/* Bottom sand (increasing) */}
-                  <g clipPath="url(#bottomBulb)">
-                    {(() => {
-                      const totalMs = 22 * 24 * 60 * 60 * 1000;
-                      const targetDate = new Date("2026-04-25T16:00:00");
-                      const now = new Date();
-                      const remaining = Math.max(0, targetDate.getTime() - now.getTime());
-                      const sandHeight = ((totalMs - remaining) / totalMs) * 70;
-                      
-                      return (
-                        <rect
-                          x="15"
-                          y={85}
-                          width="70"
-                          height={Math.min(sandHeight, 70)}
-                          fill="url(#sandGradient)"
-                          opacity="0.9"
-                        />
-                      );
-                    })()}
-                  </g>
-
-                  {/* Sand particles falling */}
-                  <g opacity="0.8">
-                    {[...Array(8)].map((_, i) => (
-                      <circle
-                        key={i}
-                        r="1.2"
-                        fill="#D4AF37"
-                      >
-                        <animateMotion
-                          dur={`${1.5 + (i * 0.2)}s`}
-                          repeatCount="indefinite"
-                          path="M 50 80 L 50 95"
-                        />
-                        <animate
-                          attributeName="opacity"
-                          values="0;1;1;0"
-                          dur={`${1.5 + (i * 0.2)}s`}
-                          repeatCount="indefinite"
-                        />
-                      </circle>
-                    ))}
-                  </g>
-
-                  {/* Frame */}
-                  <line x1="10" y1="10" x2="10" y2="25" stroke="#C9A84C" strokeWidth="2" strokeLinecap="round" />
-                  <line x1="90" y1="10" x2="90" y2="25" stroke="#C9A84C" strokeWidth="2" strokeLinecap="round" />
-                  <line x1="10" y1="150" x2="10" y2="135" stroke="#C9A84C" strokeWidth="2" strokeLinecap="round" />
-                  <line x1="90" y1="150" x2="90" y2="135" stroke="#C9A84C" strokeWidth="2" strokeLinecap="round" />
-                  
-                  {/* Decorative knobs */}
-                  <circle cx="50" cy="6" r="3" fill="#C9A84C" />
-                  <circle cx="50" cy="154" r="3" fill="#C9A84C" />
-
-                  {/* Center neck decoration */}
-                  <ellipse cx="50" cy="80" rx="3" ry="1.5" fill="rgba(201,168,76,0.6)" />
-                  <ellipse cx="50" cy="80" rx="2" ry="1" fill="#D4AF37" />
-                </svg>
-
-                {/* Time remaining text */}
-                <div style={{
-                  marginTop: isMobile ? "1rem" : "1.5rem",
-                  textAlign: "center",
-                }}>
-                  <div style={{
-                    fontSize: isCompactMobile ? "1.4rem" : isMobile ? "1.8rem" : "2.2rem",
-                    color: "#F6E8BC",
-                    fontFamily: "'Cinzel', serif",
-                    fontWeight: 600,
-                    letterSpacing: "0.1em",
-                    textShadow: "0 0 20px rgba(201,168,76,0.4)",
-                  }}>
-                    {`${String(countdown.days).padStart(2, "0")}d : ${String(countdown.hours).padStart(2, "0")}h : ${String(countdown.minutes).padStart(2, "0")}m`}
+                {[
+                  { value: countdown.days, label: "Days" },
+                  { value: countdown.hours, label: "Hours" },
+                  { value: countdown.minutes, label: "Minutes" },
+                  { value: countdown.seconds, label: "Seconds" },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    style={{
+                      minWidth: isMobile ? "0" : "104px",
+                      padding: isMobile ? "12px 8px 10px" : "0",
+                      border: isMobile ? "1px solid rgba(201,168,76,0.16)" : "none",
+                      background: isMobile ? "rgba(8, 4, 1, 0.36)" : "transparent",
+                      backdropFilter: isMobile ? "blur(6px)" : "none",
+                      borderRadius: isMobile ? "6px" : "0",
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: "block",
+                        fontSize: isCompactMobile ? "1.8rem" : isMobile ? "2.1rem" : "3rem",
+                        color: "#F6E8BC",
+                        lineHeight: 1,
+                      }}
+                    >
+                      {item.value}
+                    </span>
+                    <span
+                      style={{
+                        display: "block",
+                        color: "rgba(218, 224, 234, 0.6)",
+                        fontSize: isMobile ? "0.58rem" : "0.8rem",
+                        letterSpacing: isMobile ? "0.1em" : "0.2em",
+                        textTransform: "uppercase",
+                        marginTop: "4px",
+                      }}
+                    >
+                      {item.label}
+                    </span>
                   </div>
-                  <div style={{
-                    marginTop: "0.4rem",
-                    fontSize: isMobile ? "0.55rem" : "0.65rem",
-                    color: "rgba(201,168,76,0.6)",
-                    letterSpacing: "0.2em",
-                    textTransform: "uppercase",
-                  }}>
-                    until April 25th
-                  </div>
-                </div>
+                ))}
               </div>
 
               <div

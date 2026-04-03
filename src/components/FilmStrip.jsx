@@ -317,55 +317,72 @@ export default function FilmStrip() {
   }, []);
 
   return (
-    <div
+    <section
+      id="memory-lane"
       style={{
-        background: "#0A0500",
-        paddingTop: "0px",
-        marginBottom: "-4px",
+        background: "linear-gradient(180deg, #060200 0%, #0A0500 20%, #0A0500 80%, #080300 100%)",
+        padding: "100px 0 80px 0",
+        position: "relative",
         borderTop: "1px solid rgba(201,168,76,0.08)",
       }}
     >
-      <Strip direction="left" isMobile={isMobile} shuffledPhotos={topStripPhotos} />
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "150px", background: "linear-gradient(180deg, rgba(0,0,0,0.6), transparent)", pointerEvents: "none" }} />
+      
       <div
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: isMobile ? "18px 20px" : "28px 48px",
-          gap: "24px",
+          textAlign: "center",
+          marginBottom: "64px",
+          padding: "0 24px",
+          position: "relative",
+          zIndex: 10,
         }}
       >
-        <div
+        <div style={{ width: "1px", height: "40px", background: "linear-gradient(180deg, transparent, #C9A84C)", margin: "0 auto 24px" }} />
+        
+        <div style={{
+          fontFamily: "'Cinzel', serif",
+          fontSize: "10px",
+          letterSpacing: "0.4em",
+          color: "rgba(201,168,76,0.6)",
+          textTransform: "uppercase",
+          marginBottom: "16px"
+        }}>
+          Memory Lane
+        </div>
+
+        <h2
           style={{
-            height: "1px",
-            flex: 1,
-            background: "linear-gradient(90deg, transparent, rgba(201,168,76,0.5))",
-            maxWidth: "100px",
-          }}
-        />
-        <span
-          style={{
-            fontFamily: "'Cinzel', serif",
-            fontSize: isMobile ? "13px" : "18px",
-            letterSpacing: "0.35em",
-            color: "rgba(201,168,76,0.9)",
-            textTransform: "uppercase",
-            whiteSpace: "nowrap",
-            textShadow: "0 0 30px rgba(201,168,76,0.4), 0 0 60px rgba(201,168,76,0.15)",
+            fontFamily: "'Pinyon Script', cursive",
+            fontSize: "clamp(44px, 8vw, 72px)",
+            color: "#F6E8BC",
+            margin: 0,
+            textShadow: "0 4px 32px rgba(201,168,76,0.2), 0 2px 12px rgba(0,0,0,0.8)",
+            lineHeight: 1.1,
           }}
         >
           The Past Editions
-        </span>
-        <div
-          style={{
-            height: "1px",
-            flex: 1,
-            background: "linear-gradient(90deg, rgba(201,168,76,0.5), transparent)",
-            maxWidth: "100px",
-          }}
-        />
+        </h2>
+        
+        <p style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: "clamp(17px, 2vw, 21px)",
+          color: "rgba(218, 224, 234, 0.7)",
+          fontStyle: "italic",
+          maxWidth: "600px",
+          margin: "24px auto 0",
+          lineHeight: 1.5,
+          letterSpacing: "0.02em"
+        }}>
+          A glimpse into the cherished moments and enduring bonds from our previous alumni gatherings.
+        </p>
+
+        <div style={{ width: "1px", height: "40px", background: "linear-gradient(180deg, #C9A84C, transparent)", margin: "32px auto 0" }} />
       </div>
-      <Strip direction="right" isMobile={isMobile} shuffledPhotos={bottomStripPhotos} />
-    </div>
+
+      <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: isMobile ? "12px" : "16px" }}>
+        <Strip direction="left" isMobile={isMobile} shuffledPhotos={topStripPhotos} />
+        <Strip direction="right" isMobile={isMobile} shuffledPhotos={bottomStripPhotos} />
+      </div>
+    </section>
   );
 }

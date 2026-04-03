@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-
-const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`;
+import { useEffect, useRef } from "react";
+import "./Birdseye.css";
 
 export default function BirdseyeSection() {
-  const iframeRef = useRef(null);
+  const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`;
+  const headerRef = useRef(null);
 
   useEffect(() => {
     const headingObserver = new IntersectionObserver(
@@ -18,8 +18,9 @@ export default function BirdseyeSection() {
       { root: null, rootMargin: "0px 0px -5% 0px", threshold: 0.15 }
     );
 
-    const elements = document.querySelectorAll("#birdseye-section .landing-heading-block");
-    elements.forEach((el) => headingObserver.observe(el));
+    if (headerRef.current) {
+      headingObserver.observe(headerRef.current);
+    }
 
     return () => {
       headingObserver.disconnect();
@@ -28,74 +29,72 @@ export default function BirdseyeSection() {
 
   return (
     <section
-      id="birdseye-section"
+      id="birdseye"
       style={{
         position: "relative",
-        background: "linear-gradient(180deg, #0D0602 0%, #0A0500 55%, #080402 100%)",
-        padding: "16px 8px 0", // Reduced padding for mobile
-        marginTop: "-20px",
-        borderTop: "1px solid rgba(201, 168, 76, 0.1)",
+        background: "linear-gradient(180deg, transparent 0%, #0A0500 15%, #080402 100%)",
+        padding: "0",
+        marginTop: "72px",
+        borderTop: "none",
       }}
     >
       <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          pointerEvents: "none",
-          backgroundImage:
-            "repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(201,168,76,0.018) 60px)",
-        }}
-      />
-
-      <div
         className="landing-heading-block"
-        style={{
-          position: "relative",
-          zIndex: 2,
-          maxWidth: "1180px",
-          margin: "0 auto 12px", // Tighter margin
-          textAlign: "center",
-        }}
+        ref={headerRef}
+        style={{ marginBottom: '16px' }}
       >
-        <h2
-          className="landing-welcome-title"
+        <h2 className="landing-welcome-title">Campus Birdseye</h2>
+
+        <p
+          className="intro-description"
           style={{
-            fontSize: "clamp(38px, 6vw, 70px)", // Slightly smaller
-            marginBottom: 20,
+            opacity: 0,
+            transform: 'translate3d(0, 24px, 0)',
+            transition: 'opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.35s, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.35s'
           }}
         >
-          Campus Bird&rsquo;s-Eye
-        </h2>
+          Click on any spot to bring it back to colour!
+        </p>
+
+        {/* This tiny bit of inline css ensures the description transitions in sync with the heading. */}
+        <style>{`
+          .landing-heading-visible .intro-description {
+            opacity: 1 !important;
+            transform: translate3d(0, 0, 0) !important;
+          }
+        `}</style>
       </div>
 
       <div
-        className="landing-heading-block" // Reusing this class for animation
         style={{
           position: "relative",
           zIndex: 3,
           width: "100%",
-          maxWidth: "1400px",
           margin: "0 auto",
+          padding: "0",
         }}
       >
-        <iframe
-          ref={iframeRef}
-          title="SRCC campus bird's-eye interactive view"
-          src={assetUrl("birdseye.html")}
+        <div
           style={{
-            display: "block",
+            position: "relative",
             width: "100%",
-            height: "min(100vh, 920px)",
-            minHeight: "480px", // Reduced minHeight for mobile
-            border: "none",
-            borderRadius: "4px",
-            background: "#0A0805",
-            boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
+            height: "100vh",
+            overflow: "hidden",
+            boxShadow: "0 10px 40px rgba(0,0,0,0.9)",
           }}
-        />
+        >
+
+
+          <iframe
+            src={assetUrl("birdseye.html")}
+            style={{ width: "100%", height: "100%", border: "none", display: "block" }}
+            title="Campus Bird's-Eye"
+            allowFullScreen
+            allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+          />
+        </div>
       </div>
 
-      <div style={{ height: "28px" }} aria-hidden />
     </section>
   );
 }

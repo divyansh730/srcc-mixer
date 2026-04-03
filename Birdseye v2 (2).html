@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -57,14 +57,32 @@
       left: 0;
       right: 0;
       z-index: 340;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 24px 34px 0;
+      padding: 20px 24px 0;
       pointer-events: none;
     }
 
+    .page-topbar-inner {
+      max-width: 1220px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .page-nav {
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+
     .mixer-back,
+    .page-nav a,
     #owner-btn {
       pointer-events: auto;
       display: inline-flex;
@@ -87,11 +105,20 @@
       letter-spacing: 0.24em;
     }
 
-    .mixer-back:hover {
+    .page-nav a {
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      white-space: nowrap;
+    }
+
+    .mixer-back:hover,
+    .page-nav a:hover {
       color: var(--gold);
       border-color: rgba(212, 175, 55, 0.45);
       background: rgba(212, 175, 55, 0.1);
-      transform: translateX(-6px);
+      transform: translateY(-2px);
     }
 
     #owner-btn {
@@ -178,7 +205,6 @@
       position: relative;
       z-index: 2;
       padding: 0 0 28px;
-      margin-top: -34px;
     }
 
     #birdseye-view::before {
@@ -778,80 +804,66 @@
     body.drag-mode .pulse-point .coord-badge { opacity: 1; }
 
     /* ── Responsive ── */
+    @media (max-width: 980px) {
+      .intro-description {
+        white-space: normal;
+        max-width: 720px;
+      }
+
+      #modal-box {
+        width: min(760px, calc(100vw - 28px));
+      }
+    }
+
     @media (max-width: 600px) {
       #stage { height: 100dvh; }
-      .page-topbar { padding: 16px 16px 0; }
-      .mixer-back { padding: 10px 16px; font-size: 10px; letter-spacing: 0.2em; }
+      .page-topbar { padding: 14px 14px 0; }
+      .page-topbar-inner { gap: 10px; align-items: flex-start; }
+      .page-nav {
+        width: 100%;
+        justify-content: flex-start;
+        order: 3;
+        margin-left: 0;
+      }
+      .mixer-back { padding: 10px 14px; font-size: 9px; letter-spacing: 0.18em; }
+      .page-nav a { padding: 9px 12px; font-size: 8px; letter-spacing: 0.16em; }
       #owner-btn { min-width: 28px; min-height: 28px; padding: 0 7px; font-size: 6px; }
       #page-intro { min-height: 34vh; padding: 52px 18px 14px; margin-top: -18px; }
       .intro-title { font-size: clamp(52px, 14vw, 76px); }
       .intro-description { font-size: 16px; margin-top: 20px; white-space: normal; }
       #birdseye-view { padding: 0 0 18px; margin-top: -20px; }
       .ring-3 { display: none; }
-      .pulse-point { width: 14px; height: 14px; }
+      .pulse-point { width: 18px; height: 18px; }
       .dot { width: 8px; height: 8px; }
       .ring-1 { width: 28px; height: 28px; }
       .ring-2 { width: 44px; height: 44px; }
+      .pulse-label { display: none; }
+      #modal-box {
+        width: calc(100vw - 20px);
+      }
+      #modal-header {
+        padding: 18px 18px 14px;
+      }
+      #modal-footer {
+        padding: 12px 18px 16px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .gold-rule {
+        padding: 0 18px;
+      }
+      #modal-desc {
+        font-size: 12px;
+        line-height: 1.45;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- ══════════════ OWNER VIDEO PANEL (Hidden) ══════════════ -->
-  <div id="owner-modal">
-    <div id="owner-box">
-      <div id="owner-login-section">
-        <h3>◆ Owner Access</h3>
-        <p class="owner-sub">Enter the owner password to manage location videos.</p>
-        <div class="owner-field">
-          <label>Password</label>
-          <input type="password" id="owner-pw-input" placeholder="Enter owner password…" autocomplete="off">
-        </div>
-        <div class="owner-actions">
-          <button id="owner-login-btn" onclick="ownerLogin()">Unlock</button>
-          <button id="owner-login-close-btn" onclick="closeOwnerPanel()">Cancel</button>
-          <span id="owner-login-msg"></span>
-        </div>
-      </div>
 
-      <div id="owner-video-section" style="display:none;">
-        <h3>◆ Manage Videos</h3>
-        <p class="owner-sub">Upload a video file or paste a URL for each location.</p>
-        <div class="owner-field">
-          <label>Location</label>
-          <select id="owner-location-select"><option value="">— Select a location —</option></select>
-        </div>
-        <div class="owner-field">
-          <label>Video URL (YouTube, Drive, or Direct Link)</label>
-          <input type="text" id="owner-video-url" placeholder="https://…">
-        </div>
-        <div class="owner-actions">
-          <button id="owner-drag-btn" onclick="toggleOwnerDragMode()">Enable Drag Mode</button>
-          <button id="owner-save-btn" onclick="ownerSave()">Save</button>
-          <button id="owner-close-btn" onclick="closeOwnerPanel()">Close</button>
-          <button id="owner-exit-btn" onclick="ownerLogout()">Exit Owner Mode</button>
-          <span id="owner-msg"></span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="page-topbar">
-    <a class="mixer-back" href="./index.html">← Back</a>
-    <button id="owner-btn" type="button" onclick="openOwnerPanel()">owner</button>
-  </div>
-
-  <section id="page-intro">
-    <div class="intro-inner">
-      <h1 class="intro-title">Campus Birdseye</h1>
-      <p class="intro-description">
-        Wander over the college from above, and let each pulse point bring a familiar corner
-        of SRCC back into color!
-      </p>
-      <div class="intro-rule" aria-hidden="true"></div>
-    </div>
-  </section>
 
   <section id="birdseye-view">
   <div id="stage">
@@ -867,16 +879,16 @@
     <!-- ── Pulse Point Markers (From v2-2) ── -->
 
     <!-- Nescafe Annex -->
-    <div class="pulse-point" style="top:31.9%; left:70.0%" data-title="Nescafe Annex" data-eyebrow="The Hangout · SRCC" data-subtitle="Fuel for Brilliance" data-desc="The Nescafe Annex — SRCC's beloved coffee corner where students refuel between lectures, friendships are struck over chai, and great ideas are brewed." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765339/IMG_5739_gbb9yv.mp4">
+    <div class="pulse-point" style="top:31.9%; left:70.0%" data-title="Nescafe Annex" data-eyebrow="The Hangout · SRCC" data-subtitle="Everyone's favourite spot" data-desc="The Nescafe Annex - SRCC's beloved coffee corner where students refuel between lectures, friendships are struck over chai, and great ideas are brewed." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765339/IMG_5739_gbb9yv.mp4">
       <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
-        <span class="l-title">Nescafe Annex</span><span class="l-sub">The Hangout · SRCC</span>
+        <span class="l-title">Nescafe</span><span class="l-sub">The Hangout</span>
       </div></div>
     </div>
 
     <!-- Library -->
-    <div class="pulse-point" style="top: 27.1772%; left: 78.8536%;" data-title="SRCC Library" data-eyebrow="Knowledge Centre · SRCC" data-subtitle="Legacy in Every Volume" data-desc="The SRCC Library — a repository of commerce, economics and business knowledge. The quiet within these walls has shaped some of India's sharpest financial minds." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765390/IMG_3907_vwbiue.mp4">
+    <div class="pulse-point" style="top: 27.1772%; left: 78.8536%;" data-title="SRCC Library" data-eyebrow="Knowledge Centre · SRCC" data-subtitle="Legacy in Every Page" data-desc="The SRCC Library - a repository of commerce, economics and business knowledge. The quiet within these walls has shaped some of India's sharpest minds." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765390/IMG_3907_vwbiue.mp4">
       <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
@@ -885,7 +897,7 @@
     </div>
 
     <!-- Tute Block -->
-    <div class="pulse-point" style="top: 39.837%; left: 8.87917%;" data-title="Tute Block" data-eyebrow="Academic Block · SRCC" data-subtitle="Where Commerce Comes Alive" data-desc="The Tute Block — SRCC's dedicated tutorial and classroom wing where commerce, economics and business concepts are debated, discussed and brought to life." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774764959/WhatsApp_Video_2026-03-27_at_18.59.15_ttwz6b.mp4">
+    <div class="pulse-point" style="top: 39.837%; left: 8.87917%;" data-title="Tute Block" data-eyebrow="Academic Block · SRCC" data-subtitle="Where Commerce Comes Alive" data-desc="The Tute Block - SRCC's dedicated tutorial room wing where commerce, economics and business concepts are debated, discussed and brought to life." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774764959/WhatsApp_Video_2026-03-27_at_18.59.15_ttwz6b.mp4">
       <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
@@ -894,16 +906,16 @@
     </div>
 
     <!-- Library Lawns -->
-    <div class="pulse-point" style="top: 37.5116%; left: 64.0089%;" data-title="Library Lawns" data-eyebrow="SRCC Library Lawns" data-subtitle="Green Heart of Campus" data-desc="The serene Library Lawns — a quiet green expanse where students unwind between lectures, study under open skies, and share the stories that define the SRCC experience." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765405/IMG_8310_nsq8kz.mp4">
+    <div class="pulse-point" style="top: 37.5116%; left: 64.0089%;" data-title="Library Lawns" data-eyebrow="SRCC Library Lawns" data-subtitle="Green Retreat of Campus" data-desc="The serene Library Lawns - a quiet green expanse where students unwind between lectures, study under open skies, and share stories that define the SRCC experience." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765405/IMG_8310_nsq8kz.mp4">
       <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
-        <span class="l-title">Library Lawns</span><span class="l-sub">Green Heart of Campus</span>
+        <span class="l-title">Library Lawns</span><span class="l-sub">Green Retreat of Campus</span>
       </div></div>
     </div>
 
     <!-- Co-op -->
-    <div class="pulse-point" style="top:45.2%; left:95.0%" data-title="Co-op" data-eyebrow="Cooperative Store · SRCC" data-subtitle="The Campus Store" data-desc="The SRCC Co-operative Store — a student-run institution providing stationery, essentials and much more, embodying the cooperative spirit at the heart of SRCC." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765575/WhatsApp_Video_2026-03-28_at_21.34.20_rvdndy.mp4">
+    <div class="pulse-point" style="top:45.2%; left:95.0%" data-title="Co-op" data-eyebrow="Cooperative Store · SRCC" data-subtitle="The Campus Store" data-desc="The Co-operative Store - everyone's favourite shop providing stationery, snacks and Diet Cokes, embodying the spirit of SRCC's culture." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765575/WhatsApp_Video_2026-03-28_at_21.34.20_rvdndy.mp4">
       <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
@@ -912,38 +924,38 @@
     </div>
 
     <!-- Clock Tower -->
-    <div class="pulse-point" style="top:49.7%; left:51.8%" data-title="The Clock Tower" data-eyebrow="Main Entrance · SRCC" data-subtitle="The Iconic Heart of Campus" data-desc="The legendary SRCC clock tower — the most photographed landmark on campus and the symbolic gateway to 100 years of academic excellence." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765393/IMG_8302_cwruz8.mp4">
+    <div class="pulse-point" style="top:49.7%; left:51.8%" data-title="The Clock Tower" data-eyebrow="The Iconic · SRCC" data-subtitle="The Embodiment of Brilliance" data-desc="The legendary SRCC clock tower - the most photographed landmark on campus and the symbolic gateway to 100 years of academic excellence." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765393/IMG_8302_cwruz8.mp4">
       <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
-        <span class="l-title">Clock Tower</span><span class="l-sub">Main Entrance</span>
+        <span class="l-title">Clock Tower</span><span class="l-sub">Pinnacle of Excellence</span>
       </div></div>
     </div>
 
     <!-- Auditorium -->
-    <div class="pulse-point" style="top: 28.8485%; left: 50.8792%;" data-title="Shridhar Shriram Auditorium" data-eyebrow="The Auditorium · SRCC" data-subtitle="Stage for Distinction" data-desc="The Shridhar Shriram Auditorium — where placement drives are inaugurated, industry leaders address students, and three decades of careers have taken their first steps." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774764959/WhatsApp_Video_2026-03-26_at_18.19.02_tiuqe0.mp4">
+    <div class="pulse-point" style="top: 28.8485%; left: 50.8792%;" data-title="Shridhar Shriram Auditorium" data-eyebrow="The Auditorium · SRCC" data-subtitle="Stage for Distinction" data-desc="The Shridhar Shriram Auditorium - where placement drives are inaugurated, industry leaders address students, and three decades of careers have taken their first steps." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774764959/WhatsApp_Video_2026-03-26_at_18.19.02_tiuqe0.mp4">
       <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
-        <span class="l-title">Auditorium</span><span class="l-sub">Shridhar Shriram</span>
+        <span class="l-title">Auditorium</span><span class="l-sub">Shridhar Shriram Auditorium</span>
       </div></div>
     </div>
 
     <!-- PB Lawns -->
-    <div class="pulse-point" style="top: 91.6411%; left: 1.98438%;" data-title="PB Lawns" data-eyebrow="SRCC PB Lawns" data-subtitle="Memories on the Green" data-desc="The SRCC PB Lawns — a cherished open space where students gather for events, festivals and quiet afternoons, creating memories that last well beyond graduation." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774764962/WhatsApp_Video_2026-03-28_at_21.34.23_msksey.mp4">
+    <div class="pulse-point" style="top: 91.6411%; left: 1.98438%;" data-title="PB Lawns" data-eyebrow="SRCC PB Lawns" data-subtitle="Memories on the Green" data-desc="The PB Lawns - a cherished open space where students gather for events, festivals and quiet afternoons, creating memories that last well beyond graduation." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774764962/WhatsApp_Video_2026-03-28_at_21.34.23_msksey.mp4">
       <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
-        <span class="l-title">PB Lawns</span><span class="l-sub">SRCC PB Lawns</span>
+        <span class="l-title">PB Lawns</span><span class="l-sub">Principal's Bungalow</span>
       </div></div>
     </div>
 
     <!-- Statue Lawns -->
-    <div class="pulse-point" style="top: 93.11%; left: 30.8604%;" data-title="Statue Lawns" data-eyebrow="SRCC Statue Lawns" data-subtitle="Where Memories Were Made" data-desc="The SRCC Statue Lawns — the iconic heart of campus life where generations of students marked their milestones, farewells, and the beginning of something extraordinary." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765405/IMG_2046_zmlttf.mp4">
+    <div class="pulse-point" style="top: 93.11%; left: 30.8604%;" data-title="Statue Lawns" data-eyebrow="SRCC Statue Lawns" data-subtitle="The Heart & Soul of SRCC" data-desc="The SRCC Statue Lawns - the heart of the college where generations of students marked their milestones, farewells, and the beginning of something extraordinary." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765405/IMG_2046_zmlttf.mp4">
       <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
-        <span class="l-title">Statue Lawns</span><span class="l-sub">The Lawns</span>
+        <span class="l-title">Statue Lawns</span><span class="l-sub">The Heart of SRCC</span>
       </div></div>
     </div>
   </div><!-- /stage -->

@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Campus Birdseye - SRCC</title>
+  <title>The Placement Cell · SRCC · 30 Years of Excellence</title>
   <link rel="preconnect" href="https://fonts.googleapis.com/">
   <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Pinyon+Script&display=swap" rel="stylesheet">
 
   <style>
     /* ── CSS Variables ── */
@@ -22,40 +23,221 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
-      width: 100%; height: 100%;
-      overflow: hidden;
+      width: 100%;
+      height: 100%;
       background: var(--dark);
       font-family: 'EB Garamond', Georgia, serif;
       cursor: default;
+      overflow: hidden;
+    }
+
+    body {
+      position: relative;
+      color: var(--cream);
+      background:
+        radial-gradient(circle at top, rgba(58, 39, 16, 0.28), transparent 42%),
+        linear-gradient(180deg, #0b0602 0%, #090401 34%, #070301 100%);
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      opacity: 0.22;
+      pointer-events: none;
+      z-index: 0;
+      mix-blend-mode: overlay;
+    }
+
+    .page-topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 340;
+      padding: 20px 24px 0;
+      pointer-events: none;
+    }
+
+    .page-topbar-inner {
+      max-width: 1220px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .page-nav {
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+
+    .mixer-back,
+    .page-nav a,
+    #owner-btn {
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      border: 1px solid rgba(212, 175, 55, 0.14);
+      background: rgba(10, 5, 0, 0.46);
+      backdrop-filter: blur(10px);
+      color: rgba(232, 204, 106, 0.7);
+      font-family: 'Cinzel', serif;
+      text-transform: uppercase;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .mixer-back {
+      padding: 11px 22px;
+      border-radius: 4px;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+    }
+
+    .page-nav a {
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      white-space: nowrap;
+    }
+
+    .mixer-back:hover,
+    .page-nav a:hover {
+      color: var(--gold);
+      border-color: rgba(212, 175, 55, 0.45);
+      background: rgba(212, 175, 55, 0.1);
+      transform: translateY(-2px);
+    }
+
+    #owner-btn {
+      min-width: 34px;
+      min-height: 34px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 7px;
+      letter-spacing: 0.28em;
+      color: rgba(232, 204, 106, 0.12);
+      border-color: rgba(212, 175, 55, 0.08);
+      background: rgba(10, 5, 0, 0.08);
+      opacity: 0.26;
+    }
+
+    #owner-btn:hover,
+    #owner-btn:focus-visible {
+      color: rgba(232, 204, 106, 0.65);
+      border-color: rgba(212, 175, 55, 0.28);
+      background: rgba(212, 175, 55, 0.08);
+      opacity: 1;
+      outline: none;
+    }
+
+    #page-intro {
+      position: relative;
+      z-index: 2;
+      min-height: 44vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 44px 28px 20px;
+      margin-top: -28px;
+      text-align: center;
+    }
+
+    #page-intro::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at center, rgba(212, 175, 55, 0.1), transparent 38%),
+        linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(5, 3, 1, 0.62) 100%);
+      pointer-events: none;
+    }
+
+    .intro-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 980px;
+    }
+
+    .intro-title {
+      font-family: 'Pinyon Script', cursive;
+      font-size: clamp(56px, 8.4vw, 112px);
+      line-height: 0.92;
+      color: #d9b14a;
+      text-shadow: 0 0 24px rgba(212, 175, 55, 0.14);
+      opacity: 0;
+      animation:
+        introBloom 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.18s forwards,
+        titleGlow 4.6s ease-in-out 1.5s infinite;
+    }
+
+    .intro-description {
+      max-width: 1200px;
+      margin: 24px auto 0;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(14px, 1.2vw, 18px);
+      line-height: 1.5;
+      letter-spacing: 0.04em;
+      color: rgba(245, 237, 215, 0.68);
+      white-space: nowrap;
+      opacity: 0;
+      animation: fadeSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.42s forwards;
+    }
+
+    .intro-rule {
+      display: none;
+    }
+
+    #birdseye-view {
+      position: relative;
+      z-index: 2;
+      padding: 0;
+    }
+
+
+    @keyframes introBloom {
+      0% { opacity: 0; transform: translateY(28px) scale(0.96); filter: blur(6px); }
+      100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    }
+
+    @keyframes titleGlow {
+      0%, 100% { text-shadow: 0 0 26px rgba(212, 175, 55, 0.16); }
+      50% { text-shadow: 0 0 42px rgba(212, 175, 55, 0.32), 0 0 76px rgba(212, 175, 55, 0.12); }
+    }
+
+    @keyframes fadeSlideUp {
+      0% { opacity: 0; transform: translateY(16px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     /* ── Hero Stage ── */
     #stage {
       position: relative;
-      width: 100vw;
+      width: 100%;
       height: 100vh;
+      margin: 0 auto;
       overflow: hidden;
     }
 
-    /* ── Mobile Pan/Zoom Container ── */
-    #zoom-container {
-      position: absolute;
-      inset: 0;
-      transform-origin: 0 0;
-      transition: transform 0.05s linear;
-      will-change: transform;
-    }
 
-    #zoom-container.dragging {
-      transition: none;
-    }
-
-    @media (max-width: 768px) {
-      #stage {
-        overflow: hidden;
-        touch-action: none;
-      }
-    }
 
     /* ── Campus Aerial Image ── */
     #campus-bg {
@@ -67,7 +249,64 @@
       object-position: center;
       /* Slight Ken Burns drift for life */
       animation: kenBurns 40s ease-in-out infinite alternate;
-      filter: brightness(0.78) saturate(0.9);
+      filter: sepia(0.68) saturate(0.64) hue-rotate(-12deg) brightness(0.6) contrast(1.08);
+    }
+
+    #campus-bg-color {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      animation: kenBurns 40s ease-in-out infinite alternate;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      -webkit-mask-image:
+        radial-gradient(circle at var(--reveal-x, 50%) var(--reveal-y, 50%),
+          rgba(0,0,0,0.98) 0%,
+          rgba(0,0,0,0.98) 8%,
+          rgba(0,0,0,0.78) 12%,
+          rgba(0,0,0,0.42) 16%,
+          transparent 20%),
+        radial-gradient(circle at calc(var(--reveal-x, 50%) + 2.8%) calc(var(--reveal-y, 50%) - 2.1%),
+          rgba(0,0,0,0.54) 0%,
+          rgba(0,0,0,0.22) 6%,
+          transparent 10%),
+        radial-gradient(circle at calc(var(--reveal-x, 50%) - 3.4%) calc(var(--reveal-y, 50%) + 2.2%),
+          rgba(0,0,0,0.48) 0%,
+          rgba(0,0,0,0.18) 6%,
+          transparent 10%),
+        radial-gradient(circle at calc(var(--reveal-x, 50%) + 1.1%) calc(var(--reveal-y, 50%) + 3.8%),
+          rgba(0,0,0,0.36) 0%,
+          transparent 7%);
+      mask-image:
+        radial-gradient(circle at var(--reveal-x, 50%) var(--reveal-y, 50%),
+          rgba(0,0,0,0.98) 0%,
+          rgba(0,0,0,0.98) 8%,
+          rgba(0,0,0,0.78) 12%,
+          rgba(0,0,0,0.42) 16%,
+          transparent 20%),
+        radial-gradient(circle at calc(var(--reveal-x, 50%) + 2.8%) calc(var(--reveal-y, 50%) - 2.1%),
+          rgba(0,0,0,0.54) 0%,
+          rgba(0,0,0,0.22) 6%,
+          transparent 10%),
+        radial-gradient(circle at calc(var(--reveal-x, 50%) - 3.4%) calc(var(--reveal-y, 50%) + 2.2%),
+          rgba(0,0,0,0.48) 0%,
+          rgba(0,0,0,0.18) 6%,
+          transparent 10%),
+        radial-gradient(circle at calc(var(--reveal-x, 50%) + 1.1%) calc(var(--reveal-y, 50%) + 3.8%),
+          rgba(0,0,0,0.36) 0%,
+          transparent 7%);
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+    }
+
+    #stage.reveal-active #campus-bg-color {
+      opacity: 0.92;
+      animation: kenBurns 40s ease-in-out infinite alternate;
     }
 
     @keyframes kenBurns {
@@ -96,229 +335,6 @@
       mix-blend-mode: overlay;
     }
 
-    /* ── Header Wordmark ── */
-    #wordmark {
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      z-index: 10;
-      padding: 12px 32px;
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      background: linear-gradient(to bottom, rgba(5,3,1,0.7) 0%, transparent 100%);
-    }
-
-    #wordmark .title-block {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    #wordmark .cell-name {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(10px, 1.1vw, 14px);
-      letter-spacing: 0.3em;
-      color: var(--gold);
-      text-transform: uppercase;
-    }
-
-    #wordmark .college-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(18px, 2.2vw, 28px);
-      font-weight: 300;
-      color: var(--cream);
-      letter-spacing: 0.08em;
-    }
-
-    #wordmark .tagline {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: clamp(11px, 1vw, 13px);
-      color: var(--gold-light);
-      letter-spacing: 0.1em;
-      opacity: 0.85;
-    }
-
-        #wordmark .controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    #owner-btn,
-    #admin-launch,
-    #admin-toolbar .btn,
-    #admin-apply,
-    #admin-close {
-      background: rgba(8, 5, 2, 0.86);
-      border: 1px solid var(--gold-dim);
-      color: var(--gold);
-      font-family: 'Cinzel', serif;
-      font-size: 9px;
-      letter-spacing: 0.24em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s, border-color 0.2s;
-    }
-    #owner-btn,
-    #admin-launch {
-      padding: 10px 14px;
-    }
-    #owner-btn:hover,
-    #admin-launch:hover,
-    #admin-toolbar .btn:hover,
-    #admin-apply:hover,
-    #admin-close:hover {
-      background: var(--gold);
-      color: var(--dark);
-      border-color: var(--gold);
-    }
-    #admin-toolbar {
-      position: fixed;
-      left: 50%;
-      bottom: 22px;
-      transform: translateX(-50%);
-      display: none;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 16px;
-      background: rgba(8, 5, 2, 0.92);
-      border: 1px solid var(--gold-dim);
-      z-index: 320;
-      backdrop-filter: blur(8px);
-    }
-    #admin-toolbar.visible {
-      display: flex;
-    }
-    #admin-toolbar span {
-      font-family: 'Cinzel', serif;
-      font-size: 9px;
-      letter-spacing: 0.24em;
-      color: var(--gold-light);
-      text-transform: uppercase;
-      opacity: 0.85;
-    }
-    #admin-toolbar .btn {
-      padding: 9px 14px;
-    }
-    #admin-panel {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 330;
-      background: rgba(5, 3, 1, 0.92);
-      backdrop-filter: blur(10px);
-      align-items: center;
-      justify-content: center;
-    }
-    #admin-panel.open {
-      display: flex;
-    }
-    #admin-box {
-      width: min(560px, 94vw);
-      background: rgba(10, 7, 3, 0.98);
-      border: 1px solid var(--gold-dim);
-      padding: 28px 30px;
-      position: relative;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.45);
-    }
-    #admin-box h3 {
-      font-family: 'Cinzel', serif;
-      font-size: 12px;
-      letter-spacing: 0.32em;
-      color: var(--gold);
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    #admin-box p,
-    #admin-msg,
-    #admin-box label,
-    #admin-box input,
-    #admin-box select {
-      font-family: 'EB Garamond', Georgia, serif;
-    }
-    #admin-box .admin-sub {
-      font-size: 15px;
-      color: rgba(245, 237, 215, 0.7);
-      margin-bottom: 18px;
-    }
-    .admin-field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 14px;
-    }
-    .admin-field label {
-      font-family: 'Cinzel', serif;
-      font-size: 8px;
-      letter-spacing: 0.28em;
-      color: var(--gold);
-      text-transform: uppercase;
-      opacity: 0.8;
-    }
-    .admin-field input,
-    .admin-field select {
-      width: 100%;
-      padding: 10px 12px;
-      background: rgba(0, 0, 0, 0.45);
-      border: 1px solid rgba(212, 175, 55, 0.22);
-      color: var(--cream);
-      font-size: 14px;
-      outline: none;
-    }
-    #admin-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 18px;
-    }
-    #admin-apply,
-    #admin-close {
-      padding: 10px 18px;
-    }
-    #admin-msg {
-      min-height: 20px;
-      margin-top: 6px;
-      color: var(--gold-light);
-      font-size: 14px;
-    }
-    #admin-msg.error {
-      color: #e37b7b;
-    }
-
-    /* ── Instruction Tag ── */
-    #hint {
-      position: absolute;
-      bottom: 36px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      animation: hintFloat 3s ease-in-out infinite;
-    }
-
-    #hint span {
-      font-family: 'Cinzel', serif;
-      font-size: 10px;
-      letter-spacing: 0.35em;
-      color: var(--gold);
-      opacity: 0.7;
-      text-transform: uppercase;
-    }
-
-    #hint .scroll-line {
-      width: 1px;
-      height: 32px;
-      background: linear-gradient(to bottom, var(--gold), transparent);
-      opacity: 0.6;
-    }
-
-    @keyframes hintFloat {
-      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.9; }
-      50%       { transform: translateX(-50%) translateY(6px); opacity: 0.5; }
-    }
-
     /* ── Pulse Point Markers ── */
     .pulse-point {
       position: absolute;
@@ -327,6 +343,7 @@
       transform: translate(-50%, -50%);
       cursor: pointer;
       z-index: 8;
+      touch-action: none;
     }
 
     .pulse-point:hover .pulse-label { opacity: 1; transform: translateX(-50%) translateY(-4px); }
@@ -413,9 +430,7 @@
       color: rgba(245, 237, 215, 0.7);
     }
 
-    /* ══════════════════════════════════════
-       OWNER VIDEO PANEL
-    ══════════════════════════════════════ */
+    /* ── Owner Modal ── */
     #owner-modal {
       display: none;
       position: fixed;
@@ -493,10 +508,6 @@
       transition: border-color 0.2s;
       width: 100%;
     }
-    .owner-field input:focus, .owner-field select:focus {
-      border-color: var(--gold-dim);
-    }
-    .owner-field select option { background: #0a0703; }
     .owner-actions {
       display: flex;
       gap: 10px;
@@ -513,9 +524,7 @@
       letter-spacing: 0.25em;
       text-transform: uppercase;
       cursor: pointer;
-      transition: opacity 0.2s;
     }
-    #owner-save-btn:hover { opacity: 0.85; }
     #owner-close-btn {
       padding: 9px 18px;
       background: transparent;
@@ -526,6 +535,31 @@
       letter-spacing: 0.25em;
       text-transform: uppercase;
       cursor: pointer;
+    }
+    #owner-drag-btn,
+    #owner-exit-btn {
+      padding: 9px 18px;
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    #owner-drag-btn {
+      background: rgba(212,175,55,0.08);
+      color: var(--gold-light);
+      border: 1px solid var(--gold-dim);
+    }
+    #owner-drag-btn.active {
+      background: var(--gold);
+      color: var(--dark);
+      border-color: var(--gold);
+      box-shadow: 0 0 24px rgba(212,175,55,0.14);
+    }
+    #owner-exit-btn {
+      background: transparent;
+      color: rgba(245,237,215,0.78);
+      border: 1px solid rgba(245,237,215,0.18);
     }
     #owner-msg {
       font-family: 'Cormorant Garamond', serif;
@@ -538,11 +572,6 @@
     }
     #owner-msg.show { opacity: 1; }
     #owner-msg.error { color: #e05c5c; }
-
-    /* Login sub-panel */
-    #owner-login-section { display: block; }
-    #owner-video-section { display: none; }
-    #owner-video-section.visible { display: block; }
 
     /* ── Modal Overlay ── */
     #modal-overlay {
@@ -565,10 +594,9 @@
       pointer-events: all;
     }
 
-    /* ── Modal Box ── */
     #modal-box {
       position: relative;
-      width: min(780px, 92vw);
+      width: min(540px, 86vw);
       background: rgba(10, 7, 3, 0.96);
       border: 1px solid var(--gold-dim);
       box-shadow:
@@ -671,7 +699,6 @@
       background: #000;
       position: relative;
       overflow: hidden;
-      /* 16:9 aspect */
       aspect-ratio: 16 / 9;
     }
 
@@ -735,57 +762,78 @@
       letter-spacing: 0.3em;
     }
 
-    /* ── Scroll hint on pulse points ── */
-    .pulse-point:active .dot {
-      transform: translate(-50%, -50%) scale(0.85);
-    }
-
-    /* ── Back Button ── */
-    .birdseye-back {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 50;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      background: rgba(10, 7, 3, 0.75);
-      border: 1px solid rgba(201, 168, 76, 0.3);
-      border-radius: 4px;
+    /* Coordinate Badge for Dragging (Console help only) */
+    .coord-badge {
+      position: absolute;
+      top: calc(100% + 24px);
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      background: rgba(5,3,1,0.92);
+      border: 1px solid var(--gold-dim);
+      padding: 4px 10px;
       font-family: 'Cinzel', serif;
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: rgba(201, 168, 76, 0.8);
-      text-decoration: none;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      backdrop-filter: blur(8px);
+      font-size: 8px;
+      color: var(--gold-light);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 60;
     }
-    .birdseye-back:hover {
-      color: #C9A84C;
-      border-color: #C9A84C;
-      background: rgba(10, 7, 3, 0.9);
-    }
+    body.drag-mode .pulse-point .coord-badge { opacity: 1; }
 
     /* ── Responsive ── */
-    @media (max-width: 768px) {
+    @media (max-width: 980px) {
+      .intro-description {
+        white-space: normal;
+        max-width: 720px;
+      }
+
+      #modal-box {
+        width: min(760px, calc(100vw - 28px));
+      }
+    }
+
+    @media (max-width: 600px) {
+      #stage { height: 100dvh; }
+      .page-topbar { padding: 14px 14px 0; }
+      .page-topbar-inner { gap: 10px; align-items: flex-start; }
+      .page-nav {
+        width: 100%;
+        justify-content: flex-start;
+        order: 3;
+        margin-left: 0;
+      }
+      .mixer-back { padding: 10px 14px; font-size: 9px; letter-spacing: 0.18em; }
+      .page-nav a { padding: 9px 12px; font-size: 8px; letter-spacing: 0.16em; }
+      #owner-btn { min-width: 28px; min-height: 28px; padding: 0 7px; font-size: 6px; }
+      #page-intro { min-height: 34vh; padding: 52px 18px 14px; margin-top: -18px; }
+      .intro-title { font-size: clamp(52px, 14vw, 76px); }
+      .intro-description { font-size: 16px; margin-top: 20px; white-space: normal; }
+      #birdseye-view { padding: 0 0 18px; margin-top: -20px; }
       .ring-3 { display: none; }
-      #owner-login-wrap, #owner-btn, #admin-launch { display: none !important; }
-      #admin-toolbar { display: none !important; }
-      #owner-box { padding: 24px 20px; }
-      #modal-header { padding: 16px 18px; }
-      #modal-title { font-size: clamp(16px, 4vw, 20px); }
-      #modal-footer { padding: 10px 18px 14px; flex-direction: column; gap: 8px; text-align: center; }
-      #modal-desc { font-size: 12px; }
-      .hint { bottom: 16px; }
-      .hint span { font-size: 8px; }
-      .birdseye-back {
-        top: 12px;
-        left: 12px;
-        padding: 8px 14px;
-        font-size: 8px;
-        letter-spacing: 0.15em;
+      .pulse-point { width: 18px; height: 18px; }
+      .dot { width: 8px; height: 8px; }
+      .ring-1 { width: 28px; height: 28px; }
+      .ring-2 { width: 44px; height: 44px; }
+      .pulse-label { display: none; }
+      #modal-box {
+        width: calc(100vw - 20px);
+      }
+      #modal-header {
+        padding: 18px 18px 14px;
+      }
+      #modal-footer {
+        padding: 12px 18px 16px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .gold-rule {
+        padding: 0 18px;
+      }
+      #modal-desc {
+        font-size: 12px;
+        line-height: 1.45;
       }
     }
   </style>
@@ -793,389 +841,233 @@
 
 <body>
 
-  <!-- ══════════════ OWNER VIDEO PANEL ══════════════ -->
-  <div id="owner-modal" class="">
-    <div id="owner-box">
 
-      <!-- LOGIN SECTION -->
-      <div id="owner-login-section" style="display: none;">
-        <h3>◆ Owner Access</h3>
-        <p class="owner-sub">Enter the owner password to manage location videos.</p>
-        <div class="owner-field">
-          <label>Password</label>
-          <input type="password" id="owner-pw-input" placeholder="Enter owner password…" autocomplete="off">
-        </div>
-        <div class="owner-actions">
-          <button id="owner-login-btn" onclick="ownerLogin()">Unlock</button>
-          <button id="owner-login-close-btn" onclick="closeOwnerPanel()">Cancel</button>
-          <span id="owner-login-msg" class=""></span>
-        </div>
-        <p style="margin-top:18px;font-family:&#39;Cormorant Garamond&#39;,serif;font-style:italic;font-size:11px;color:rgba(212,175,55,0.3);letter-spacing:0.05em;">
-          Default password: <strong style="color:rgba(212,175,55,0.5);">srcc1996</strong> — change it after first login.
-        </p>
-      </div>
 
-      <!-- VIDEO MANAGEMENT SECTION (shown after login) -->
-      <div id="owner-video-section" class="visible">
-        <h3>◆ Manage Videos</h3>
-        <p class="owner-sub">Upload a video file or paste a URL for each location.</p>
-        <div class="owner-field">
-          <label>Location</label>
-          <select id="owner-location-select"><option value="">— Select a location —</option><option value="Nescafe Annex">Nescafe Annex</option><option value="SRCC Library">SRCC Library</option><option value="Tute Block">Tute Block</option><option value="Library Lawns">Library Lawns</option><option value="Co-op">Co-op</option><option value="The Clock Tower">The Clock Tower</option><option value="Shridhar Shriram Auditorium">Shridhar Shriram Auditorium</option><option value="PB Lawns">PB Lawns</option><option value="Statue Lawns">Statue Lawns</option></select>
-        </div>
-
-        <!-- Upload tab toggle -->
-        <div style="display:flex;gap:0;margin-bottom:12px;border:1px solid rgba(212,175,55,0.25);">
-          <button id="tab-url-btn" onclick="switchTab(&#39;url&#39;)" style="flex:1;padding:7px 0;background:rgba(212,175,55,0.15);border:none;color:var(--gold);font-family:&#39;Cinzel&#39;,serif;font-size:8px;letter-spacing:0.25em;cursor:pointer;text-transform:uppercase;">
-            ◆ Paste URL
-          </button>
-          <button id="tab-upload-btn" onclick="switchTab(&#39;upload&#39;)" style="flex:1;padding:7px 0;background:transparent;border:none;color:rgba(212,175,55,0.5);font-family:&#39;Cinzel&#39;,serif;font-size:8px;letter-spacing:0.25em;cursor:pointer;text-transform:uppercase;">
-            ◆ Upload File
-          </button>
-        </div>
-
-        <!-- URL mode -->
-        <div id="video-tab-url" class="owner-field">
-          <label>Video URL — YouTube, Google Drive share link, or direct .mp4 URL</label>
-          <input type="text" id="owner-video-url" placeholder="YouTube link, Drive share URL, or https://…/video.mp4">
-        </div>
-
-        <!-- Upload mode -->
-        <div id="video-tab-upload" class="owner-field" style="display:none;">
-          <label>Choose a video file from your device</label>
-          <input type="file" id="owner-video-file" accept="video/*" style="background:rgba(0,0,0,0.5);border:1px solid rgba(212,175,55,0.25);color:var(--cream);
-                   font-family:&#39;Cormorant Garamond&#39;,serif;font-size:13px;padding:8px 10px;width:100%;cursor:pointer;">
-          <p style="margin-top:6px;font-family:&#39;Cormorant Garamond&#39;,serif;font-style:italic;font-size:11px;color:rgba(212,175,55,0.4);">
-            The video is stored locally in your browser (IndexedDB). Works offline — no hosting needed.
-          </p>
-        </div>
-
-        <!-- Inline preview -->
-        <div id="owner-video-preview" style="display: block; margin-bottom: 14px;">
-          <label style="font-family:&#39;Cinzel&#39;,serif;font-size:8px;letter-spacing:0.3em;color:var(--gold);opacity:0.7;text-transform:uppercase;display:block;margin-bottom:6px;">Current Video</label>
-          <iframe id="owner-preview-iframe" allowfullscreen="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" src="./The Placement Cell · SRCC · 30 Years of Excellence_files/saved_resource.html" style="width: 100%; max-height: 160px; background: rgb(0, 0, 0); border: 1px solid rgba(212, 175, 55, 0.2); display: none;"></iframe><video id="owner-preview-video" controls="" style="width: 100%; max-height: 160px; background: rgb(0, 0, 0); border: 1px solid rgba(212, 175, 55, 0.2);" src="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765575/WhatsApp_Video_2026-03-28_at_21.34.20_rvdndy.mp4"></video>
-          <button onclick="clearVideoForLocation()" style="margin-top:6px;padding:5px 14px;background:transparent;border:1px solid rgba(212,175,55,0.25);color:rgba(212,175,55,0.55);font-family:&#39;Cinzel&#39;,serif;font-size:8px;letter-spacing:0.2em;cursor:pointer;text-transform:uppercase;">Remove Video</button>
-        </div>
-
-        <div class="owner-field">
-          <label>Change Owner Password (leave blank to keep current)</label>
-          <input type="password" id="owner-new-pw" placeholder="New password…" autocomplete="new-password">
-        </div>
-        <div class="owner-actions">
-          <button id="owner-save-btn" onclick="ownerSave()">Save</button>
-          <button id="owner-close-btn" onclick="closeOwnerPanel()">Close</button>
-          <button style="font-size:9px;padding:8px 14px;background:transparent;border:1px solid rgba(212,175,55,0.25);color:rgba(212,175,55,0.55);font-family:'Cinzel',serif;letter-spacing:0.2em;cursor:pointer;text-transform:uppercase;" onclick="ownerLogout()">Logout</button>
-          <span id="owner-msg" class=""></span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
+  <section id="birdseye-view">
   <div id="stage">
+    <!-- SRCC Branding - Top Overlay -->
+    <div
+      style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 48px 20px 32px;
+        background: linear-gradient(180deg, rgba(6, 3, 1, 0.98) 0%, rgba(6, 3, 1, 0.5) 60%, transparent 100%);
+        text-align: center;
+        z-index: 10;
+        pointer-events: none;
+      "
+    >
+      <p
+        style="
+          font-family: 'Cinzel', serif;
+          font-size: clamp(12px, 3vw, 24px);
+          color: rgba(220, 215, 200, 0.9);
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          margin: 0;
+          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+        "
+      >
+        Shri Ram College of Commerce
+      </p>
+      <p
+        style="
+          font-family: 'Cinzel', serif;
+          font-size: clamp(10px, 2vw, 16px);
+          color: #D4AF37;
+          letter-spacing: 0.35em;
+          text-transform: uppercase;
+          margin-top: 2px;
+          text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+        "
+      >
+        Est. 1926
+      </p>
+    </div>
 
-    <!-- ── Zoom Container for Mobile Pan/Zoom ── -->
-    <div id="zoom-container">
     <!-- ── Campus Aerial Background ── -->
-    <img id="campus-bg" src="./srcc-aerial.jpg" alt="SRCC Campus Aerial View">
+    <img id="campus-bg" src="./srcc-aerial.jpg">
+    <img id="campus-bg-color" src="./srcc-aerial.jpg" aria-hidden="true">
 
-    <!-- ── Back Button ── -->
-    <a class="birdseye-back" href="./index.html">&#8592; Back</a>
+    <!-- Atmospheric layers -->
+    <div id="vignette"></div>
+    <div id="grain"></div>
 
-    <!-- ── Pulse Point Markers ── -->
+    <!-- ── Pulse Point Markers (From v2-2) ── -->
 
-
-
-
-
-
-
-
-
-    <!-- Nescafe Annex: top:31.9% left:70.0% -->
-    <div class="pulse-point" style="top:31.9%; left:70.0%" data-title="Nescafe Annex" data-eyebrow="The Hangout · SRCC" data-subtitle="Fuel for Brilliance" data-desc="The Nescafe Annex — SRCC&#39;s beloved coffee corner where students refuel between lectures, friendships are struck over chai, and great ideas are brewed." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765339/IMG_5739_gbb9yv.mp4" tabindex="0" role="button" aria-label="View Nescafe Annex">
-      <div class="ring ring-1" style="animation-delay: 1.8s;"></div><div class="ring ring-2" style="animation-delay: 1.8s;"></div><div class="ring ring-3" style="animation-delay: 1.8s;"></div>
+    <!-- Nescafe Annex -->
+    <div class="pulse-point" style="top:31.9%; left:70.0%" data-title="Nescafe Annex" data-eyebrow="The Hangout · SRCC" data-subtitle="Everyone's favourite spot" data-desc="The Nescafe Annex - SRCC's beloved coffee corner where students refuel between lectures, friendships are struck over chai, and great ideas are brewed." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765339/IMG_5739_gbb9yv.mp4">
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
-        <span class="l-title">Nescafe Annex</span><span class="l-sub">The Hangout · SRCC</span>
+        <span class="l-title">Nescafe</span><span class="l-sub">The Hangout</span>
       </div></div>
     </div>
 
-    <!-- Library: top:39.9% left:76.6% -->
-    <div class="pulse-point" style="top: 27.1772%; left: 78.8536%;" data-title="SRCC Library" data-eyebrow="Knowledge Centre · SRCC" data-subtitle="Legacy in Every Volume" data-desc="The SRCC Library — a repository of commerce, economics and business knowledge. The quiet within these walls has shaped some of India&#39;s sharpest financial minds." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765390/IMG_3907_vwbiue.mp4" tabindex="0" role="button" aria-label="View SRCC Library">
-      <div class="ring ring-1" style="animation-delay: 2.7s;"></div><div class="ring ring-2" style="animation-delay: 2.7s;"></div><div class="ring ring-3" style="animation-delay: 2.7s;"></div>
+    <!-- Library -->
+    <div class="pulse-point" style="top: 27.1772%; left: 78.8536%;" data-title="SRCC Library" data-eyebrow="Knowledge Centre · SRCC" data-subtitle="Legacy in Every Page" data-desc="The SRCC Library - a repository of commerce, economics and business knowledge. The quiet within these walls has shaped some of India's sharpest minds." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765390/IMG_3907_vwbiue.mp4">
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
         <span class="l-title">Library</span><span class="l-sub">Knowledge Centre</span>
       </div></div>
     </div>
 
-    <!-- Tute Block: top:42.9% left:6.7% -->
-    <div class="pulse-point" style="top: 39.837%; left: 8.87917%;" data-title="Tute Block" data-eyebrow="Academic Block · SRCC" data-subtitle="Where Commerce Comes Alive" data-desc="The Tute Block — SRCC&#39;s dedicated tutorial and classroom wing where commerce, economics and business concepts are debated, discussed and brought to life." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774764959/WhatsApp_Video_2026-03-27_at_18.59.15_ttwz6b.mp4" tabindex="0" role="button" aria-label="View Tute Block">
-      <div class="ring ring-1" style="animation-delay: 3.6s;"></div><div class="ring ring-2" style="animation-delay: 3.6s;"></div><div class="ring ring-3" style="animation-delay: 3.6s;"></div>
+    <!-- Tute Block -->
+    <div class="pulse-point" style="top: 39.837%; left: 8.87917%;" data-title="Tute Block" data-eyebrow="Academic Block · SRCC" data-subtitle="Where Commerce Comes Alive" data-desc="The Tute Block - SRCC's dedicated tutorial room wing where commerce, economics and business concepts are debated, discussed and brought to life." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774764959/WhatsApp_Video_2026-03-27_at_18.59.15_ttwz6b.mp4">
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
         <span class="l-title">Tute Block</span><span class="l-sub">Academic Block</span>
       </div></div>
     </div>
 
-    <!-- Library Lawns: top:43.2% left:61.6% -->
-    <div class="pulse-point" style="top: 37.5116%; left: 64.0089%;" data-title="Library Lawns" data-eyebrow="SRCC Library Lawns" data-subtitle="Green Heart of Campus" data-desc="The serene Library Lawns — a quiet green expanse where students unwind between lectures, study under open skies, and share the stories that define the SRCC experience." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765405/IMG_8310_nsq8kz.mp4" tabindex="0" role="button" aria-label="View Library Lawns">
-      <div class="ring ring-1" style="animation-delay: 4.5s;"></div><div class="ring ring-2" style="animation-delay: 4.5s;"></div><div class="ring ring-3" style="animation-delay: 4.5s;"></div>
+    <!-- Library Lawns -->
+    <div class="pulse-point" style="top: 37.5116%; left: 64.0089%;" data-title="Library Lawns" data-eyebrow="SRCC Library Lawns" data-subtitle="Green Retreat of Campus" data-desc="The serene Library Lawns - a quiet green expanse where students unwind between lectures, study under open skies, and share stories that define the SRCC experience." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765405/IMG_8310_nsq8kz.mp4">
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
-        <span class="l-title">Library Lawns</span><span class="l-sub">Green Heart of Campus</span>
+        <span class="l-title">Library Lawns</span><span class="l-sub">Green Retreat of Campus</span>
       </div></div>
     </div>
 
-
-
-    <!-- Co-op: top:45.2% left:95.0% -->
-    <div class="pulse-point" style="top:45.2%; left:95.0%" data-title="Co-op" data-eyebrow="Cooperative Store · SRCC" data-subtitle="The Campus Store" data-desc="The SRCC Co-operative Store — a student-run institution providing stationery, essentials and much more, embodying the cooperative spirit at the heart of SRCC." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765575/WhatsApp_Video_2026-03-28_at_21.34.20_rvdndy.mp4" tabindex="0" role="button" aria-label="View Co-op">
-      <div class="ring ring-1" style="animation-delay: 6.3s;"></div><div class="ring ring-2" style="animation-delay: 6.3s;"></div><div class="ring ring-3" style="animation-delay: 6.3s;"></div>
+    <!-- Co-op -->
+    <div class="pulse-point" style="top:45.2%; left:95.0%" data-title="Co-op" data-eyebrow="Cooperative Store · SRCC" data-subtitle="The Campus Store" data-desc="The Co-operative Store - everyone's favourite shop providing stationery, snacks and Diet Cokes, embodying the spirit of SRCC's culture." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765575/WhatsApp_Video_2026-03-28_at_21.34.20_rvdndy.mp4">
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
         <span class="l-title">Co-op</span><span class="l-sub">Cooperative Store</span>
       </div></div>
     </div>
 
-    <!-- Clock Tower: top:49.7% left:51.8% -->
-    <div class="pulse-point" style="top:49.7%; left:51.8%" data-title="The Clock Tower" data-eyebrow="Main Entrance · SRCC" data-subtitle="The Iconic Heart of Campus" data-desc="The legendary SRCC clock tower — the most photographed landmark on campus and the symbolic gateway to 100 years of academic excellence." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765393/IMG_8302_cwruz8.mp4" tabindex="0" role="button" aria-label="View The Clock Tower">
-      <div class="ring ring-1" style="animation-delay: 7.2s;"></div><div class="ring ring-2" style="animation-delay: 7.2s;"></div><div class="ring ring-3" style="animation-delay: 7.2s;"></div>
+    <!-- Clock Tower -->
+    <div class="pulse-point" style="top:49.7%; left:51.8%" data-title="The Clock Tower" data-eyebrow="The Iconic · SRCC" data-subtitle="The Embodiment of Brilliance" data-desc="The legendary SRCC clock tower - the most photographed landmark on campus and the symbolic gateway to 100 years of academic excellence." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765393/IMG_8302_cwruz8.mp4">
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
-        <span class="l-title">Clock Tower</span><span class="l-sub">Main Entrance</span>
+        <span class="l-title">Clock Tower</span><span class="l-sub">Pinnacle of Excellence</span>
       </div></div>
     </div>
 
-    <!-- Shridhar Shriram Auditorium: top:37.6% left:51.4% -->
-    <div class="pulse-point" style="top: 28.8485%; left: 50.8792%;" data-title="Shridhar Shriram Auditorium" data-eyebrow="The Auditorium · SRCC" data-subtitle="Stage for Distinction" data-desc="The Shridhar Shriram Auditorium — where placement drives are inaugurated, industry leaders address students, and three decades of careers have taken their first steps." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774764959/WhatsApp_Video_2026-03-26_at_18.19.02_tiuqe0.mp4" tabindex="0" role="button" aria-label="View Shridhar Shriram Auditorium">
-      <div class="ring ring-1" style="animation-delay: 8.1s;"></div><div class="ring ring-2" style="animation-delay: 8.1s;"></div><div class="ring ring-3" style="animation-delay: 8.1s;"></div>
+    <!-- Auditorium -->
+    <div class="pulse-point" style="top: 28.8485%; left: 50.8792%;" data-title="Shridhar Shriram Auditorium" data-eyebrow="The Auditorium · SRCC" data-subtitle="Stage for Distinction" data-desc="The Shridhar Shriram Auditorium - where placement drives are inaugurated, industry leaders address students, and three decades of careers have taken their first steps." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774764959/WhatsApp_Video_2026-03-26_at_18.19.02_tiuqe0.mp4">
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
-        <span class="l-title">Auditorium</span><span class="l-sub">Shridhar Shriram</span>
+        <span class="l-title">Auditorium</span><span class="l-sub">Shridhar Shriram Auditorium</span>
       </div></div>
     </div>
 
-
-
-
-    <!-- PB Lawns: top:70.2% left:5.5% -->
-    <div class="pulse-point" style="top: 91.6411%; left: 1.98438%;" data-title="PB Lawns" data-eyebrow="SRCC PB Lawns" data-subtitle="Memories on the Green" data-desc="The SRCC PB Lawns — a cherished open space where students gather for events, festivals and quiet afternoons, creating memories that last well beyond graduation." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774764962/WhatsApp_Video_2026-03-28_at_21.34.23_msksey.mp4" tabindex="0" role="button" aria-label="View PB Lawns">
-      <div class="ring ring-1" style="animation-delay: 9s;"></div><div class="ring ring-2" style="animation-delay: 9s;"></div><div class="ring ring-3" style="animation-delay: 9s;"></div>
+    <!-- PB Lawns -->
+    <div class="pulse-point" style="top: 91.6411%; left: 1.98438%;" data-title="PB Lawns" data-eyebrow="SRCC PB Lawns" data-subtitle="Memories on the Green" data-desc="The PB Lawns - a cherished open space where students gather for events, festivals and quiet afternoons, creating memories that last well beyond graduation." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774764962/WhatsApp_Video_2026-03-28_at_21.34.23_msksey.mp4">
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
-        <span class="l-title">PB Lawns</span><span class="l-sub">SRCC PB Lawns</span>
+        <span class="l-title">PB Lawns</span><span class="l-sub">Principal's Bungalow</span>
       </div></div>
     </div>
 
-    <!-- Statue Lawns: top:85.1% left:30.7% -->
-    <div class="pulse-point" style="top: 93.11%; left: 30.8604%;" data-title="Statue Lawns" data-eyebrow="SRCC Statue Lawns" data-subtitle="Where Memories Were Made" data-desc="The SRCC Statue Lawns — the iconic heart of campus life where generations of students marked their milestones, farewells, and the beginning of something extraordinary." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765405/IMG_2046_zmlttf.mp4" tabindex="0" role="button" aria-label="View Statue Lawns">
-      <div class="ring ring-1" style="animation-delay: 9.9s;"></div><div class="ring ring-2" style="animation-delay: 9.9s;"></div><div class="ring ring-3" style="animation-delay: 9.9s;"></div>
+    <!-- Statue Lawns -->
+    <div class="pulse-point" style="top: 93.11%; left: 30.8604%;" data-title="Statue Lawns" data-eyebrow="SRCC Statue Lawns" data-subtitle="The Heart & Soul of SRCC" data-desc="The SRCC Statue Lawns - the heart of the college where generations of students marked their milestones, farewells, and the beginning of something extraordinary." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774765405/IMG_2046_zmlttf.mp4">
+      <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
-        <span class="l-title">Statue Lawns</span><span class="l-sub">The Lawns</span>
+        <span class="l-title">Statue Lawns</span><span class="l-sub">The Heart of SRCC</span>
       </div></div>
     </div>
+  </div><!-- /stage -->
+  </section>
 
 
-    <!-- ── Bottom Hint ── -->
-    <div id="hint">
-      <span>Explore the Campus</span>
-      <div class="scroll-line"></div>
-    </div>
-
-    </div><!-- /zoom-container -->
-  </div><!-- /stage -->  <div id="admin-toolbar">
-    <span>Admin Tools</span>
-    <button class="btn" type="button" onclick="setAdminMode('move')">Move</button>
-    <button class="btn" type="button" onclick="setAdminMode('add')">Add</button>
-    <button class="btn" type="button" onclick="setAdminMode('remove')">Remove</button>
-    <button class="btn" type="button" onclick="setAdminMode('video')">Video</button>
-  </div>
-  <div id="admin-panel" onclick="closeAdminPanel()">
-    <div id="admin-box" onclick="event.stopPropagation()">
-      <h3>Admin Controls</h3>
-      <p class="admin-sub">These are the original editor controls, carried into the latest birdseye page.</p>
-      <div class="admin-field">
-        <label>Action</label>
-        <select id="admin-action" onchange="syncAdminSections()">
-          <option value="">Choose an action</option>
-          <option value="move">Move a location</option>
-          <option value="add">Add a location</option>
-          <option value="remove">Remove a location</option>
-          <option value="video">Update video URL</option>
-        </select>
-      </div>
-      <div id="admin-move" style="display:none;">
-        <div class="admin-field">
-          <label>Location</label>
-          <select id="admin-move-select"></select>
-        </div>
-      </div>
-      <div id="admin-add" style="display:none;">
-        <div class="admin-field">
-          <label>Title</label>
-          <input id="admin-add-title" type="text" placeholder="e.g. Main Canteen">
-        </div>
-        <div class="admin-field">
-          <label>Eyebrow</label>
-          <input id="admin-add-eyebrow" type="text" placeholder="e.g. Food Court ? SRCC">
-        </div>
-        <div class="admin-field">
-          <label>Subtitle</label>
-          <input id="admin-add-subtitle" type="text" placeholder="e.g. Between classes">
-        </div>
-        <div class="admin-field">
-          <label>Description</label>
-          <input id="admin-add-desc" type="text" placeholder="Short description">
-        </div>
-      </div>
-      <div id="admin-remove" style="display:none;">
-        <div class="admin-field">
-          <label>Location</label>
-          <select id="admin-remove-select"></select>
-        </div>
-      </div>
-      <div id="admin-video" style="display:none;">
-        <div class="admin-field">
-          <label>Location</label>
-          <select id="admin-video-select"></select>
-        </div>
-        <div class="admin-field">
-          <label>Video URL</label>
-          <input id="admin-video-url" type="text" placeholder="https://...">
-        </div>
-      </div>
-      <div id="admin-msg"></div>
-      <div id="admin-actions">
-        <button id="admin-apply" type="button" onclick="applyAdminAction()">Apply</button>
-        <button id="admin-close" type="button" onclick="closeAdminPanel()">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ?????????????? MODAL ?????????????? -->
-  <div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" class="">
-
+  <!-- ══════════════ MODAL ══════════════ -->
+  <div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div id="modal-box">
-
-      <!-- Header -->
       <div id="modal-header">
         <div id="modal-title-wrap">
-          <span id="modal-eyebrow">Cooperative Store · SRCC</span>
-          <h2 id="modal-title">Co-op</h2>
-          <p id="modal-subtitle">The Campus Store</p>
+          <span id="modal-eyebrow"></span>
+          <h2 id="modal-title"></h2>
+          <p id="modal-subtitle"></p>
         </div>
         <button id="modal-close" aria-label="Close modal">×</button>
       </div>
-
-      <!-- Video -->
       <div id="modal-video-wrap">
-        <video id="modal-video" controls="" playsinline="" preload="none" src="" style="display: block;">
+        <video id="modal-video" controls playsinline preload="none">
           Your browser does not support the video tag.
         </video>
-        <iframe id="modal-iframe" allowfullscreen="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" src="./The Placement Cell · SRCC · 30 Years of Excellence_files/saved_resource(1).html" style="display: none;"></iframe>
+        <iframe id="modal-iframe" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
       </div>
-
-      <!-- Decorative rule -->
       <div class="gold-rule"><span>◆</span></div>
-
-      <!-- Footer -->
       <div id="modal-footer">
-        <p id="modal-desc">The SRCC Co-operative Store — a student-run institution providing stationery, essentials and much more, embodying the cooperative spirit at the heart of SRCC.</p>
+        <p id="modal-desc"></p>
         <span id="modal-badge">30 Years of Excellence</span>
       </div>
-
-    </div><!-- /modal-box -->
-  </div><!-- /modal-overlay -->
+    </div>
+  </div>
 
 
   <script>
-    /* ═══════════════════════════════════════════════════
-       SRCC Placement Cell — Pulse Points + Visual Editor
-    ═══════════════════════════════════════════════════ */
-
     const overlay   = document.getElementById('modal-overlay');
     const modalBox  = document.getElementById('modal-box');
+    const stage     = document.getElementById('stage');
+    const campusBgColor = document.getElementById('campus-bg-color');
     const video     = document.getElementById('modal-video');
+    const iframe    = document.getElementById('modal-iframe');
     const closeBtn  = document.getElementById('modal-close');
     const elTitle    = document.getElementById('modal-title');
     const elEyebrow  = document.getElementById('modal-eyebrow');
     const elSubtitle = document.getElementById('modal-subtitle');
     const elDesc     = document.getElementById('modal-desc');
+
+    function setReveal(point) {
+      if (!point) return;
+      campusBgColor.style.setProperty('--reveal-x', point.style.left || '50%');
+      campusBgColor.style.setProperty('--reveal-y', point.style.top || '50%');
+      stage.classList.add('reveal-active');
+    }
+
+    function clearReveal() {
+      stage.classList.remove('reveal-active');
+    }
+
     /* ── Stagger ring animation delays ── */
     document.querySelectorAll('.pulse-point').forEach((point, i) => {
       point.querySelectorAll('.ring').forEach(ring => {
-        const base = parseFloat(ring.style.animationDelay || '0');
-        ring.style.animationDelay = (base + i * 0.45) + 's';
+        ring.style.animationDelay = (i * 0.45) + 's';
       });
     });
 
-    /* ════════════════════════════
-       MODAL
-    ════════════════════════════ */
-
-    /* Convert any YouTube or Google Drive URL to an embeddable/streamable URL.
-       Returns { type: 'iframe'|'video', src: string } or null for plain MP4s. */
     function toEmbedUrl(url) {
       if (!url) return null;
-
-      // ── YouTube ──
-      if (url.includes('youtube.com/embed/')) {
-        return { type: 'iframe', src: url.split('?')[0] };
-      }
+      if (url.includes('youtube.com/embed/')) return { type: 'iframe', src: url.split('?')[0] };
       let m = url.match(/youtu\.be\/([A-Za-z0-9_-]{11})/);
       if (m) return { type: 'iframe', src: `https://www.youtube.com/embed/${m[1]}` };
       m = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/))([A-Za-z0-9_-]{11})/);
       if (m) return { type: 'iframe', src: `https://www.youtube.com/embed/${m[1]}` };
-
-      // ── Google Drive ──
-      // Handles all common GDrive share/export/open URL forms
-      // Format 1: /file/d/FILE_ID/view  or  /file/d/FILE_ID/edit
       m = url.match(/drive\.google\.com\/file\/d\/([A-Za-z0-9_-]+)/);
       if (m) return { type: 'iframe', src: `https://drive.google.com/file/d/${m[1]}/preview` };
-      // Format 2: ?id=FILE_ID  (uc?export=download&id=XXX  or  open?id=XXX)
       m = url.match(/drive\.google\.com\/.*[?&]id=([A-Za-z0-9_-]+)/);
       if (m) return { type: 'iframe', src: `https://drive.google.com/file/d/${m[1]}/preview` };
-      // Format 3: already a /preview link
-      if (url.includes('drive.google.com') && url.includes('/preview')) {
-        return { type: 'iframe', src: url };
-      }
-
-      // ── Everything else (mp4, blob, data URLs) → native video ──
       return null;
     }
 
-    /* Legacy shim so older call-sites still work */
-    function toYouTubeEmbed(url) {
-      const r = toEmbedUrl(url);
-      return (r && r.type === 'iframe') ? r.src : null;
-    }
-
     function openModal(point) {
+      if (dragMode) return;
       elTitle.textContent    = point.dataset.title   || '';
       elEyebrow.textContent  = point.dataset.eyebrow || 'The Placement Cell · SRCC';
       elSubtitle.textContent = point.dataset.subtitle || '';
       elDesc.textContent     = point.dataset.desc    || '';
 
-      // Always pull the freshest video src from storage at open time
-      const storedSrc = getStoredVideoSrc(point.dataset.title);
-      const src = storedSrc || point.dataset.video || '';
-
+      const src = point.dataset.video || '';
       const embed = toEmbedUrl(src);
 
       if (embed) {
-        // YouTube / Google Drive → use iframe
         video.style.display = 'none';
         video.src = '';
-        const iframe = document.getElementById('modal-iframe');
         iframe.style.display = 'block';
-        const isYT = embed.src.includes('youtube.com/embed/');
-        iframe.src = isYT ? embed.src + '?autoplay=1&rel=0' : embed.src;
+        iframe.src = embed.src + (embed.src.includes('youtube') ? '?autoplay=1&rel=0' : '');
       } else {
-        // Direct file / MP4 → use video element
-        const iframe = document.getElementById('modal-iframe');
         iframe.style.display = 'none';
         iframe.src = '';
         video.style.display = 'block';
@@ -1194,30 +1086,81 @@
       document.body.style.overflow = '';
       setTimeout(() => {
         video.pause();
-        video.currentTime = 0;
         video.src = '';
-        video.load();
-        const iframe = document.getElementById('modal-iframe');
         iframe.src = '';
-        iframe.style.display = 'none';
-        video.style.display = 'block';
       }, 420);
     }
 
+    /* ── Drag logic (Console access only) ── */
+    let dragMode = false;
+    let activePoint = null, startMouse = {}, startPos = {};
+
+    function updateBadge(point) {
+      const badge = point.querySelector('.coord-badge');
+      if (!badge) return;
+      const t = parseFloat(point.style.top).toFixed(1);
+      const l = parseFloat(point.style.left).toFixed(1);
+      badge.textContent = `top:${t}%  left:${l}%`;
+    }
+    document.querySelectorAll('.pulse-point').forEach(updateBadge);
+
+    function startDrag(e, point) {
+      if (!dragMode) return;
+      e.preventDefault();
+      e.stopPropagation();
+      activePoint = point;
+      point.classList.add('dragging');
+      const stage = document.getElementById('stage');
+      const sr = stage.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      startMouse = { x: clientX, y: clientY };
+      startPos = {
+        top:  (parseFloat(point.style.top)  / 100) * sr.height,
+        left: (parseFloat(point.style.left) / 100) * sr.width
+      };
+    }
+
+    function moveDrag(e) {
+      if (!activePoint) return;
+      if (e.cancelable) e.preventDefault();
+      const stage = document.getElementById('stage');
+      const sr = stage.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      const dx = clientX - startMouse.x;
+      const dy = clientY - startMouse.y;
+      let newTop  = ((startPos.top  + dy) / sr.height) * 100;
+      let newLeft = ((startPos.left + dx) / sr.width)  * 100;
+      newTop  = Math.max(0, Math.min(100, newTop));
+      newLeft = Math.max(0, Math.min(100, newLeft));
+      activePoint.style.top  = newTop  + '%';
+      activePoint.style.left = newLeft + '%';
+      updateBadge(activePoint);
+    }
+
+    function endDrag() {
+      if (!activePoint) return;
+      activePoint.classList.remove('dragging');
+      activePoint = null;
+    }
+
     document.querySelectorAll('.pulse-point').forEach(point => {
+      point.addEventListener('mouseenter', () => setReveal(point));
+      point.addEventListener('mouseleave', clearReveal);
+      point.addEventListener('mousedown', e => startDrag(e, point));
+      point.addEventListener('touchstart', e => startDrag(e, point), { passive: false });
       point.addEventListener('click', e => {
+        if (dragMode) { e.stopPropagation(); return; }
         e.stopPropagation();
         openModal(point);
       });
-      point.setAttribute('tabindex', '0');
-      point.setAttribute('role', 'button');
-      point.setAttribute('aria-label', `View ${point.dataset.title}`);
-      point.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault(); openModal(point);
-        }
-      });
     });
+
+    document.addEventListener('mousemove', moveDrag);
+    document.addEventListener('touchmove', moveDrag, { passive: false });
+    document.addEventListener('mouseup', endDrag);
+    document.addEventListener('touchend', endDrag);
 
     closeBtn.addEventListener('click', closeModal);
     overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
@@ -1227,74 +1170,17 @@
         else if (overlay.classList.contains('open')) closeModal();
       }
     });
-    modalBox.addEventListener('click', e => e.stopPropagation());
 
-    /* ════════════════════════════════════════
-       OWNER VIDEO MANAGEMENT
-       Storage strategy:
-         • URL  → stored as plain string in localStorage
-         • File → converted to base64 data-URL via FileReader,
-                  stored in localStorage. Fully synchronous on read.
-       Key: srcc_video_<title>
-    ════════════════════════════════════════ */
-
-    const OWNER_PW_KEY    = 'srcc_owner_pw_hash';
-    const OWNER_SESS_KEY  = 'srcc_owner_session';
-    const VIDEO_PREFIX    = 'srcc_video_';
-    const DEFAULT_PW_HASH = btoa('srcc1996');
-
-    function getStoredHash()   { return localStorage.getItem(OWNER_PW_KEY) || DEFAULT_PW_HASH; }
-    function isOwnerLoggedIn() { return sessionStorage.getItem(OWNER_SESS_KEY) === '1'; }
-
-    /* Returns a playable src string (URL or data-URL), or '' */
-    function getStoredVideoSrc(title) {
-      return localStorage.getItem(VIDEO_PREFIX + title) || '';
-    }
-    function setStoredVideoSrc(title, src) {
-      if (src) localStorage.setItem(VIDEO_PREFIX + title, src);
-      else     localStorage.removeItem(VIDEO_PREFIX + title);
+    /* ── Owner panel logic (Console access only) ── */
+    function syncOwnerDragUi() {
+      const dragBtn = document.getElementById('owner-drag-btn');
+      if (!dragBtn) return;
+      dragBtn.classList.toggle('active', dragMode);
+      dragBtn.textContent = dragMode ? 'Disable Drag Mode' : 'Enable Drag Mode';
     }
 
-    /* ── Apply stored videos to pulse points on page load ── */
-    document.querySelectorAll('.pulse-point').forEach(p => {
-      const src = getStoredVideoSrc(p.dataset.title);
-      if (src) p.dataset.video = src;
-    });
-
-    /* ── Tab switcher ── */
-    function switchTab(tab) {
-      const isUrl = tab === 'url';
-      document.getElementById('video-tab-url').style.display    = isUrl ? '' : 'none';
-      document.getElementById('video-tab-upload').style.display = isUrl ? 'none' : '';
-      document.getElementById('tab-url-btn').style.background    = isUrl ? 'rgba(212,175,55,0.15)' : 'transparent';
-      document.getElementById('tab-url-btn').style.color         = isUrl ? 'var(--gold)' : 'rgba(212,175,55,0.5)';
-      document.getElementById('tab-upload-btn').style.background = isUrl ? 'transparent' : 'rgba(212,175,55,0.15)';
-      document.getElementById('tab-upload-btn').style.color      = isUrl ? 'rgba(212,175,55,0.5)' : 'var(--gold)';
-    }
-
-    /* ── Owner panel open/close ── */
-    function openOwnerPanel() {
+    window.openOwnerPanel = () => {
       document.getElementById('owner-modal').classList.add('open');
-      clearOwnerMsg();
-      if (isOwnerLoggedIn()) showVideoSection();
-      else {
-        showLoginSection();
-        setTimeout(() => document.getElementById('owner-pw-input').focus(), 80);
-      }
-    }
-    function closeOwnerPanel() {
-      document.getElementById('owner-modal').classList.remove('open');
-      document.getElementById('owner-pw-input').value = '';
-      document.getElementById('owner-new-pw').value   = '';
-    }
-    function showLoginSection() {
-      document.getElementById('owner-login-section').style.display = 'block';
-      document.getElementById('owner-video-section').classList.remove('visible');
-    }
-    function showVideoSection() {
-      document.getElementById('owner-login-section').style.display = 'none';
-      document.getElementById('owner-video-section').classList.add('visible');
-
       const sel = document.getElementById('owner-location-select');
       sel.innerHTML = '<option value="">— Select a location —</option>';
       document.querySelectorAll('.pulse-point').forEach(p => {
@@ -1303,511 +1189,71 @@
         opt.textContent = p.dataset.title;
         sel.appendChild(opt);
       });
-
-      sel.onchange = function() {
-        const title = sel.value;
-        document.getElementById('owner-video-url').value  = '';
-        document.getElementById('owner-video-file').value = '';
-        const preview      = document.getElementById('owner-video-preview');
-        const previewVideo = document.getElementById('owner-preview-video');
-        // Hide any existing iframe preview
-        const existingIframe = document.getElementById('owner-preview-iframe');
-        if (existingIframe) { existingIframe.src = ''; existingIframe.style.display = 'none'; }
-        if (!title) { preview.style.display = 'none'; previewVideo.src = ''; return; }
-
-        const src = getStoredVideoSrc(title);
-        // Pre-fill URL field if it looks like a URL (not a data-URL)
-        if (src && !src.startsWith('data:')) {
-          document.getElementById('owner-video-url').value = src;
-        }
-        if (src) {
-          const embed = toEmbedUrl(src);
-          if (embed) {
-            previewVideo.style.display = 'none';
-            let previewIframe = document.getElementById('owner-preview-iframe');
-            if (!previewIframe) {
-              previewIframe = document.createElement('iframe');
-              previewIframe.id = 'owner-preview-iframe';
-              previewIframe.style.cssText = 'width:100%;max-height:160px;background:#000;border:1px solid rgba(212,175,55,0.2);';
-              previewIframe.setAttribute('allowfullscreen', '');
-              previewIframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-              previewVideo.parentNode.insertBefore(previewIframe, previewVideo);
-            }
-            previewIframe.src = embed.src;
-            previewIframe.style.display = 'block';
-          } else {
-            previewVideo.style.display = '';
-            previewVideo.src = src;
-          }
-          preview.style.display = 'block';
-        } else {
-          previewVideo.src = '';
-          preview.style.display = 'none';
-        }
-      };
-
-      document.getElementById('owner-btn').classList.add('logged-in');
-      document.getElementById('owner-btn').textContent = '◆ Owner: Videos';
-    }
-
-    /* ── Login ── */
-    function ownerLogin() {
+      syncOwnerDragUi();
+    };
+    window.closeOwnerPanel = () => {
+      document.getElementById('owner-modal').classList.remove('open');
+    };
+    window.ownerLogin = () => {
       const pw = document.getElementById('owner-pw-input').value;
-      if (!pw) { showOwnerMsg('Enter your password.', true); return; }
-      if (btoa(pw) === getStoredHash()) {
-        sessionStorage.setItem(OWNER_SESS_KEY, '1');
-        showOwnerMsg('');
-        showVideoSection();
+      if (pw === 'srcc1996') {
+        document.getElementById('owner-login-section').style.display = 'none';
+        document.getElementById('owner-video-section').style.display = 'block';
+        document.getElementById('owner-login-msg').textContent = '';
+        syncOwnerDragUi();
       } else {
-        showOwnerMsg('Incorrect password.', true);
-        document.getElementById('owner-pw-input').value = '';
-        document.getElementById('owner-pw-input').focus();
+        document.getElementById('owner-login-msg').textContent = 'Incorrect password.';
       }
-    }
-    document.getElementById('owner-pw-input').addEventListener('keydown', e => {
-      if (e.key === 'Enter') ownerLogin();
-    });
-
-    /* ── Remove video ── */
-    function clearVideoForLocation() {
-      const sel = document.getElementById('owner-location-select');
-      if (!sel.value) return;
-      setStoredVideoSrc(sel.value, '');
+    };
+    window.ownerSave = () => {
+      const sel = document.getElementById('owner-location-select').value;
+      const url = document.getElementById('owner-video-url').value;
+      if (!sel) return;
       document.querySelectorAll('.pulse-point').forEach(p => {
-        if (p.dataset.title === sel.value) p.dataset.video = '';
+        if (p.dataset.title === sel) p.dataset.video = url;
       });
-      document.getElementById('owner-video-preview').style.display = 'none';
-      document.getElementById('owner-preview-video').src = '';
-      document.getElementById('owner-video-url').value   = '';
-      showOwnerMsg('Video removed ✓');
-      setTimeout(clearOwnerMsg, 2000);
-    }
+      document.getElementById('owner-msg').textContent = 'Saved ✓';
+      setTimeout(() => { document.getElementById('owner-msg').textContent = ''; }, 2000);
+    };
 
-    /* ── Save ── */
-    function ownerSave() {
-      const sel    = document.getElementById('owner-location-select');
-      const urlVal = document.getElementById('owner-video-url').value.trim();
-      const fileEl = document.getElementById('owner-video-file');
-      const newPw  = document.getElementById('owner-new-pw').value;
-      const file   = fileEl.files && fileEl.files[0];
+    window.toggleOwnerDragMode = () => {
+      dragMode = !dragMode;
+      document.body.classList.toggle('drag-mode', dragMode);
+      if (!dragMode) endDrag();
+      syncOwnerDragUi();
+      const ownerMsg = document.getElementById('owner-msg');
+      ownerMsg.textContent = dragMode ? 'Drag mode is on. Move pulse points freely, then disable it when finished.' : '';
+      ownerMsg.classList.toggle('show', dragMode);
+      ownerMsg.classList.remove('error');
+    };
 
-      if (!sel.value) { showOwnerMsg('Select a location first.', true); return; }
-
-      const uploadTabVisible = document.getElementById('video-tab-upload').style.display !== 'none';
-
-      if (uploadTabVisible && file) {
-        // Convert file to base64 data-URL (synchronous read via FileReader)
-        showOwnerMsg('Reading file…');
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const dataUrl = e.target.result;
-          try {
-            setStoredVideoSrc(sel.value, dataUrl);
-          } catch(err) {
-            // localStorage quota exceeded (large files)
-            showOwnerMsg('File too large for browser storage. Use a URL instead.', true);
-            return;
-          }
-          // Update all matching pulse points live
-          document.querySelectorAll('.pulse-point').forEach(p => {
-            if (p.dataset.title === sel.value) p.dataset.video = dataUrl;
-          });
-          document.getElementById('owner-preview-video').src = dataUrl;
-          document.getElementById('owner-preview-video').style.display = '';
-          document.getElementById('owner-video-preview').style.display = 'block';
-          if (newPw) {
-            localStorage.setItem(OWNER_PW_KEY, btoa(newPw));
-            document.getElementById('owner-new-pw').value = '';
-          }
-          showOwnerMsg('Uploaded & saved ✓');
-          setTimeout(clearOwnerMsg, 2500);
-        };
-        reader.onerror = function() {
-          showOwnerMsg('Could not read file.', true);
-        };
-        reader.readAsDataURL(file);
-        return; // early return — rest runs inside onload
-      }
-
-      // URL tab: save the URL (works for YouTube, Google Drive, MP4, or any direct link)
-      // We check urlVal regardless of which tab is visible — if a URL was typed, save it
-      if (urlVal) {
-        setStoredVideoSrc(sel.value, urlVal);
-        document.querySelectorAll('.pulse-point').forEach(p => {
-          if (p.dataset.title === sel.value) p.dataset.video = urlVal;
-        });
-        // Show preview: embed-able URL (YouTube/Drive) → iframe, else video element
-        const embed = toEmbedUrl(urlVal);
-        const previewEl = document.getElementById('owner-preview-video');
-        const previewWrap = document.getElementById('owner-video-preview');
-        if (embed) {
-          previewEl.style.display = 'none';
-          let previewIframe = document.getElementById('owner-preview-iframe');
-          if (!previewIframe) {
-            previewIframe = document.createElement('iframe');
-            previewIframe.id = 'owner-preview-iframe';
-            previewIframe.style.cssText = 'width:100%;max-height:160px;background:#000;border:1px solid rgba(212,175,55,0.2);';
-            previewIframe.setAttribute('allowfullscreen', '');
-            previewIframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-            previewEl.parentNode.insertBefore(previewIframe, previewEl);
-          }
-          previewIframe.src = embed.src;
-          previewIframe.style.display = 'block';
-        } else {
-          const existingIframe = document.getElementById('owner-preview-iframe');
-          if (existingIframe) { existingIframe.src = ''; existingIframe.style.display = 'none'; }
-          previewEl.style.display = '';
-          previewEl.src = urlVal;
-        }
-        previewWrap.style.display = 'block';
-      } else if (uploadTabVisible && !file) {
-        showOwnerMsg('No video file selected.', true);
-        return;
-      } else if (!urlVal) {
-        showOwnerMsg('No video URL provided.', true);
-        return;
-      }
-
-      if (newPw) {
-        localStorage.setItem(OWNER_PW_KEY, btoa(newPw));
-        document.getElementById('owner-new-pw').value = '';
-      }
-      showOwnerMsg('Saved ✓');
-      setTimeout(clearOwnerMsg, 2500);
-    }
-
-    /* ── Logout ── */
-    function ownerLogout() {
-      sessionStorage.removeItem(OWNER_SESS_KEY);
-      document.getElementById('owner-btn').classList.remove('logged-in');
-      document.getElementById('owner-btn').textContent = '◆ Owner Videos';
+    window.ownerLogout = () => {
+      dragMode = false;
+      endDrag();
+      document.body.classList.remove('drag-mode');
+      document.getElementById('owner-pw-input').value = '';
+      document.getElementById('owner-login-msg').textContent = '';
+      document.getElementById('owner-msg').textContent = '';
+      document.getElementById('owner-msg').classList.remove('show', 'error');
+      document.getElementById('owner-login-section').style.display = 'block';
+      document.getElementById('owner-video-section').style.display = 'none';
+      syncOwnerDragUi();
       closeOwnerPanel();
-    }
+    };
 
-    /* ── Message helpers ── */
-    function showOwnerMsg(text, isError) {
-      const loginVisible = document.getElementById('owner-login-section').style.display !== 'none';
-      const el = document.getElementById(loginVisible ? 'owner-login-msg' : 'owner-msg');
-      if (!el) return;
-      el.textContent = text;
-      el.classList.toggle('error', !!isError);
-      el.classList.add('show');
-    }
-    function clearOwnerMsg() {
-      ['owner-msg', 'owner-login-msg'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) { el.textContent = ''; el.classList.remove('show', 'error'); }
-      });
-    }
+    window.enableDrag = () => {
+      dragMode = true;
+      document.body.classList.add('drag-mode');
+      syncOwnerDragUi();
+      console.log("Drag mode enabled.");
+    };
+    window.disableDrag = () => {
+      dragMode = false;
+      document.body.classList.remove('drag-mode');
+      endDrag();
+      syncOwnerDragUi();
+      console.log("Drag mode disabled.");
+    };
   </script>
-
-
-
-  <script>
-    let adminMode = null;
-    let selectedPointTitle = '';
-    function getStage() {
-      return document.getElementById('stage');
-    }
-    function getPulsePoints() {
-      return Array.from(document.querySelectorAll('.pulse-point'));
-    }
-    function openAdminPanel() {
-      document.getElementById('admin-panel').classList.add('open');
-      populateAdminSelects();
-      syncAdminSections();
-    }
-    function closeAdminPanel() {
-      document.getElementById('admin-panel').classList.remove('open');
-      clearAdminMessage();
-    }
-    function populateAdminSelects() {
-      const ids = ['admin-move-select', 'admin-remove-select', 'admin-video-select'];
-      ids.forEach((id) => {
-        const select = document.getElementById(id);
-        if (!select) return;
-        select.innerHTML = '<option value="">Select a location</option>';
-        getPulsePoints().forEach((point) => {
-          const option = document.createElement('option');
-          option.value = point.dataset.title || '';
-          option.textContent = point.dataset.title || '';
-          select.appendChild(option);
-        });
-      });
-    }
-    function syncAdminSections() {
-      const action = document.getElementById('admin-action').value;
-      ['move', 'add', 'remove', 'video'].forEach((name) => {
-        document.getElementById(`admin-${name}`).style.display = action === name ? 'block' : 'none';
-      });
-      clearAdminMessage();
-    }
-    function setAdminMode(mode) {
-      openAdminPanel();
-      document.getElementById('admin-action').value = mode;
-      syncAdminSections();
-    }
-    function showAdminMessage(text, isError) {
-      const msg = document.getElementById('admin-msg');
-      msg.textContent = text;
-      msg.className = isError ? 'error' : '';
-    }
-    function clearAdminMessage() {
-      showAdminMessage('', false);
-    }
-    function bindPoint(point) {
-      point.setAttribute('tabindex', '0');
-      point.setAttribute('role', 'button');
-      point.setAttribute('aria-label', `View ${point.dataset.title || 'location'}`);
-      point.addEventListener('click', (event) => {
-        event.stopPropagation();
-        if (adminMode === 'remove') {
-          point.remove();
-          populateAdminSelects();
-          adminMode = null;
-          showAdminMessage('Location removed.', false);
-          return;
-        }
-        openModal(point);
-      });
-      point.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          point.click();
-        }
-      });
-    }
-    function addAdminPoint(title, eyebrow, subtitle, desc, x, y) {
-      const point = document.createElement('div');
-      point.className = 'pulse-point';
-      point.style.top = `${y}%`;
-      point.style.left = `${x}%`;
-      point.dataset.title = title;
-      point.dataset.eyebrow = eyebrow;
-      point.dataset.subtitle = subtitle;
-      point.dataset.desc = desc;
-      point.dataset.video = '';
-      point.innerHTML = '<div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div><div class="dot"></div><div class="pulse-label"><div class="label-inner"><span class="l-title"></span><span class="l-sub"></span></div></div>';
-      point.querySelector('.l-title').textContent = title;
-      point.querySelector('.l-sub').textContent = subtitle || eyebrow || '';
-      getStage().appendChild(point);
-      bindPoint(point);
-      populateAdminSelects();
-    }
-    function applyAdminAction() {
-      const action = document.getElementById('admin-action').value;
-      if (!action) {
-        showAdminMessage('Choose an action first.', true);
-        return;
-      }
-      if (action === 'move') {
-        selectedPointTitle = document.getElementById('admin-move-select').value;
-        if (!selectedPointTitle) {
-          showAdminMessage('Select a location to move.', true);
-          return;
-        }
-        adminMode = 'move';
-        closeAdminPanel();
-        document.getElementById('admin-toolbar').classList.add('visible');
-        return;
-      }
-      if (action === 'add') {
-        const title = document.getElementById('admin-add-title').value.trim();
-        if (!title) {
-          showAdminMessage('Add a title before placing the point.', true);
-          return;
-        }
-        adminMode = 'add';
-        closeAdminPanel();
-        document.getElementById('admin-toolbar').classList.add('visible');
-        return;
-      }
-      if (action === 'remove') {
-        const title = document.getElementById('admin-remove-select').value;
-        if (!title) {
-          showAdminMessage('Select a location to remove.', true);
-          return;
-        }
-        const point = getPulsePoints().find((item) => item.dataset.title === title);
-        if (point) {
-          point.remove();
-          populateAdminSelects();
-          showAdminMessage('Location removed.', false);
-        }
-        return;
-      }
-      if (action === 'video') {
-        const title = document.getElementById('admin-video-select').value;
-        const url = document.getElementById('admin-video-url').value.trim();
-        if (!title || !url) {
-          showAdminMessage('Select a location and enter a video URL.', true);
-          return;
-        }
-        const point = getPulsePoints().find((item) => item.dataset.title === title);
-        if (point) {
-          point.dataset.video = url;
-          showAdminMessage('Video URL updated.', false);
-        }
-      }
-    }
-    getStage().addEventListener('click', (event) => {
-      if (!adminMode) return;
-      if (event.target.closest('.pulse-point')) return;
-      const rect = getStage().getBoundingClientRect();
-      const x = (((event.clientX - rect.left) / rect.width) * 100).toFixed(4);
-      const y = (((event.clientY - rect.top) / rect.height) * 100).toFixed(4);
-      if (adminMode === 'move') {
-        const point = getPulsePoints().find((item) => item.dataset.title === selectedPointTitle);
-        if (point) {
-          point.style.left = `${x}%`;
-          point.style.top = `${y}%`;
-        }
-      }
-      if (adminMode === 'add') {
-        addAdminPoint(
-          document.getElementById('admin-add-title').value.trim(),
-          document.getElementById('admin-add-eyebrow').value.trim() || 'Location - SRCC',
-          document.getElementById('admin-add-subtitle').value.trim(),
-          document.getElementById('admin-add-desc').value.trim(),
-          x,
-          y
-        );
-      }
-      adminMode = null;
-      document.getElementById('admin-toolbar').classList.remove('visible');
-    });
-    getPulsePoints().forEach((point) => {
-      if (!point.dataset.adminBound) {
-        point.dataset.adminBound = '1';
-        bindPoint(point);
-      }
-    });
-  </script>
-
-  <!-- Mobile Pan/Zoom Script -->
-  <script>
-    (function() {
-      if (window.innerWidth > 768) return;
-
-      const container = document.getElementById('zoom-container');
-      const stage = document.getElementById('stage');
-      if (!container || !stage) return;
-
-      let scale = 1.5;
-      let translateX = 0;
-      let translateY = 0;
-      const MIN_SCALE = 1;
-      const MAX_SCALE = 3;
-
-      function updateTransform() {
-        container.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-      }
-
-      let isDragging = false;
-      let startX, startY;
-      let lastTouchDist = 0;
-      let lastTouchMidX = 0;
-      let lastTouchMidY = 0;
-
-      function getDistance(t1, t2) {
-        const dx = t1.clientX - t2.clientX;
-        const dy = t1.clientY - t2.clientY;
-        return Math.sqrt(dx * dx + dy * dy);
-      }
-
-      function getMidpoint(t1, t2) {
-        return {
-          x: (t1.clientX + t2.clientX) / 2,
-          y: (t1.clientY + t2.clientY) / 2
-        };
-      }
-
-      stage.addEventListener('touchstart', function(e) {
-        if (e.touches.length === 1) {
-          isDragging = true;
-          startX = e.touches[0].clientX - translateX;
-          startY = e.touches[0].clientY - translateY;
-          container.classList.add('dragging');
-        } else if (e.touches.length === 2) {
-          isDragging = false;
-          lastTouchDist = getDistance(e.touches[0], e.touches[1]);
-          const mid = getMidpoint(e.touches[0], e.touches[1]);
-          lastTouchMidX = mid.x;
-          lastTouchMidY = mid.y;
-        }
-        e.preventDefault();
-      }, { passive: false });
-
-      stage.addEventListener('touchmove', function(e) {
-        if (e.touches.length === 1 && isDragging) {
-          translateX = e.touches[0].clientX - startX;
-          translateY = e.touches[0].clientY - startY;
-          updateTransform();
-        } else if (e.touches.length === 2) {
-          const dist = getDistance(e.touches[0], e.touches[1]);
-          const mid = getMidpoint(e.touches[0], e.touches[1]);
-          
-          const scaleFactor = dist / lastTouchDist;
-          const newScale = Math.min(Math.max(scale * scaleFactor, MIN_SCALE), MAX_SCALE);
-          
-          const scaleChange = newScale / scale;
-          translateX = mid.x - (mid.x - translateX) * scaleChange;
-          translateY = mid.y - (mid.y - translateY) * scaleChange;
-          
-          scale = newScale;
-          lastTouchDist = dist;
-          lastTouchMidX = mid.x;
-          lastTouchMidY = mid.y;
-          
-          updateTransform();
-        }
-        e.preventDefault();
-      }, { passive: false });
-
-      stage.addEventListener('touchend', function(e) {
-        if (e.touches.length === 0) {
-          isDragging = false;
-          container.classList.remove('dragging');
-        } else if (e.touches.length === 1) {
-          startX = e.touches[0].clientX - translateX;
-          startY = e.touches[0].clientY - translateY;
-          isDragging = true;
-        }
-      });
-
-      // Mouse support for testing on desktop
-      let isMouseDragging = false;
-      let mouseStartX, mouseStartY;
-
-      stage.addEventListener('mousedown', function(e) {
-        isMouseDragging = true;
-        mouseStartX = e.clientX - translateX;
-        mouseStartY = e.clientY - translateY;
-        container.classList.add('dragging');
-      });
-
-      window.addEventListener('mousemove', function(e) {
-        if (!isMouseDragging) return;
-        translateX = e.clientX - mouseStartX;
-        translateY = e.clientY - mouseStartY;
-        updateTransform();
-      });
-
-      window.addEventListener('mouseup', function() {
-        isMouseDragging = false;
-        container.classList.remove('dragging');
-      });
-
-      stage.addEventListener('wheel', function(e) {
-        e.preventDefault();
-        const delta = e.deltaY > 0 ? 0.9 : 1.1;
-        scale = Math.min(Math.max(scale * delta, MIN_SCALE), MAX_SCALE);
-        updateTransform();
-      }, { passive: false });
-
-      // Initial transform
-      updateTransform();
-    })();
-  </script>
-
-
+</body>
+</html>

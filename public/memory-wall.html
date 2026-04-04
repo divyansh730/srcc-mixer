@@ -124,6 +124,7 @@
       color: #2c241a;
       width: min(380px, 85vw);
       padding: 35px;
+      margin: 16px;
       box-shadow: 
         5px 5px 20px rgba(0,0,0,0.5),
         inset 0 0 40px rgba(212, 175, 55, 0.05);
@@ -193,10 +194,14 @@
       border-top: 1px solid rgba(0,0,0,0.06);
       padding-top: 15px;
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       font-family: 'Cinzel', serif;
       font-size: 12px;
       letter-spacing: 0.1em;
+    }
+
+    .note-name {
+      color: rgba(0,0,0,0.5);
     }
 
     .note-batch {
@@ -524,7 +529,7 @@
         position: relative !important;
         left: 0 !important;
         top: 0 !important;
-        margin: 20px auto; /* Tighter vertical spacing */
+        margin: 24px auto; /* More vertical spacing */
         width: 92vw;
         padding: 28px 24px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.6);

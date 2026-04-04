@@ -835,6 +835,11 @@
         font-size: 12px;
         line-height: 1.45;
       }
+      .pulse-point.mobile-active .pulse-label {
+        display: flex !important;
+        opacity: 1 !important;
+        transform: translateX(-50%) translateY(0) !important;
+      }
     }
   </style>
 </head>
@@ -961,7 +966,7 @@
     </div>
 
     <!-- PB Lawns -->
-    <div class="pulse-point" style="top: 91.6411%; left: 1.98438%;" data-title="PB Lawns" data-eyebrow="SRCC PB Lawns" data-subtitle="Memories on the Green" data-desc="The PB Lawns - a cherished open space where students gather for events, festivals and quiet afternoons, creating memories that last well beyond graduation." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774764962/WhatsApp_Video_2026-03-28_at_21.34.23_msksey.mp4">
+    <div class="pulse-point" style="top: 91.6411%; left: 12%;" data-title="PB Lawns" data-eyebrow="SRCC PB Lawns" data-subtitle="Memories on the Green" data-desc="The PB Lawns - a cherished open space where students gather for events, festivals and quiet afternoons, creating memories that last well beyond graduation." data-video="https://res.cloudinary.com/dvdnqska5/video/upload/v1774764962/WhatsApp_Video_2026-03-28_at_21.34.23_msksey.mp4">
       <div class="coord-badge"></div><div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
       <div class="dot"></div>
       <div class="pulse-label"><div class="label-inner">
@@ -1001,7 +1006,7 @@
       <div class="gold-rule"><span>◆</span></div>
       <div id="modal-footer">
         <p id="modal-desc"></p>
-        <span id="modal-badge">30 Years of Excellence</span>
+        <span id="modal-badge" style="display: none;"></span>
       </div>
     </div>
   </div>
@@ -1146,13 +1151,24 @@
     }
 
     document.querySelectorAll('.pulse-point').forEach(point => {
-      point.addEventListener('mouseenter', () => setReveal(point));
-      point.addEventListener('mouseleave', clearReveal);
+      point.addEventListener('mouseenter', () => { if (window.innerWidth > 600) setReveal(point); });
+      point.addEventListener('mouseleave', () => { if (window.innerWidth > 600) clearReveal(); });
       point.addEventListener('mousedown', e => startDrag(e, point));
       point.addEventListener('touchstart', e => startDrag(e, point), { passive: false });
       point.addEventListener('click', e => {
         if (dragMode) { e.stopPropagation(); return; }
         e.stopPropagation();
+        
+        if (window.innerWidth <= 600) {
+          const isActive = point.classList.contains('mobile-active');
+          if (!isActive) {
+             document.querySelectorAll('.pulse-point').forEach(p => p.classList.remove('mobile-active'));
+             point.classList.add('mobile-active');
+             setReveal(point);
+             return;
+          }
+        }
+        
         openModal(point);
       });
     });

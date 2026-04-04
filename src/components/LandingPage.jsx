@@ -115,7 +115,7 @@ export default function LandingPage() {
       style={{
         background: "linear-gradient(180deg, #0A0500 0%, #0D0602 100%)",
         position: "relative",
-        padding: isMobile ? "0px 16px 0px" : "0px 40px 0px",
+        padding: isMobile ? "0px 16px 44px" : "0px 40px 60px",
       }}
     >
 

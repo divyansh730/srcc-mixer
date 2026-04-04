@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import FilmStrip from "./FilmStrip";
 
 const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`;
 const MEMORY_WALL_PAGE = `${import.meta.env.BASE_URL}memory-wall.html`;
@@ -8,7 +9,7 @@ const MIXER_LOGO = assetUrl("Mixer logo.png");
 const BG_CLOCK = assetUrl("srcc-clock.jpg");
 const BG_CORRIDOR = assetUrl("srcc-corridor.jpg");
 
-const TOTAL = 5;
+const TOTAL = 10;
 
 export default function ScrollStoryV2() {
   const clockBgRef = useRef(null);
@@ -20,6 +21,15 @@ export default function ScrollStoryV2() {
   const mlTextRef = useRef(null);
   const countdownRef = useRef(null);
   const mlSubRef = useRef(null);
+  const dialBgRef = useRef(null);
+  const revealRef = useRef(null);
+  const ring1Ref = useRef(null);
+  const ring2Ref = useRef(null);
+  const ring3Ref = useRef(null);
+  const ring4Ref = useRef(null);
+  const ring5Ref = useRef(null);
+  const outTickRef = useRef(null);
+  const inTickRef = useRef(null);
 
   const [showCountdownInHeader, setShowCountdownInHeader] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -74,65 +84,78 @@ export default function ScrollStoryV2() {
   useEffect(() => {
     let winH = window.innerHeight;
     let winW = window.innerWidth;
-    let ticking = false;
     let lastSy = 0;
-
-    const onResize = () => {
-      winH = window.innerHeight;
-      winW = window.innerWidth;
-    };
+    let animId;
+    let lastTime = performance.now();
+    const speeds = { r1: 2.5, r2: -3.8, r3: 1.8, r4: -1.2, r5: 4.2, out: -2.0, inn: 3.0 };
+    const perp = { r1: 0, r2: 0, r3: 0, r4: 0, r5: 0, out: 0, inn: 0 };
+    const onResize = () => { winH = window.innerHeight; winW = window.innerWidth; };
     window.addEventListener("resize", onResize, { passive: true });
-
     const ease = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
     const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
     const range = (p, a, b) => clamp((p - a) / (b - a), 0, 1);
-
-    const update = () => {
+    const render = (now) => {
+      const dt = Math.min((now - lastTime) / 1000, 0.1);
+      lastTime = now;
+      perp.r1 += speeds.r1 * dt; perp.r2 += speeds.r2 * dt; perp.r3 += speeds.r3 * dt;
+      perp.r4 += speeds.r4 * dt; perp.r5 += speeds.r5 * dt; perp.out += speeds.out * dt; perp.inn += speeds.inn * dt;
       const sy = lastSy;
       const total = winH * TOTAL;
       const p = clamp(sy / total, 0, 1);
-
       if (clockBgRef.current) {
         const ty = -p * 22;
-        const op = 1 - ease(range(p, 0.3, 0.56));
+        const op = 1 - Math.min(ease(range(p, 0.25, 0.45)), 1);
         clockBgRef.current.style.opacity = op;
         clockBgRef.current.style.transform = `translate3d(0, ${ty}%, 0)`;
       }
-
-      if (corridorBgRef.current) {
-        const op = ease(range(p, 0.3, 0.58));
-        const ty = (1 - op) * 8;
-        corridorBgRef.current.style.opacity = op;
-        corridorBgRef.current.style.transform = `translate3d(0, ${ty}%, 0)`;
+      if (dialBgRef.current) {
+        const inOp = ease(range(p, 0.35, 0.50));
+        const outOpOp = ease(range(p, 0.70, 0.80));
+        const currentOp = Math.min(inOp, 1) * (1 - outOpOp);
+        const expandP = range(p, 0.52, 0.82);
+        const sc = 1 + (expandP * expandP) * 14;
+        dialBgRef.current.style.opacity = currentOp;
+        dialBgRef.current.style.transform = `translate3d(0,0,0) scale(${sc})`;
+        const sr1 = p * 90, sr2 = -p * 130, sr3 = p * 170;
+        const sr4 = -p * 60, sr5 = p * 200, srOut = -p * 140, srIn = p * 180;
+        if (ring1Ref.current) ring1Ref.current.style.transform = `rotate(${perp.r1 + sr1}deg)`;
+        if (ring2Ref.current) ring2Ref.current.style.transform = `rotate(${perp.r2 + sr2}deg)`;
+        if (ring3Ref.current) ring3Ref.current.style.transform = `rotate(${perp.r3 + sr3}deg)`;
+        if (ring4Ref.current) ring4Ref.current.style.transform = `rotate(${perp.r4 + sr4}deg)`;
+        if (ring5Ref.current) ring5Ref.current.style.transform = `rotate(${perp.r5 + sr5}deg)`;
+        if (outTickRef.current) outTickRef.current.style.transform = `rotate(${perp.out + srOut}deg)`;
+        if (inTickRef.current) inTickRef.current.style.transform = `rotate(${perp.inn + srIn}deg)`;
+        if (revealRef.current) {
+          const revealOp = ease(range(p, 0.70, 0.82));
+          const revealTy = 40 * (1 - ease(range(p, 0.70, 0.92)));
+          revealRef.current.style.opacity = revealOp;
+          revealRef.current.style.transform = `translateY(${revealTy}px)`;
+        }
       }
-
       if (headerRef.current) {
-        const hop = ease(range(p, 0.34, 0.46));
+        const hop = ease(range(p, 0.30, 0.40));
         headerRef.current.style.opacity = hop;
         headerRef.current.style.pointerEvents = hop > 0.5 ? "all" : "none";
       }
-
       if (countdownRef.current) {
         const rect = countdownRef.current.getBoundingClientRect();
         setShowCountdownInHeader(rect.top < winH * 0.5);
       }
-
       if (logoRef.current) {
-        const lp = ease(range(p, 0.12, 0.44));
-        const startSize = isMobile ? 80 : 96; // Slightly adjusted start size
+        const lp = ease(range(p, 0.10, 0.40));
+        const startSize = isMobile ? 80 : 96;
         const size = startSize - lp * (startSize - logoEndSize);
         const startX = winW / 2 - startSize / 2;
-        const startY = isMobile ? winH * 0.16 : winH * 0.22; // Moved up slightly to be "at the top"
+        const startY = isMobile ? winH * 0.16 : winH * 0.22;
         const x = startX + lp * (logoEndX - startX);
         const y = startY + lp * (logoEndY - startY);
         logoRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
         logoRef.current.style.width = `${size}px`;
         logoRef.current.style.height = `${size}px`;
-        logoRef.current.style.opacity = p > 0.46 ? 0 : 1;
+        logoRef.current.style.opacity = p > 0.42 ? 0 : 1;
       }
-
       if (contentRef.current) {
-        const cp = ease(range(p, 0.1, 0.42));
+        const cp = ease(range(p, 0.08, 0.35));
         const op = Math.max(1 - cp * (isMobile ? 1.35 : 1.65), 0);
         const tx = cp * -winW * (isMobile ? 0.08 : 0.27);
         const ty = cp * -winH * (isMobile ? 0.22 : 0.36);
@@ -140,75 +163,50 @@ export default function ScrollStoryV2() {
         contentRef.current.style.opacity = op;
         contentRef.current.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${sc})`;
       }
-
       if (scrollIndRef.current) {
-        scrollIndRef.current.style.opacity = Math.max(1 - ease(range(p, 0, 0.08)), 0);
+        const sop = 1 - ease(range(p, 0.05, 0.18));
+        scrollIndRef.current.style.opacity = sop;
       }
-
       if (mlTextRef.current) {
-        if (p >= 0.68 && !mlTextRef.current.dataset.triggered) {
-          mlTextRef.current.dataset.triggered = "true";
-          mlTextRef.current.style.transition =
-            "opacity 2.2s cubic-bezier(0.16,1,0.3,1), transform 2.4s cubic-bezier(0.16,1,0.3,1)";
-          mlTextRef.current.style.opacity = 1;
-          mlTextRef.current.style.transform = "translate3d(0, 0px, 0)";
-        } else if (p < 0.68 && mlTextRef.current.dataset.triggered) {
-          mlTextRef.current.dataset.triggered = "";
-          mlTextRef.current.style.transition = "opacity 0.6s ease, transform 0.6s ease";
-          mlTextRef.current.style.opacity = 0;
-          mlTextRef.current.style.transform = "translate3d(0, 80px, 0)";
-        }
+        const inOp = ease(range(p, 0.46, 0.54));
+        const outOpOp = ease(range(p, 0.66, 0.72));
+        const finalOp = inOp * (1 - outOpOp);
+        const ty = inOp < 1 ? 60 * (1 - inOp) : -60 * outOpOp;
+        mlTextRef.current.style.transition = 'none';
+        mlTextRef.current.style.opacity = finalOp;
+        mlTextRef.current.style.transform = `translate3d(0, ${ty}px, 0)`;
       }
-
       if (countdownRef.current) {
-        if (p >= 0.72 && !countdownRef.current.dataset.triggered) {
-          countdownRef.current.dataset.triggered = "true";
-          countdownRef.current.style.transition =
-            "opacity 2s cubic-bezier(0.16,1,0.3,1) 0.3s, transform 2s cubic-bezier(0.16,1,0.3,1) 0.3s";
-          countdownRef.current.style.opacity = 1;
-          countdownRef.current.style.transform = "translate3d(0, 0px, 0)";
-        } else if (p < 0.72 && countdownRef.current.dataset.triggered) {
-          countdownRef.current.dataset.triggered = "";
-          countdownRef.current.style.transition = "opacity 0.5s ease, transform 0.5s ease";
-          countdownRef.current.style.opacity = 0;
-          countdownRef.current.style.transform = "translate3d(0, 32px, 0)";
-        }
+        const inOp = ease(range(p, 0.48, 0.56));
+        const outOpOp = ease(range(p, 0.67, 0.73));
+        const finalOp = inOp * (1 - outOpOp);
+        const ty = inOp < 1 ? 40 * (1 - inOp) : -40 * outOpOp;
+        countdownRef.current.style.transition = 'none';
+        countdownRef.current.style.opacity = finalOp;
+        countdownRef.current.style.transform = `translate3d(0, ${ty}px, 0)`;
       }
-
       if (mlSubRef.current) {
-        if (p >= 0.76 && !mlSubRef.current.dataset.triggered) {
-          mlSubRef.current.dataset.triggered = "true";
-          mlSubRef.current.style.transition =
-            "opacity 2s cubic-bezier(0.16,1,0.3,1) 0.5s, transform 2s cubic-bezier(0.16,1,0.3,1) 0.5s";
-          mlSubRef.current.style.opacity = 1;
-          mlSubRef.current.style.transform = "translate3d(0, 0px, 0)";
-        } else if (p < 0.76 && mlSubRef.current.dataset.triggered) {
-          mlSubRef.current.dataset.triggered = "";
-          mlSubRef.current.style.transition = "opacity 0.5s ease, transform 0.5s ease";
-          mlSubRef.current.style.opacity = 0;
-          mlSubRef.current.style.transform = "translate3d(0, 32px, 0)";
-        }
+        const inOp = ease(range(p, 0.50, 0.58));
+        const outOpOp = ease(range(p, 0.68, 0.74));
+        const finalOp = inOp * (1 - outOpOp);
+        const ty = inOp < 1 ? 40 * (1 - inOp) : -40 * outOpOp;
+        mlSubRef.current.style.transition = 'none';
+        mlSubRef.current.style.opacity = finalOp;
+        mlSubRef.current.style.transform = `translate3d(0, ${ty}px, 0)`;
       }
-
-      ticking = false;
+      animId = requestAnimationFrame(render);
     };
-
-    const onScroll = () => {
-      lastSy = window.scrollY;
-      if (!ticking) {
-        requestAnimationFrame(update);
-        ticking = true;
-      }
-    };
-
+    const onScroll = () => { lastSy = window.scrollY; };
     window.addEventListener("scroll", onScroll, { passive: true });
-    update();
-
+    animId = requestAnimationFrame(render);
     return () => {
+      cancelAnimationFrame(animId);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
     };
   }, [isMobile, logoEndSize, logoEndX, logoEndY]);
+
+
 
   return (
     <>
@@ -220,8 +218,8 @@ export default function ScrollStoryV2() {
           left: 0,
           right: 0,
           height: `${headerTotalHeight}px`,
-          background: "rgba(6,2,0,0.985)", // More opaque for better visibility
-          borderBottom: "1px solid rgba(201,168,76,0.22)", // Slightly stronger border
+          background: "rgba(6,2,0,0.985)",
+          borderBottom: "1px solid rgba(201,168,76,0.22)",
           display: "flex",
           flexDirection: "column",
           alignItems: "stretch",
@@ -230,9 +228,9 @@ export default function ScrollStoryV2() {
           zIndex: 200,
           opacity: 0,
           pointerEvents: "none",
-          backdropFilter: "blur(18px)", // Enhanced blur
+          backdropFilter: "blur(18px)",
           WebkitBackdropFilter: "blur(18px)",
-          boxShadow: "0 4px 30px rgba(0,0,0,0.4)", // Added shadow for visibility
+          boxShadow: "0 4px 30px rgba(0,0,0,0.4)",
         }}
       >
         <div
@@ -246,121 +244,84 @@ export default function ScrollStoryV2() {
             flexShrink: 0,
           }}
         >
-        <a
-          href="#top"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: isMobile ? "10px" : "16px",
-            minWidth: 0,
-            textDecoration: "none",
-            color: "inherit",
-          }}
-        >
-          <img
-            src={SRCC_LOGO}
-            alt="SRCC"
+          <a
+            href="#top"
             style={{
-              width: isMobile ? "34px" : "40px",
-              height: isMobile ? "34px" : "40px",
-              flexShrink: 0,
-              objectFit: "contain",
-              filter: "drop-shadow(0 0 8px rgba(201,168,76,0.3))",
+              display: "flex",
+              alignItems: "center",
+              gap: isMobile ? "10px" : "16px",
+              minWidth: 0,
+              textDecoration: "none",
+              color: "inherit",
             }}
-          />
-          <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.15, minWidth: 0 }}>
-            <span
+          >
+            <img
+              src={SRCC_LOGO}
+              alt="SRCC"
               style={{
-                fontFamily: "'Cinzel', serif",
-                fontSize: isMobile ? (isVeryCompactMobile ? "11px" : "12px") : "17px",
-                letterSpacing: isMobile ? (isVeryCompactMobile ? "0.06em" : "0.08em") : "0.15em",
-                color: "#E2E6ED",
-                textTransform: "uppercase",
-                fontWeight: 600,
-                whiteSpace: "nowrap",
+                width: isMobile ? "34px" : "40px",
+                height: isMobile ? "34px" : "40px",
+                flexShrink: 0,
+                objectFit: "contain",
+                filter: "drop-shadow(0 0 8px rgba(201,168,76,0.3))",
               }}
-            >
-              The Placement Cell
-            </span>
-            <span
-              style={{
-                fontFamily: "'Cinzel', serif",
-                fontSize: isMobile ? (isVeryCompactMobile ? "7.5px" : "8px") : "11.5px",
-                letterSpacing: isMobile ? (isVeryCompactMobile ? "0.04em" : "0.06em") : "0.10em",
-                color: "#C9A84C",
-                textTransform: "uppercase",
-                fontWeight: 600,
-                marginTop: "2px",
-                whiteSpace: "nowrap",
-              }}
-            >
-              Shri Ram College of Commerce
-            </span>
-          </div>
-          <img
-            src={MIXER_LOGO}
-            alt="Mixer Logo"
-            style={{
-              width: "57px",
-              height: "57px",
-              objectFit: "contain",
-              flexShrink: 0,
-              marginLeft: isMobile ? "0" : "-3px",
-              filter: "drop-shadow(0 0 10px rgba(201,168,76,0.35))",
-            }}
-          />
-        </a>
-        <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "10px" : "3rem", minWidth: 0 }}>
-          {isMobile ? (
-            <>
-              <div
+            />
+            <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.15, minWidth: 0 }}>
+              <span
                 style={{
-                  opacity: showCountdownInHeader && !isVeryCompactMobile ? 1 : 0,
-                  transform: `translateY(${showCountdownInHeader ? "0px" : "4px"})`,
-                  transition: "opacity 0.35s ease, transform 0.35s ease",
                   fontFamily: "'Cinzel', serif",
-                  fontSize: isCompactMobile ? "10px" : "12px",
-                  color: "#C9A84C",
-                  letterSpacing: isCompactMobile ? "0.04em" : "0.08em",
-                  whiteSpace: "nowrap",
-                  textAlign: "right",
+                  fontSize: isMobile ? (isVeryCompactMobile ? "11px" : "12px") : "17px",
+                  letterSpacing: isMobile ? (isVeryCompactMobile ? "0.06em" : "0.08em") : "0.15em",
+                  color: "#E2E6ED",
+                  textTransform: "uppercase",
                   fontWeight: 600,
+                  whiteSpace: "nowrap",
                 }}
               >
-                {`${String(countdown.days).padStart(2, "0")}:${String(countdown.hours).padStart(
-                  2,
-                  "0"
-                )}:${String(countdown.minutes).padStart(2, "0")}:${String(countdown.seconds).padStart(2, "0")}`}
-              </div>
-              <button
-                type="button"
-                aria-label="Open navigation menu"
-                aria-expanded={menuOpen}
-                className={`mobile-menu-button${menuOpen ? " mobile-menu-button-open" : ""}`}
-                onClick={() => setMenuOpen((open) => !open)}
+                The Placement Cell
+              </span>
+              <span
                 style={{
-                  width: isVeryCompactMobile ? "42px" : "44px",
-                  height: isVeryCompactMobile ? "42px" : "44px",
-                  flexShrink: 0,
+                  fontFamily: "'Cinzel', serif",
+                  fontSize: isMobile ? (isVeryCompactMobile ? "7.5px" : "8px") : "11.5px",
+                  letterSpacing: isMobile ? (isVeryCompactMobile ? "0.04em" : "0.06em") : "0.10em",
+                  color: "#C9A84C",
+                  textTransform: "uppercase",
+                  fontWeight: 600,
+                  marginTop: "2px",
+                  whiteSpace: "nowrap",
                 }}
               >
-                <span />
-                <span />
-                <span />
-              </button>
-            </>
-          ) : (
-            <>
-              {!isCompactMobile && (
+                Shri Ram College of Commerce
+              </span>
+            </div>
+            <img
+              src={MIXER_LOGO}
+              alt="Mixer Logo"
+              style={{
+                width: "57px",
+                height: "57px",
+                objectFit: "contain",
+                flexShrink: 0,
+                marginLeft: isMobile ? "0" : "-3px",
+                filter: "drop-shadow(0 0 10px rgba(201,168,76,0.35))",
+              }}
+            />
+          </a>
+          <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "10px" : "3rem", minWidth: 0 }}>
+            {isMobile ? (
+              <>
                 <div
                   style={{
-                    opacity: showCountdownInHeader ? 1 : 0,
-                    transition: "opacity 0.5s",
+                    opacity: showCountdownInHeader && !isVeryCompactMobile ? 1 : 0,
+                    transform: `translateY(${showCountdownInHeader ? "0px" : "4px"})`,
+                    transition: "opacity 0.35s ease, transform 0.35s ease",
                     fontFamily: "'Cinzel', serif",
-                    fontSize: "19px", // Slightly bigger
+                    fontSize: isCompactMobile ? "10px" : "12px",
                     color: "#C9A84C",
-                    letterSpacing: "0.12em",
+                    letterSpacing: isCompactMobile ? "0.04em" : "0.08em",
                     whiteSpace: "nowrap",
+                    textAlign: "right",
                     fontWeight: 600,
                   }}
                 >
@@ -369,21 +330,58 @@ export default function ScrollStoryV2() {
                     "0"
                   )}:${String(countdown.minutes).padStart(2, "0")}:${String(countdown.seconds).padStart(2, "0")}`}
                 </div>
-              )}
-              <nav style={{ display: "flex", gap: "36px", flexWrap: "wrap", justifyContent: "flex-end" }}>
-                <a href={MEMORY_WALL_PAGE} className="nav-link" style={{ fontSize: "11px" }}>
-                  Memory Wall
-                </a>
-                <a href={GALLERY_PAGE} className="nav-link" style={{ fontSize: "11px" }}>
-                  PC Gallery
-                </a>
-                <a href="#birdseye" className="nav-link" style={{ fontSize: "11px" }}>
-                  Campus Birdseye
-                </a>
-              </nav>
-            </>
-          )}
-        </div>
+                <button
+                  type="button"
+                  aria-label="Open navigation menu"
+                  aria-expanded={menuOpen}
+                  className={`mobile-menu-button${menuOpen ? " mobile-menu-button-open" : ""}`}
+                  onClick={() => setMenuOpen((open) => !open)}
+                  style={{
+                    width: isVeryCompactMobile ? "42px" : "44px",
+                    height: isVeryCompactMobile ? "42px" : "44px",
+                    flexShrink: 0,
+                  }}
+                >
+                  <span />
+                  <span />
+                  <span />
+                </button>
+              </>
+            ) : (
+              <>
+                {!isCompactMobile && (
+                  <div
+                    style={{
+                      opacity: showCountdownInHeader ? 1 : 0,
+                      transition: "opacity 0.5s",
+                      fontFamily: "'Cinzel', serif",
+                      fontSize: "19px", // Slightly bigger
+                      color: "#C9A84C",
+                      letterSpacing: "0.12em",
+                      whiteSpace: "nowrap",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {`${String(countdown.days).padStart(2, "0")}:${String(countdown.hours).padStart(
+                      2,
+                      "0"
+                    )}:${String(countdown.minutes).padStart(2, "0")}:${String(countdown.seconds).padStart(2, "0")}`}
+                  </div>
+                )}
+                <nav style={{ display: "flex", gap: "36px", flexWrap: "wrap", justifyContent: "flex-end" }}>
+                  <a href={MEMORY_WALL_PAGE} className="nav-link" style={{ fontSize: "11px" }}>
+                    Memory Wall
+                  </a>
+                  <a href={GALLERY_PAGE} className="nav-link" style={{ fontSize: "11px" }}>
+                    PC Gallery
+                  </a>
+                  <a href="#birdseye" className="nav-link" style={{ fontSize: "11px" }}>
+                    Campus Birdseye
+                  </a>
+                </nav>
+              </>
+            )}
+          </div>
         </div>
       </header>
 
@@ -439,6 +437,7 @@ export default function ScrollStoryV2() {
             height: "100vh",
             overflow: "hidden",
             isolation: "isolate",
+            backgroundColor: "#000000",
           }}
         >
           <div
@@ -465,27 +464,206 @@ export default function ScrollStoryV2() {
           </div>
 
           <div
-            ref={corridorBgRef}
+            ref={dialBgRef}
             style={{
               position: "absolute",
-              inset: "-20% 0 -20% 0",
+              inset: "-100vw -100vh", /* Huge inset so elements aren't clipped */
               zIndex: 0,
-              overflow: "hidden",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              opacity: 0,
+              willChange: "transform, opacity",
+              pointerEvents: "none"
+            }}
+          >
+            <svg viewBox="0 0 1000 1000" style={{ width: "min(115vw, 115vh)", height: "min(115vw, 115vh)", overflow: "visible", maxWidth: "1200px", opacity: 0.75 }}>
+              <defs>
+                <radialGradient id="ringGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="60%" stopColor="#C9A84C" stopOpacity="0" />
+                  <stop offset="100%" stopColor="#C9A84C" stopOpacity="0.12" />
+                </radialGradient>
+                <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#2A1F00" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#000000" stopOpacity="1" />
+                </radialGradient>
+                {/* Radial mask: center is transparent, outer rim is visible */}
+                <radialGradient id="centerFade" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="white" stopOpacity="0" />
+                  <stop offset="20%" stopColor="white" stopOpacity="0" />
+                  <stop offset="40%" stopColor="white" stopOpacity="0.3" />
+                  <stop offset="55%" stopColor="white" stopOpacity="0.7" />
+                  <stop offset="70%" stopColor="white" stopOpacity="0.95" />
+                  <stop offset="100%" stopColor="white" stopOpacity="1" />
+                </radialGradient>
+                <mask id="dialMask" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="1000">
+                  <rect x="0" y="0" width="1000" height="1000" fill="url(#centerFade)" />
+                </mask>
+                <filter id="goldGlow" x="-30%" y="-30%" width="160%" height="160%">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+                <filter id="softGlow">
+                  <feGaussianBlur stdDeviation="2" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+                <filter id="heavyGlow">
+                  <feGaussianBlur stdDeviation="5" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+              </defs>
+
+              <g mask="url(#dialMask)">
+                {/* === OUTERMOST THICK BAND === */}
+                <circle cx="500" cy="500" r="488" fill="none" stroke="#C9A84C" strokeWidth="4" strokeOpacity="0.25" />
+                <circle ref={ring1Ref} cx="500" cy="500" r="480" fill="url(#ringGlow)" stroke="#C9A84C" strokeWidth="2" strokeOpacity="0.7" transform-origin="500px 500px" />
+                <circle cx="500" cy="500" r="472" fill="none" stroke="#C9A84C" strokeWidth="1" strokeOpacity="0.3" />
+
+                {/* === BEZEL TEETH — 120 fine + 12 bold hour marks === */}
+                <g ref={outTickRef} transform-origin="500px 500px">
+                  {Array.from({ length: 120 }).map((_, i) => {
+                    const isHour = i % 10 === 0;
+                    const isMajor = i % 5 === 0;
+                    return (
+                      <line
+                        key={`bz-${i}`}
+                        x1="500" y1={isHour ? "6" : isMajor ? "14" : "18"}
+                        x2="500" y2={isHour ? "40" : isMajor ? "32" : "26"}
+                        stroke="#C9A84C"
+                        strokeWidth={isHour ? "3" : isMajor ? "1.8" : "0.7"}
+                        strokeOpacity={isHour ? "1" : isMajor ? "0.7" : "0.3"}
+                        transform={`rotate(${i * 3} 500 500)`}
+                      />
+                    );
+                  })}
+                  {/* Ornate fleur-de-lis at 12 positions */}
+                  {Array.from({ length: 12 }).map((_, i) => (
+                    <g key={`fl-${i}`} transform={`rotate(${i * 30} 500 500)`}>
+                      <line x1="500" y1="42" x2="500" y2="62" stroke="#C9A84C" strokeWidth="2" />
+                      <polygon points="495,62 500,72 505,62" fill="#C9A84C" fillOpacity="0.9" />
+                      <path d="M495,58 Q490,52 493,47 Q496,53 500,56" fill="#C9A84C" fillOpacity="0.55" />
+                      <path d="M505,58 Q510,52 507,47 Q504,53 500,56" fill="#C9A84C" fillOpacity="0.55" />
+                      <circle cx="500" cy="44" r="1.5" fill="#C9A84C" fillOpacity="0.8" />
+                    </g>
+                  ))}
+                </g>
+
+                {/* === FILLED CHAPTER BAND (outer engraved ring) === */}
+                <circle cx="500" cy="500" r="445" fill="none" stroke="#C9A84C" strokeWidth="3" strokeOpacity="0.6" />
+                <circle ref={ring2Ref} cx="500" cy="500" r="430" fill="none" stroke="#C9A84C" strokeWidth="24" strokeOpacity="0.06" transform-origin="500px 500px" />
+                <circle cx="500" cy="500" r="430" fill="none" stroke="#C9A84C" strokeWidth="1" strokeDasharray="6 4" strokeOpacity="0.4" />
+                <circle cx="500" cy="500" r="415" fill="none" stroke="#C9A84C" strokeWidth="3" strokeOpacity="0.6" />
+                {/* Minute hash marks in the chapter band */}
+                {Array.from({ length: 60 }).map((_, i) => (
+                  <line
+                    key={`ch-${i}`}
+                    x1="500" y1="416" x2="500" y2={i % 5 === 0 ? "444" : "424"}
+                    stroke="#C9A84C"
+                    strokeWidth={i % 5 === 0 ? "1.5" : "0.5"}
+                    strokeOpacity={i % 5 === 0 ? "0.8" : "0.35"}
+                    transform={`rotate(${i * 6} 500 500)`}
+                  />
+                ))}
+
+                {/* === ORNATE FILIGREE DOUBLE-RING === */}
+                <circle ref={ring3Ref} cx="500" cy="500" r="380" fill="none" stroke="#C9A84C" strokeWidth="1.5" strokeOpacity="0.5" transform-origin="500px 500px" />
+                <circle cx="500" cy="500" r="360" fill="none" stroke="#C9A84C" strokeWidth="2.5" filter="url(#goldGlow)" strokeOpacity="0.85" />
+                <circle cx="500" cy="500" r="340" fill="none" stroke="#C9A84C" strokeWidth="1" strokeOpacity="0.4" />
+                {/* Filigree scrollwork around the 360 ring — 24 ornamental arcs */}
+                {Array.from({ length: 24 }).map((_, i) => {
+                  const a1 = i * 15;
+                  const a2 = a1 + 7.5;
+                  const r = 360;
+                  const rad1 = (a1 * Math.PI) / 180;
+                  const rad2 = (a2 * Math.PI) / 180;
+                  const x1 = 500 + r * Math.sin(rad1);
+                  const y1 = 500 - r * Math.cos(rad1);
+                  const x2 = 500 + (r + 14) * Math.sin(rad2);
+                  const y2 = 500 - (r + 14) * Math.cos(rad2);
+                  const x3 = 500 + r * Math.sin((a1 + 15) * Math.PI / 180);
+                  const y3 = 500 - r * Math.cos((a1 + 15) * Math.PI / 180);
+                  return (
+                    <path
+                      key={`sc-${i}`}
+                      d={`M${x1},${y1} Q${x2},${y2} ${x3},${y3}`}
+                      fill="none" stroke="#C9A84C" strokeWidth="0.8" strokeOpacity="0.5"
+                    />
+                  );
+                })}
+
+                {/* === MIDDLE TRACK & DECORATIVE RING === */}
+                <circle ref={ring4Ref} cx="500" cy="500" r="290" fill="none" stroke="#C9A84C" strokeWidth="1.5" strokeOpacity="0.5" transform-origin="500px 500px" />
+                <circle cx="500" cy="500" r="280" fill="none" stroke="#C9A84C" strokeWidth="16" strokeOpacity="0.04" />
+                <circle cx="500" cy="500" r="270" fill="none" stroke="#C9A84C" strokeWidth="1" strokeDasharray="2 6" strokeOpacity="0.35" />
+                {/* Decorative dots around middle track */}
+                {Array.from({ length: 36 }).map((_, i) => {
+                  const ang = (i * 10 * Math.PI) / 180;
+                  return <circle key={`dot-${i}`} cx={500 + 280 * Math.sin(ang)} cy={500 - 280 * Math.cos(ang)} r={i % 3 === 0 ? "2.5" : "1.2"} fill="#C9A84C" fillOpacity={i % 3 === 0 ? "0.7" : "0.3"} />;
+                })}
+
+                {/* === INNER ORNATE COMPASS ROSE === */}
+                <circle ref={ring5Ref} cx="500" cy="500" r="210" fill="none" stroke="#C9A84C" strokeWidth="2" strokeOpacity="0.6" filter="url(#softGlow)" transform-origin="500px 500px" />
+                <circle cx="500" cy="500" r="195" fill="none" stroke="#C9A84C" strokeWidth="0.5" strokeOpacity="0.3" />
+
+                <g ref={inTickRef} transform-origin="500px 500px">
+                  {/* 8-point sunburst with flanking spikes */}
+                  {Array.from({ length: 8 }).map((_, i) => (
+                    <g key={`sun-${i}`} transform={`rotate(${i * 45} 500 500)`}>
+                      <line x1="500" y1="290" x2="500" y2="400" stroke="#C9A84C" strokeWidth="2.5" strokeOpacity="0.85" />
+                      <line x1="500" y1="310" x2="500" y2="380" stroke="#C9A84C" strokeWidth="1" strokeOpacity="0.5" transform={`rotate(6 500 500)`} />
+                      <line x1="500" y1="310" x2="500" y2="380" stroke="#C9A84C" strokeWidth="1" strokeOpacity="0.5" transform={`rotate(-6 500 500)`} />
+                      <line x1="500" y1="330" x2="500" y2="360" stroke="#C9A84C" strokeWidth="0.6" strokeOpacity="0.3" transform={`rotate(12 500 500)`} />
+                      <line x1="500" y1="330" x2="500" y2="360" stroke="#C9A84C" strokeWidth="0.6" strokeOpacity="0.3" transform={`rotate(-12 500 500)`} />
+                    </g>
+                  ))}
+                  {/* Cardinal diamond arrowheads */}
+                  {[0, 90, 180, 270].map((ang) => (
+                    <polygon
+                      key={`cd-${ang}`}
+                      points="496,290 500,268 504,290 500,310"
+                      fill="#C9A84C" fillOpacity="0.85"
+                      transform={`rotate(${ang} 500 500)`}
+                    />
+                  ))}
+                  {/* Intercardinal triangles */}
+                  {[45, 135, 225, 315].map((ang) => (
+                    <polygon
+                      key={`ic-${ang}`}
+                      points="498,300 500,285 502,300"
+                      fill="#C9A84C" fillOpacity="0.5"
+                      transform={`rotate(${ang} 500 500)`}
+                    />
+                  ))}
+                </g>
+
+                {/* === CENTER ORNAMENT (no filled disc) === */}
+                <circle cx="500" cy="500" r="160" fill="none" stroke="#C9A84C" strokeWidth="1.5" strokeOpacity="0.4" />
+                <circle cx="500" cy="500" r="145" fill="none" stroke="#C9A84C" strokeWidth="0.5" strokeDasharray="3 5" strokeOpacity="0.25" />
+                {Array.from({ length: 12 }).map((_, i) => (
+                  <line key={`cm-${i}`} x1="500" y1="140" x2="500" y2="155" stroke="#C9A84C" strokeWidth="1" strokeOpacity="0.4" transform={`rotate(${i * 30} 500 500)`} />
+                ))}
+                <circle cx="500" cy="500" r="24" fill="none" stroke="#C9A84C" strokeWidth="1.5" strokeOpacity="0.6" />
+                <circle cx="500" cy="500" r="6" fill="#C9A84C" fillOpacity="0.6" />
+              </g>
+            </svg>
+          </div>
+
+          {/* === PAST EDITIONS REVEAL LAYER === */}
+          {/* Sits behind everything, revealed when the dial fades out */}
+          <div
+            ref={revealRef}
+            style={{
+              position: "absolute",
+              inset: 0,
+              zIndex: 50,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
               opacity: 0,
               willChange: "transform, opacity",
             }}
           >
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                backgroundImage: `url('${BG_CORRIDOR}')`,
-                backgroundSize: "cover",
-                backgroundPosition: isMobile ? "center 42%" : "center 50%",
-                filter: "sepia(0.5) brightness(0.45) contrast(1.05)",
-                transform: "translate3d(0,0,0)",
-              }}
-            />
+            <FilmStrip embedded />
           </div>
 
           <div
@@ -679,10 +857,11 @@ export default function ScrollStoryV2() {
               <div
                 ref={countdownRef}
                 style={{
-                  display: "grid",
-                  gridTemplateColumns: isMobile ? "repeat(2, minmax(0, 1fr))" : "repeat(4, minmax(0, 1fr))",
-                  gap: isCompactMobile ? "0.65rem" : isMobile ? "0.9rem" : "2rem",
-                  marginTop: isMobile ? "1rem" : "2rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: isMobile ? "0" : "0",
+                  marginTop: isMobile ? "1.2rem" : "2.2rem",
                   fontFamily: "'Cinzel', serif",
                   opacity: 0,
                   transform: "translate3d(0, 32px, 0)",
@@ -694,40 +873,63 @@ export default function ScrollStoryV2() {
                   { value: countdown.hours, label: "Hours" },
                   { value: countdown.minutes, label: "Minutes" },
                   { value: countdown.seconds, label: "Seconds" },
-                ].map((item) => (
-                  <div
-                    key={item.label}
-                    style={{
-                      minWidth: isMobile ? "0" : "104px",
-                      padding: isMobile ? "12px 8px 10px" : "0",
-                      border: isMobile ? "1px solid rgba(201,168,76,0.16)" : "none",
-                      background: isMobile ? "rgba(8, 4, 1, 0.36)" : "transparent",
-                      backdropFilter: isMobile ? "blur(6px)" : "none",
-                      borderRadius: isMobile ? "6px" : "0",
-                    }}
-                  >
-                    <span
+                ].map((item, idx) => (
+                  <div key={item.label} style={{ display: "flex", alignItems: "center" }}>
+                    <div
                       style={{
-                        display: "block",
-                        fontSize: isCompactMobile ? "1.8rem" : isMobile ? "2.1rem" : "3rem",
-                        color: "#F6E8BC",
-                        lineHeight: 1,
+                        position: "relative",
+                        minWidth: isCompactMobile ? "58px" : isMobile ? "68px" : "110px",
+                        padding: isCompactMobile ? "14px 6px" : isMobile ? "16px 10px" : "24px 18px",
+                        background: "rgba(10, 6, 2, 0.55)",
+                        border: "1px solid rgba(201,168,76,0.25)",
+                        borderRadius: "8px",
+                        backdropFilter: "blur(12px)",
+                        WebkitBackdropFilter: "blur(12px)",
+                        textAlign: "center",
                       }}
                     >
-                      {item.value}
-                    </span>
-                    <span
-                      style={{
-                        display: "block",
-                        color: "rgba(218, 224, 234, 0.6)",
-                        fontSize: isMobile ? "0.58rem" : "0.8rem",
-                        letterSpacing: isMobile ? "0.1em" : "0.2em",
-                        textTransform: "uppercase",
-                        marginTop: "4px",
-                      }}
-                    >
-                      {item.label}
-                    </span>
+                      {/* Corner ornaments */}
+                      <div style={{ position: "absolute", top: "-1px", left: "-1px", width: "8px", height: "8px", borderTop: "2px solid #C9A84C", borderLeft: "2px solid #C9A84C", borderRadius: "2px 0 0 0", opacity: 0.6 }} />
+                      <div style={{ position: "absolute", top: "-1px", right: "-1px", width: "8px", height: "8px", borderTop: "2px solid #C9A84C", borderRight: "2px solid #C9A84C", borderRadius: "0 2px 0 0", opacity: 0.6 }} />
+                      <div style={{ position: "absolute", bottom: "-1px", left: "-1px", width: "8px", height: "8px", borderBottom: "2px solid #C9A84C", borderLeft: "2px solid #C9A84C", borderRadius: "0 0 0 2px", opacity: 0.6 }} />
+                      <div style={{ position: "absolute", bottom: "-1px", right: "-1px", width: "8px", height: "8px", borderBottom: "2px solid #C9A84C", borderRight: "2px solid #C9A84C", borderRadius: "0 0 2px 0", opacity: 0.6 }} />
+                      <span
+                        style={{
+                          display: "block",
+                          fontSize: isCompactMobile ? "1.6rem" : isMobile ? "1.9rem" : "2.8rem",
+                          color: "#F6E8BC",
+                          lineHeight: 1,
+                          fontWeight: 400,
+                          textShadow: "0 0 20px rgba(201,168,76,0.3)",
+                        }}
+                      >
+                        {String(item.value).padStart(2, "0")}
+                      </span>
+                      <span
+                        style={{
+                          display: "block",
+                          color: "rgba(201,168,76,0.65)",
+                          fontSize: isCompactMobile ? "0.5rem" : isMobile ? "0.55rem" : "0.7rem",
+                          letterSpacing: "0.18em",
+                          textTransform: "uppercase",
+                          marginTop: "6px",
+                        }}
+                      >
+                        {item.label}
+                      </span>
+                    </div>
+                    {/* Gold separator between cards */}
+                    {idx < 3 && (
+                      <div style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: "4px",
+                        padding: isCompactMobile ? "0 4px" : isMobile ? "0 6px" : "0 14px",
+                      }}>
+                        <span style={{ color: "#C9A84C", fontSize: isMobile ? "6px" : "8px", opacity: 0.7 }}>◆</span>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

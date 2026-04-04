@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import ScrollStoryV2 from "./components/ScrollStory_V2";
-import MemoryLaneGallery from "./components/MemoryLaneGallery";
+
 import LandingPage from "./components/LandingPage";
+import FilmStrip from "./components/FilmStrip";
 
 export default function AppV2() {
   useEffect(() => {
@@ -37,7 +38,8 @@ export default function AppV2() {
   return (
     <>
       <ScrollStoryV2 />
-      <MemoryLaneGallery />
+      <FilmStrip />
+
       <LandingPage />
     </>
   );

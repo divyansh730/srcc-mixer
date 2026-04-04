@@ -579,10 +579,10 @@
       </div>
 
       <div class="form-group">
-        <label class="form-label">Graduating Batch</label>
+        <label class="form-label">Team</label>
         <div class="select-wrapper" id="custom-select">
           <div class="custom-select-trigger">
-            <span id="selected-year">Select Year</span>
+            <span id="selected-year">Select Team</span>
             <span style="font-size: 12px; color: var(--gold-dim);">▾</span>
           </div>
           <div class="custom-options" id="year-options">
@@ -645,15 +645,16 @@
     let selectedYearValue = "";
 
     // Populate Batch Dropdown
-    for (let year = 2027; year >= 1996; year--) {
+    for (let year = 2024; year >= 1995; year--) {
       const opt = document.createElement('div');
       opt.className = 'custom-option';
-      opt.textContent = `Batch of ${year}`;
+      const nextYear = (year + 1).toString().slice(2);
+      opt.textContent = `Team of ${year}-${nextYear}`;
       opt.dataset.value = year;
       opt.onclick = (e) => {
         e.stopPropagation();
         selectedYearValue = year;
-        selectedYearLabel.textContent = `Batch of ${year}`;
+        selectedYearLabel.textContent = `Team of ${year}-${nextYear}`;
         selectedYearLabel.style.color = 'var(--cream)';
         customSelect.classList.remove('active');
         
@@ -716,7 +717,7 @@
           <p class="note-text">"${m.text}"</p>
           <div class="note-footer">
             <span class="note-name">${m.name ? m.name + ' · ' : ''}</span>
-            <span class="note-batch">Batch of ${m.batch}</span>
+            <span class="note-batch">Team of ${m.batch}-${((m.batch + 1) + '').slice(2)}</span>
           </div>
         `;
         wall.appendChild(note);
@@ -735,8 +736,8 @@
       const text = memoryInput.value.trim();
       const name = nameInput.value.trim();
 
-      if (!batch || !text) {
-        alert("Please fill in both fields (Batch and Memory).");
+        if (!batch || !text) {
+          alert("Please fill in both fields (Team and Memory).");
         return;
       }
 

@@ -131,7 +131,7 @@ export default function LandingPage() {
 
       <div style={{ position: "relative", zIndex: 2, maxWidth: "1180px", margin: "0 auto" }}>
         <div ref={headingBlockRef} className="landing-heading-block landing-heading-block--simple">
-          <h2 className="landing-welcome-title">Welcome to Memory Lane</h2>
+          <h2 className="landing-welcome-title">Through the Years</h2>
         </div>
 
         <div className="landing-grid">

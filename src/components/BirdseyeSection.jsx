@@ -1,9 +1,18 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./Birdseye.css";
 
 export default function BirdseyeSection() {
   const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`;
   const headerRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window === "undefined" ? false : window.innerWidth <= 768
+  );
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   useEffect(() => {
     const headingObserver = new IntersectionObserver(
@@ -32,44 +41,51 @@ export default function BirdseyeSection() {
       id="birdseye"
       style={{
         position: "relative",
-        background: "linear-gradient(180deg, transparent 0%, #0A0500 15%, #080402 100%)",
-        padding: "0",
-        marginTop: "72px",
+        background: isMobile ? "transparent" : "linear-gradient(180deg, transparent 0%, #0A0500 15%, #080402 100%)",
+        padding: isMobile ? "0" : "0",
+        marginTop: isMobile ? "0" : "72px",
         borderTop: "none",
+        minHeight: isMobile ? "100vh" : "auto",
       }}
     >
-      <div
-        className="landing-heading-block"
-        ref={headerRef}
-        style={{ marginBottom: '16px' }}
-      >
-        <h2 className="landing-welcome-title">Campus Birdseye</h2>
-
-        <p
-          className="intro-description"
-          style={{
-            opacity: 0,
-            transform: 'translate3d(0, 24px, 0)',
-            transition: 'opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.35s, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.35s'
-          }}
+      {!isMobile && (
+        <div
+          className="landing-heading-block"
+          ref={headerRef}
+          style={{ marginBottom: '16px' }}
         >
-          Click on any spot to bring it back to colour!
-        </p>
+          <h2 className="landing-welcome-title">Campus Birdseye</h2>
 
-        {/* This tiny bit of inline css ensures the description transitions in sync with the heading. */}
-        <style>{`
-          .landing-heading-visible .intro-description {
-            opacity: 1 !important;
-            transform: translate3d(0, 0, 0) !important;
-          }
-        `}</style>
-      </div>
+          <p
+            className="intro-description"
+            style={{
+              opacity: 0,
+              transform: 'translate3d(0, 24px, 0)',
+              transition: 'opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.35s, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.35s'
+            }}
+          >
+            Click on any spot to bring it back to colour!
+          </p>
+
+          <style>{`
+            .landing-heading-visible .intro-description {
+              opacity: 1 !important;
+              transform: translate3d(0, 0, 0) !important;
+            }
+          `}</style>
+        </div>
+      )}
 
       <div
         style={{
-          position: "relative",
-          zIndex: 3,
+          position: isMobile ? "fixed" : "relative",
+          top: isMobile ? 0 : "auto",
+          left: isMobile ? 0 : "auto",
+          right: isMobile ? 0 : "auto",
+          bottom: isMobile ? 0 : "auto",
+          zIndex: isMobile ? 9999 : 3,
           width: "100%",
+          height: isMobile ? "100vh" : "100vh",
           margin: "0 auto",
           padding: "0",
         }}
@@ -78,13 +94,11 @@ export default function BirdseyeSection() {
           style={{
             position: "relative",
             width: "100%",
-            height: "100vh",
+            height: "100%",
             overflow: "hidden",
-            boxShadow: "0 10px 40px rgba(0,0,0,0.9)",
+            boxShadow: isMobile ? "none" : "0 10px 40px rgba(0,0,0,0.9)",
           }}
         >
-
-
           <iframe
             src={assetUrl("birdseye.html")}
             style={{ width: "100%", height: "100%", border: "none", display: "block" }}

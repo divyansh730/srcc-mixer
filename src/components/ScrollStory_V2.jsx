@@ -702,36 +702,36 @@ export default function ScrollStoryV2() {
               textAlign: "center",
               pointerEvents: "none",
             }}
-          >
-            <div style={{ height: isMobile ? "16px" : "32px" }} />
-            <div
-              ref={contentRef}
-              style={{
-                willChange: "transform, opacity",
-                transformOrigin: "center center",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: isMobile ? "6px" : "12px",
-                maxWidth: isMobile ? "320px" : "none",
-                transform: "translate3d(0,0,0)",
-              }}
             >
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2px" }}>
-                <div
-                  style={{
-                    fontFamily: "'Times New Roman', Times, serif",
-                    fontSize: isMobile ? "clamp(16px, 6.5vw, 22px)" : "clamp(20px, 3.4vw, 42px)",
-                    color: "#DDE3ED",
-                    letterSpacing: isMobile ? "0.07em" : "0.12em",
-                    lineHeight: 1.2,
-                    fontWeight: 400,
-                    textTransform: "uppercase",
-                    textShadow: "0 2px 20px rgba(0,0,0,0.9)",
-                  }}
-                >
-                  The Placement Cell
-                </div>
+              <div style={{ height: isMobile ? "8px" : "20px" }} />
+              <div
+                ref={contentRef}
+                style={{
+                  willChange: "transform, opacity",
+                  transformOrigin: "center center",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: isMobile ? "3px" : "8px",
+                  maxWidth: isMobile ? "320px" : "none",
+                  transform: "translate3d(0,0,0)",
+                }}
+              >
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1px" }}>
+                  <div
+                    style={{
+                      fontFamily: "'Times New Roman', Times, serif",
+                      fontSize: isMobile ? "clamp(16px, 6.5vw, 22px)" : "clamp(20px, 3.4vw, 42px)",
+                      color: "#DDE3ED",
+                      letterSpacing: isMobile ? "0.07em" : "0.12em",
+                      lineHeight: 1.2,
+                      fontWeight: 400,
+                      textTransform: "uppercase",
+                      textShadow: "0 2px 20px rgba(0,0,0,0.9)",
+                    }}
+                  >
+                    The Placement Cell
+                  </div>
                 <div
                   style={{
                     fontFamily: "'Times New Roman', Times, serif",
@@ -748,18 +748,18 @@ export default function ScrollStoryV2() {
                 </div>
               </div>
 
-              <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "8px" : "12px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "6px" : "10px", marginTop: "2px", marginBottom: "2px" }}>
                 <div
                   style={{
-                    width: isMobile ? "34px" : "80px",
+                    width: isMobile ? "24px" : "60px",
                     height: "1px",
                     background: "linear-gradient(90deg, transparent, #C9A84C)",
                   }}
                 />
-                <span style={{ color: "#C9A84C", fontSize: isMobile ? "10px" : "13px" }}>✦</span>
+                <span style={{ color: "#C9A84C", fontSize: isMobile ? "8px" : "12px" }}>✦</span>
                 <div
                   style={{
-                    width: isMobile ? "34px" : "80px",
+                    width: isMobile ? "24px" : "60px",
                     height: "1px",
                     background: "linear-gradient(90deg, #C9A84C, transparent)",
                   }}

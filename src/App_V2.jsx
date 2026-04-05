@@ -38,8 +38,6 @@ export default function AppV2() {
   return (
     <>
       <ScrollStoryV2 />
-      <FilmStrip />
-
       <LandingPage />
     </>
   );

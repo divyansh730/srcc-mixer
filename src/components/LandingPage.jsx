@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
 import BirdseyeSection from "./BirdseyeSection";
+import ClosingNote from "./ClosingNote";
+import Footer from "./Footer";
 
 const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`;
 const MEMORY_WALL_PAGE = `${import.meta.env.BASE_URL}memory-wall.html`;
@@ -115,7 +117,6 @@ export default function LandingPage() {
       style={{
         background: "linear-gradient(180deg, #0A0500 0%, #0D0602 100%)",
         position: "relative",
-        padding: isMobile ? "0px 16px 44px" : "0px 40px 60px",
       }}
     >
 
@@ -129,7 +130,7 @@ export default function LandingPage() {
         }}
       />
 
-      <div style={{ position: "relative", zIndex: 2, maxWidth: "1180px", margin: "0 auto" }}>
+      <div style={{ position: "relative", zIndex: 2, maxWidth: "1180px", margin: "0 auto", padding: isMobile ? "25px 16px 0px" : "50px 40px 0px" }}>
         <div ref={headingBlockRef} className="landing-heading-block landing-heading-block--simple">
           <h2 className="landing-welcome-title">Through the Years</h2>
         </div>
@@ -204,6 +205,8 @@ export default function LandingPage() {
       </div>
 
       <BirdseyeSection />
+      <ClosingNote />
+      <Footer />
     </section>
   );
 }

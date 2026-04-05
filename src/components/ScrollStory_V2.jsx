@@ -9,7 +9,7 @@ const MIXER_LOGO = assetUrl("Mixer logo.png");
 const BG_CLOCK = assetUrl("srcc-clock.jpg");
 const BG_CORRIDOR = assetUrl("srcc-corridor.jpg");
 
-const TOTAL = 10;
+const TOTAL = 7;
 
 export default function ScrollStoryV2() {
   const clockBgRef = useRef(null);
@@ -648,8 +648,6 @@ export default function ScrollStoryV2() {
             </svg>
           </div>
 
-          {/* === PAST EDITIONS REVEAL LAYER === */}
-          {/* Sits behind everything, revealed when the dial fades out */}
           <div
             ref={revealRef}
             style={{
@@ -663,7 +661,9 @@ export default function ScrollStoryV2() {
               willChange: "transform, opacity",
             }}
           >
-            <FilmStrip embedded />
+            <div style={{ width: "100%", height: "100%" }}>
+              <FilmStrip />
+            </div>
           </div>
 
           <div

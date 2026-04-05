@@ -91,7 +91,33 @@ export default function BirdseyeSection() {
           allowFullScreen
           allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
         />
+        {/* Bottom gradient blend */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: "120px",
+            background: "linear-gradient(to bottom, transparent, #0A0500 80%)",
+            pointerEvents: "none",
+            zIndex: 10,
+          }}
+        />
       </div>
+
+      {/* Section bottom gradient */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: "80px",
+          background: "linear-gradient(to bottom, transparent, #0A0500)",
+          pointerEvents: "none",
+        }}
+      />
 
     </section>
   );

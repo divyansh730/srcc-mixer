@@ -50,7 +50,7 @@ export default function BirdseyeSection() {
       <div
         className="landing-heading-block"
         ref={headerRef}
-        style={{ marginBottom: '16px' }}
+        style={{ marginBottom: '0px' }}
       >
         <h2 className="landing-welcome-title">Campus Birdseye</h2>
 
@@ -98,7 +98,7 @@ export default function BirdseyeSection() {
             bottom: 0,
             left: 0,
             right: 0,
-            height: "120px",
+            height: "15px",
             background: "linear-gradient(to bottom, transparent, #0A0500 80%)",
             pointerEvents: "none",
             zIndex: 10,
@@ -113,7 +113,7 @@ export default function BirdseyeSection() {
           bottom: 0,
           left: 0,
           right: 0,
-          height: "10px",
+          height: "0px",
           background: "linear-gradient(to bottom, transparent, #0A0500)",
           pointerEvents: "none",
         }}

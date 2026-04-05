@@ -111,8 +111,8 @@
       position: relative;
       max-width: 1600px;
       margin: 0 auto;
-      min-height: 300vh;
-      padding-top: 0; /* Reduced from 10px */
+      min-height: 100vh;
+      padding-top: 0;
       padding-bottom: 120px; 
       z-index: 5;
     }
@@ -698,21 +698,22 @@
         const styleNum = (i % 3) + 1;
         note.className = `memory-note note-style-${styleNum}`;
         
-        // More scattered rotation
-        const rotation = (Math.random() * 16 - 8).toFixed(1); 
+        // Slight rotation for scattered feel
+        const rotation = (Math.random() * 8 - 4).toFixed(1); 
         const delay = (i * 0.1).toFixed(1);
         
         note.style.setProperty('--rotation', `${rotation}deg`);
         note.style.setProperty('--delay', `${delay}s`);
         
         if (!isMobile) {
-          // Truly random positioning across the page
-          const horizontalOffset = 3 + (Math.random() * 94); 
-          const verticalOffset = 30 + (Math.random() * 2500); 
+          // Centered layout with 75% width
+          const side = i % 2 === 0 ? 'left' : 'right';
+          const horizontalOffset = 12.5 + (Math.random() * 5); 
+          const verticalOffset = 50 + (i * 180) + (Math.random() * 30 - 15); 
           
-          note.style.left = `${horizontalOffset}%`;
+          if (side === 'left') note.style.left = `${horizontalOffset}%`;
+          else note.style.right = `${horizontalOffset}%`;
           note.style.top = `${verticalOffset}px`;
-          note.style.right = 'auto';
         }
 
         note.innerHTML = `

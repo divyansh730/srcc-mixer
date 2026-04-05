@@ -745,7 +745,7 @@ export default function ScrollStoryV2() {
                   <div
                     style={{
                       fontFamily: "'Times New Roman', Times, serif",
-                      fontSize: isMobile ? "clamp(16px, 6.5vw, 22px)" : "clamp(20px, 3.4vw, 42px)",
+                      fontSize: isMobile ? "clamp(12px, 5vw, 18px)" : "clamp(20px, 3.4vw, 42px)",
                       color: "#DDE3ED",
                       letterSpacing: isMobile ? "0.07em" : "0.12em",
                       lineHeight: 1.2,

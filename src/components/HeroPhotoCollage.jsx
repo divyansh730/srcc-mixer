@@ -51,7 +51,7 @@ export default function HeroPhotoCollage() {
       style={{
         position: "absolute",
         inset: 0,
-        backgroundColor: "#020100",
+        backgroundColor: "#0A0500",
         overflow: "hidden",
       }}
     >

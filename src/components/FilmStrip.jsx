@@ -73,7 +73,7 @@ function TickerRow({ images, reverse, speedSeconds, isCenter, isMobile }) {
               style={{
                 position: "absolute",
                 inset: 0,
-                background: "linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.8) 100%)",
+                background: "linear-gradient(180deg, transparent 50%, rgba(10,5,0,0.8) 100%)",
                 zIndex: 2,
                 pointerEvents: "none",
               }}
@@ -125,7 +125,7 @@ export default function FilmStrip() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        background: "#000000",
+        background: "#0A0500",
         position: "relative",
         overflow: "hidden",
       }}
@@ -197,7 +197,7 @@ export default function FilmStrip() {
         top: 0,
         bottom: 0,
         width: "15%",
-        background: "linear-gradient(90deg, #000000 0%, transparent 100%)",
+        background: "linear-gradient(90deg, #0A0500 0%, transparent 100%)",
         pointerEvents: "none",
         zIndex: 20
       }} />
@@ -207,14 +207,14 @@ export default function FilmStrip() {
         top: 0,
         bottom: 0,
         width: "15%",
-        background: "linear-gradient(270deg, #000000 0%, transparent 100%)",
+        background: "linear-gradient(270deg, #0A0500 0%, transparent 100%)",
         pointerEvents: "none",
         zIndex: 20
       }} />
       <div style={{
         position: "absolute",
         inset: "0 0 0 0",
-        background: "linear-gradient(180deg, #000000 0%, transparent 15%)",
+        background: "linear-gradient(180deg, #0A0500 0%, transparent 15%)",
         pointerEvents: "none",
         zIndex: 20
       }} />

@@ -106,7 +106,7 @@ export default function HeroPhotoCollage() {
           position: "absolute",
           inset: 0,
           background:
-            "radial-gradient(circle at center, transparent 0%, rgba(2,1,0,0.3) 85%, rgba(0,0,0,0.85) 1%)",
+            "radial-gradient(circle at center, transparent 0%, rgba(2,1,0,0.3) 85%, rgba(0,0,0,0.85) 100%)",
           pointerEvents: "none",
         }}
       />

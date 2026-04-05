@@ -720,7 +720,7 @@ export default function ScrollStoryV2() {
               alignItems: "center",
               justifyContent: "center",
               padding: isMobile ? "0 18px" : "0 24px",
-              marginTop: isMobile ? "-7vh" : "-2vh",
+              margin: 0,
               textAlign: "center",
               pointerEvents: "none",
             }}
@@ -739,16 +739,25 @@ export default function ScrollStoryV2() {
                 transform: "translate3d(0,0,0)",
               }}
             >
-              <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: isMobile ? "16px" : "24px" }}>
-                <div ref={placeholderRef} style={{ width: isMobile ? "60px" : "110px", height: isMobile ? "60px" : "110px", flexShrink: 0 }} />
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "1px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "flex-start",
+                  gap: isMobile ? "12px" : "28px",
+                  justifyContent: "center",
+                  marginBottom: isMobile ? "16px" : "32px",
+                }}
+              >
+                <div ref={placeholderRef} style={{ marginTop: isMobile ? "-3px" : "-10px", width: isMobile ? "65px" : "125px", height: isMobile ? "65px" : "125px", flexShrink: 0 }} />
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: isMobile ? "0px" : "2px", textAlign: "center", position: "relative", left: "0.09em" }}>
                   <div
                     style={{
                       fontFamily: "'Times New Roman', Times, serif",
-                      fontSize: isMobile ? "clamp(12px, 5vw, 18px)" : "clamp(20px, 3.4vw, 42px)",
-                      color: "#DDE3ED",
-                      letterSpacing: isMobile ? "0.07em" : "0.12em",
-                      lineHeight: 1.2,
+                      fontSize: isMobile ? "clamp(24px, 6vw, 32px)" : "clamp(36px, 5.5vw, 68px)",
+                      color: "#FDFDFD",
+                      letterSpacing: isMobile ? "0.02em" : "0.03em",
+                      lineHeight: 1,
                       fontWeight: 400,
                       textTransform: "uppercase",
                       textShadow: "0 2px 20px rgba(0,0,0,0.9)",
@@ -759,10 +768,10 @@ export default function ScrollStoryV2() {
                   <div
                     style={{
                       fontFamily: "'Times New Roman', Times, serif",
-                      fontSize: isMobile ? "clamp(9px, 3.2vw, 12px)" : "clamp(12px, 2vw, 24px)",
-                      color: "rgba(221,227,237,0.78)",
-                      letterSpacing: isMobile ? "0.1em" : "0.18em",
-                      lineHeight: 1.2,
+                      fontSize: isMobile ? "clamp(11px, 2.7vw, 15px)" : "clamp(16px, 2.5vw, 31px)",
+                      color: "#FDFDFD",
+                      letterSpacing: isMobile ? "0.08em" : "0.19em",
+                      lineHeight: 1,
                       fontWeight: 400,
                       textTransform: "uppercase",
                       textShadow: "0 2px 20px rgba(0,0,0,0.9)",
@@ -770,38 +779,40 @@ export default function ScrollStoryV2() {
                   >
                     Shri Ram College of Commerce
                   </div>
+
+                  <div style={{ display: "flex", width: "100%", alignItems: "center", gap: isMobile ? "6px" : "10px", marginTop: isMobile ? "10px" : "18px" }}>
+                    <div
+                      style={{
+                        flex: 1,
+                        height: "1px",
+                        background: "linear-gradient(90deg, transparent, #C9A84C)",
+                      }}
+                    />
+                    <span style={{ color: "#C9A84C", fontSize: isMobile ? "8px" : "12px", lineHeight: 1, paddingTop: "2px" }}>✦</span>
+                    <div
+                      style={{
+                        flex: 1,
+                        height: "1px",
+                        background: "linear-gradient(90deg, #C9A84C, transparent)",
+                      }}
+                    />
+                  </div>
+
+                  <div
+                    style={{
+                      fontFamily: "'Pinyon Script', cursive",
+                      fontSize: isMobile ? "clamp(28px, 12vw, 44px)" : "clamp(36px, 6vw, 66px)",
+                      color: "#C9A84C",
+                      textShadow: "0 0 30px rgba(201,168,76,0.55), 0 2px 10px rgba(0,0,0,0.9)",
+                      lineHeight: 1,
+                      letterSpacing: "0.02em",
+                      marginTop: isMobile ? "10px" : "20px"
+                    }}
+                  >
+                    30 Years of Excellence
+                  </div>
+
                 </div>
-              </div>
-
-              <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "6px" : "10px", marginTop: "2px", marginBottom: "2px" }}>
-                <div
-                  style={{
-                    width: isMobile ? "24px" : "60px",
-                    height: "1px",
-                    background: "linear-gradient(90deg, transparent, #C9A84C)",
-                  }}
-                />
-                <span style={{ color: "#C9A84C", fontSize: isMobile ? "8px" : "12px" }}>✦</span>
-                <div
-                  style={{
-                    width: isMobile ? "24px" : "60px",
-                    height: "1px",
-                    background: "linear-gradient(90deg, #C9A84C, transparent)",
-                  }}
-                />
-              </div>
-
-              <div
-                style={{
-                  fontFamily: "'Pinyon Script', cursive",
-                  fontSize: isMobile ? "clamp(24px, 10vw, 38px)" : "clamp(30px, 5vw, 56px)",
-                  color: "#C9A84C",
-                  textShadow: "0 0 30px rgba(201,168,76,0.55), 0 2px 10px rgba(0,0,0,0.9)",
-                  lineHeight: 1,
-                  letterSpacing: "0.02em",
-                }}
-              >
-                30 Years of Excellence
               </div>
             </div>
           </div>

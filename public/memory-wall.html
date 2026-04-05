@@ -698,19 +698,20 @@
         const styleNum = (i % 3) + 1;
         note.className = `memory-note note-style-${styleNum}`;
         
-        // Very subtle rotation for a cleaner look
-        const rotation = (Math.random() * 4 - 2).toFixed(1); 
+        // More scattered rotation
+        const rotation = (Math.random() * 12 - 6).toFixed(1); 
         const delay = (i * 0.1).toFixed(1);
         
         note.style.setProperty('--rotation', `${rotation}deg`);
         note.style.setProperty('--delay', `${delay}s`);
         
         if (!isMobile) {
-          const side = i % 2 === 0 ? 'left' : 'right';
-          // Horizontal scatter remains variety-rich
-          const horizontalOffset = 15 + (Math.random() * 25); 
-          // Increased vertical increment to ensure space and prevent direct overlap
-          const verticalOffset = 100 + (i * 220) + (Math.random() * 40); 
+          // Random side instead of alternating
+          const side = Math.random() > 0.5 ? 'left' : 'right';
+          // More horizontal scatter
+          const horizontalOffset = 5 + (Math.random() * 40); 
+          // More vertical scatter
+          const verticalOffset = 50 + (i * 200) + (Math.random() * 80); 
           
           if (side === 'left') note.style.left = `${horizontalOffset}%`;
           else note.style.right = `${horizontalOffset}%`;

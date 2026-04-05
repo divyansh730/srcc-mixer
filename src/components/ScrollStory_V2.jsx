@@ -744,17 +744,17 @@ export default function ScrollStoryV2() {
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "flex-start",
-                  gap: isMobile ? "10px" : "28px",
+                  gap: isMobile ? "12px" : "28px",
                   justifyContent: "center",
-                  marginBottom: isMobile ? "12px" : "32px",
+                  marginBottom: isMobile ? "14px" : "32px",
                 }}
               >
-                <div ref={placeholderRef} style={{ marginTop: isMobile ? "-3px" : "-10px", width: isMobile ? "50px" : "125px", height: isMobile ? "50px" : "125px", flexShrink: 0 }} />
+                <div ref={placeholderRef} style={{ marginTop: isMobile ? "-3px" : "-10px", width: isMobile ? "55px" : "125px", height: isMobile ? "55px" : "125px", flexShrink: 0 }} />
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: isMobile ? "0px" : "2px", textAlign: "center", position: "relative", left: "0.09em" }}>
                   <div
                     style={{
                       fontFamily: "'Times New Roman', Times, serif",
-                      fontSize: isMobile ? "clamp(14px, 4vw, 20px)" : "clamp(36px, 5.5vw, 68px)",
+                      fontSize: isMobile ? "clamp(16px, 4.5vw, 22px)" : "clamp(36px, 5.5vw, 68px)",
                       color: "#FDFDFD",
                       letterSpacing: isMobile ? "0.02em" : "0.03em",
                       lineHeight: 1,
@@ -768,7 +768,7 @@ export default function ScrollStoryV2() {
                   <div
                     style={{
                       fontFamily: "'Times New Roman', Times, serif",
-                      fontSize: isMobile ? "clamp(8px, 2.2vw, 12px)" : "clamp(16px, 2.5vw, 31px)",
+                      fontSize: isMobile ? "clamp(9px, 2.5vw, 13px)" : "clamp(16px, 2.5vw, 31px)",
                       color: "#FDFDFD",
                       letterSpacing: isMobile ? "0.06em" : "0.19em",
                       lineHeight: 1,
@@ -801,12 +801,12 @@ export default function ScrollStoryV2() {
                   <div
                     style={{
                       fontFamily: "'Pinyon Script', cursive",
-                      fontSize: isMobile ? "clamp(20px, 7vw, 28px)" : "clamp(36px, 6vw, 66px)",
+                      fontSize: isMobile ? "clamp(24px, 7.5vw, 32px)" : "clamp(36px, 6vw, 66px)",
                       color: "#C9A84C",
                       textShadow: "0 0 30px rgba(201,168,76,0.55), 0 2px 10px rgba(0,0,0,0.9)",
                       lineHeight: 1,
                       letterSpacing: "0.02em",
-                      marginTop: isMobile ? "6px" : "20px"
+                      marginTop: isMobile ? "8px" : "20px"
                     }}
                   >
                     30 Years of Excellence

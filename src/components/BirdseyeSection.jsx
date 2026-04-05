@@ -113,7 +113,7 @@ export default function BirdseyeSection() {
           bottom: 0,
           left: 0,
           right: 0,
-          height: "30px",
+          height: "10px",
           background: "linear-gradient(to bottom, transparent, #0A0500)",
           pointerEvents: "none",
         }}

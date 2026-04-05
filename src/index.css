@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -147,7 +147,7 @@ body::before {
 }
 .btn-ghost:hover { border-color: rgba(200,205,214,0.5); color: #E2E6ED; }
 
-/* Landing: scroll-driven reveals — easing aligned with ScrollStory_V2 text */
+/* Landing: scroll-driven reveals â€” easing aligned with ScrollStory_V2 text */
 .landing-heading-block {
   text-align: center;
   margin-bottom: 56px;
@@ -613,5 +613,4 @@ body::before {
     top: 0;
     animation: bounce 2s infinite ease-in-out;
 }
-@ m e d i a   ( m a x - w i d t h :   7 6 8 p x )   {   # l o g o   {   t o p :   3 2 v h   ! i m p o r t a n t ;   }   # m l - t e x t   {   f o n t - s i z e :   c l a m p ( 4 0 p x ,   1 2 v w ,   5 5 p x )   ! i m p o r t a n t ;   t r a n s f o r m :   t r a n s l a t e 3 d ( 0 ,   0 p x ,   0 )   ! i m p o r t a n t ;   }   }  
- 
+@media (max-width: 768px) { #logo { top: 30vh !important; } #ml-text[data-triggered='true'] { font-size: clamp(40px, 11vw, 55px) !important; transform: translate3d(0, -6vh, 0) !important; } }

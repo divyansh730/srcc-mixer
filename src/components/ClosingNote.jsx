@@ -3,6 +3,15 @@ import { useEffect, useRef, useState } from "react";
 export default function ClosingNote() {
   const containerRef = useRef(null);
   const [activeLine, setActiveLine] = useState(-1);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window === "undefined" ? false : window.innerWidth <= 768
+  );
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -38,7 +47,7 @@ export default function ClosingNote() {
     <div
       ref={containerRef}
       style={{
-        padding: "clamp(40px, 10vh, 120px) 20px clamp(40px, 8vh, 80px)",
+        padding: isMobile ? "32px 20px 24px" : "clamp(40px, 10vh, 120px) 20px clamp(40px, 8vh, 80px)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -46,7 +55,7 @@ export default function ClosingNote() {
         textAlign: "center",
         position: "relative",
         zIndex: 5,
-        minHeight: "50vh"
+        minHeight: isMobile ? "40vh" : "50vh"
       }}
     >
       {/* Subtle background glow */}

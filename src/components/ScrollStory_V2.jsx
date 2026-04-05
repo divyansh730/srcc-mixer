@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import FilmStrip from "./FilmStrip";
+import HeroPhotoCollage from "./HeroPhotoCollage";
 
 const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`;
 const MEMORY_WALL_PAGE = `${import.meta.env.BASE_URL}memory-wall.html`;
@@ -30,6 +31,8 @@ export default function ScrollStoryV2() {
   const ring5Ref = useRef(null);
   const outTickRef = useRef(null);
   const inTickRef = useRef(null);
+  const placeholderRef = useRef(null);
+  const baseLogoMetricsRef = useRef({ x: 0, y: 0, size: 0 });
 
   const [showCountdownInHeader, setShowCountdownInHeader] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -73,6 +76,34 @@ export default function ScrollStoryV2() {
     const onResize = () => setViewportWidth(window.innerWidth);
     window.addEventListener("resize", onResize, { passive: true });
     return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  useEffect(() => {
+    const measureLogoPlaceholder = () => {
+      if (!placeholderRef.current || !contentRef.current) return;
+
+      const parent = contentRef.current;
+      const oldTransform = parent.style.transform;
+      parent.style.transform = 'translate3d(0,0,0) scale(1)';
+
+      const rect = placeholderRef.current.getBoundingClientRect();
+      if (rect.width > 0) {
+        baseLogoMetricsRef.current = { x: rect.left, y: rect.top, size: rect.width };
+      }
+
+      parent.style.transform = oldTransform;
+    };
+
+    measureLogoPlaceholder();
+    const t1 = setTimeout(measureLogoPlaceholder, 100);
+    const t2 = setTimeout(measureLogoPlaceholder, 500);
+    const t3 = setTimeout(measureLogoPlaceholder, 1000);
+
+    window.addEventListener('resize', measureLogoPlaceholder);
+    return () => {
+      clearTimeout(t1); clearTimeout(t2); clearTimeout(t3);
+      window.removeEventListener('resize', measureLogoPlaceholder);
+    };
   }, []);
 
   useEffect(() => {
@@ -143,25 +174,26 @@ export default function ScrollStoryV2() {
       }
       if (logoRef.current) {
         const lp = ease(range(p, 0.10, 0.40));
-        const startSize = isMobile ? 80 : 96;
-        const size = startSize - lp * (startSize - logoEndSize);
-        const startX = winW / 2 - startSize / 2;
-        const startY = isMobile ? winH * 0.16 : winH * 0.22;
-        const x = startX + lp * (logoEndX - startX);
-        const y = startY + lp * (logoEndY - startY);
-        logoRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-        logoRef.current.style.width = `${size}px`;
-        logoRef.current.style.height = `${size}px`;
-        logoRef.current.style.opacity = p > 0.42 ? 0 : 1;
+        const { x: startX, y: startY, size: startSize } = baseLogoMetricsRef.current;
+
+        if (startSize > 0) {
+          const size = startSize - lp * (startSize - logoEndSize);
+          const x = startX + lp * (logoEndX - startX);
+          const y = startY + lp * (logoEndY - startY);
+          logoRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+          logoRef.current.style.width = `${size}px`;
+          logoRef.current.style.height = `${size}px`;
+          logoRef.current.style.opacity = p > 0.42 ? 0 : 1;
+        } else {
+          logoRef.current.style.opacity = 0;
+        }
       }
       if (contentRef.current) {
         const cp = ease(range(p, 0.08, 0.35));
         const op = Math.max(1 - cp * (isMobile ? 1.35 : 1.65), 0);
-        const tx = cp * -winW * (isMobile ? 0.08 : 0.27);
-        const ty = cp * -winH * (isMobile ? 0.22 : 0.36);
-        const sc = 1 - cp * (isMobile ? 0.2 : 0.48);
+        const ty = cp * -winH * 0.20;
         contentRef.current.style.opacity = op;
-        contentRef.current.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${sc})`;
+        contentRef.current.style.transform = `translate3d(0, ${ty}px, 0) scale(1)`;
       }
       if (scrollIndRef.current) {
         const sop = 1 - ease(range(p, 0.05, 0.18));
@@ -450,17 +482,7 @@ export default function ScrollStoryV2() {
               willChange: "transform, opacity",
             }}
           >
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                backgroundImage: `url('${BG_CLOCK}')`,
-                backgroundSize: "cover",
-                backgroundPosition: isMobile ? "center center" : "center 50%",
-                filter: "sepia(0.5) brightness(0.65) contrast(.98)",
-                transform: "translate3d(0,0,0)",
-              }}
-            />
+            <HeroPhotoCollage />
           </div>
 
           <div
@@ -702,22 +724,24 @@ export default function ScrollStoryV2() {
               textAlign: "center",
               pointerEvents: "none",
             }}
+          >
+            <div style={{ height: isMobile ? "8px" : "20px" }} />
+            <div
+              ref={contentRef}
+              style={{
+                willChange: "transform, opacity",
+                transformOrigin: "center center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: isMobile ? "3px" : "8px",
+                maxWidth: isMobile ? "320px" : "none",
+                transform: "translate3d(0,0,0)",
+              }}
             >
-              <div style={{ height: isMobile ? "8px" : "20px" }} />
-              <div
-                ref={contentRef}
-                style={{
-                  willChange: "transform, opacity",
-                  transformOrigin: "center center",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: isMobile ? "3px" : "8px",
-                  maxWidth: isMobile ? "320px" : "none",
-                  transform: "translate3d(0,0,0)",
-                }}
-              >
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1px" }}>
+              <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: isMobile ? "16px" : "24px" }}>
+                <div ref={placeholderRef} style={{ width: isMobile ? "60px" : "110px", height: isMobile ? "60px" : "110px", flexShrink: 0 }} />
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "1px" }}>
                   <div
                     style={{
                       fontFamily: "'Times New Roman', Times, serif",
@@ -732,19 +756,20 @@ export default function ScrollStoryV2() {
                   >
                     The Placement Cell
                   </div>
-                <div
-                  style={{
-                    fontFamily: "'Times New Roman', Times, serif",
-                    fontSize: isMobile ? "clamp(9px, 3.2vw, 12px)" : "clamp(12px, 2vw, 24px)",
-                    color: "rgba(221,227,237,0.78)",
-                    letterSpacing: isMobile ? "0.1em" : "0.18em",
-                    lineHeight: 1.2,
-                    fontWeight: 400,
-                    textTransform: "uppercase",
-                    textShadow: "0 2px 20px rgba(0,0,0,0.9)",
-                  }}
-                >
-                  Shri Ram College of Commerce
+                  <div
+                    style={{
+                      fontFamily: "'Times New Roman', Times, serif",
+                      fontSize: isMobile ? "clamp(9px, 3.2vw, 12px)" : "clamp(12px, 2vw, 24px)",
+                      color: "rgba(221,227,237,0.78)",
+                      letterSpacing: isMobile ? "0.1em" : "0.18em",
+                      lineHeight: 1.2,
+                      fontWeight: 400,
+                      textTransform: "uppercase",
+                      textShadow: "0 2px 20px rgba(0,0,0,0.9)",
+                    }}
+                  >
+                    Shri Ram College of Commerce
+                  </div>
                 </div>
               </div>
 

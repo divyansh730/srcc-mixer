@@ -148,7 +148,7 @@ export default function FilmStrip() {
       }} />
 
       {/* Title Block */}
-      <div style={{ textAlign: "center", marginTop: "8vh", marginBottom: "3vh", position: "relative", zIndex: 10 }}>
+      <div style={{ textAlign: "center", marginTop: isMobile ? "4vh" : "8vh", marginBottom: "3vh", position: "relative", zIndex: 10 }}>
         <h2 style={{
           fontFamily: "'Pinyon Script', cursive",
           fontSize: isMobile ? "clamp(40px, 10vw, 54px)" : "clamp(50px, 8vh, 86px)",

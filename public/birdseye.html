@@ -793,8 +793,16 @@
       }
     }
 
-    @media (max-width: 600px) {
-      #stage { height: 100dvh; }
+    @media (max-width: 768px) {
+      body {
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+      }
+      #stage { 
+        height: 100dvh; 
+        width: 1000px; /* Lock aspect ratio and force horizontal scroll */
+      }
       .page-topbar { padding: 14px 14px 0; }
       .page-topbar-inner { gap: 10px; align-items: flex-start; }
       .page-nav {

@@ -38,7 +38,7 @@ export default function ClosingNote() {
     <div
       ref={containerRef}
       style={{
-        padding: "120px 20px 80px",
+        padding: "clamp(40px, 10vh, 120px) 20px clamp(40px, 8vh, 80px)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",

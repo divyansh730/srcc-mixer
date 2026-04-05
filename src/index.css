@@ -613,3 +613,5 @@ body::before {
     top: 0;
     animation: bounce 2s infinite ease-in-out;
 }
+@ m e d i a   ( m a x - w i d t h :   7 6 8 p x )   {   # l o g o   {   t o p :   3 2 v h   ! i m p o r t a n t ;   }   # m l - t e x t   {   f o n t - s i z e :   c l a m p ( 4 0 p x ,   1 2 v w ,   5 5 p x )   ! i m p o r t a n t ;   t r a n s f o r m :   t r a n s l a t e 3 d ( 0 ,   0 p x ,   0 )   ! i m p o r t a n t ;   }   }  
+ 

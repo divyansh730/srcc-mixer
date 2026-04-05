@@ -29,7 +29,7 @@ function shuffleArray(array) {
   return shuffled;
 }
 
-function TickerRow({ images, reverse, speedSeconds, isCenter }) {
+function TickerRow({ images, reverse, speedSeconds, isCenter, isMobile }) {
   const loopImages = [...images, ...images, ...images, ...images].filter(Boolean);
 
   return (
@@ -52,8 +52,12 @@ function TickerRow({ images, reverse, speedSeconds, isCenter }) {
           <div
             key={`${src}-${i}`}
             style={{
-              width: isCenter ? "clamp(260px, 35vh, 420px)" : "clamp(200px, 28vh, 320px)",
-              height: isCenter ? "min(28vh, 280px)" : "min(20vh, 200px)",
+              width: isCenter 
+                ? (isMobile ? "clamp(160px, 25vh, 260px)" : "clamp(260px, 35vh, 420px)") 
+                : (isMobile ? "clamp(120px, 20vh, 200px)" : "clamp(200px, 28vh, 320px)"),
+              height: isCenter 
+                ? (isMobile ? "min(18vh, 180px)" : "min(28vh, 280px)") 
+                : (isMobile ? "min(14vh, 140px)" : "min(20vh, 200px)"),
               flexShrink: 0,
               marginRight: "20px",
               borderRadius: "12px",
@@ -179,11 +183,11 @@ export default function FilmStrip() {
         zIndex: 5,
         transform: "scale(1.05)",
       }}>
-        <TickerRow images={row1} reverse={false} speedSeconds={isMobile ? 40 : 80} />
+        <TickerRow images={row1} reverse={false} speedSeconds={isMobile ? 40 : 80} isMobile={isMobile} />
         <div className="center-row">
-          <TickerRow images={row2} reverse={true} speedSeconds={isMobile ? 45 : 90} isCenter={true} />
+          <TickerRow images={row2} reverse={true} speedSeconds={isMobile ? 45 : 90} isCenter={true} isMobile={isMobile} />
         </div>
-        <TickerRow images={row3} reverse={false} speedSeconds={isMobile ? 35 : 75} />
+        <TickerRow images={row3} reverse={false} speedSeconds={isMobile ? 35 : 75} isMobile={isMobile} />
       </div>
 
       {/* Edge Fade Gradients */}

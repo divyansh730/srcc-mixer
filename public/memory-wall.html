@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Memory Wall · SRCC</title>
   <link rel="preconnect" href="https://fonts.googleapis.com/">
   <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Pinyon+Script&display=swap"
+    rel="stylesheet">
 
   <style>
     :root {
@@ -17,19 +20,23 @@
       --dark: #0A0805;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
-      background-color: #1a0a05; 
+      background-color: #1a0a05;
       /* ── Realistic Red Brick Wall Background ── */
-      background-image: 
-        linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), 
+      background-image:
+        linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
         url("https://www.transparenttextures.com/patterns/brick-wall.png"),
         url("https://images.unsplash.com/photo-1590060153074-303deaa567af?q=80&w=2000&auto=format&fit=crop");
       background-size: auto, auto, cover;
       /* Removed background-attachment: fixed to make wall scroll with notes */
       background-position: center;
-      
+
       color: var(--cream);
       font-family: 'Cormorant Garamond', serif;
       min-height: 100vh;
@@ -40,8 +47,9 @@
     /* Radial overlay for lighting depth */
     body::after {
       content: '';
-      position: fixed; inset: 0;
-      background: radial-gradient(circle at 50% 30%, transparent 0%, rgba(0,0,0,0.7) 100%);
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 50% 30%, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
       pointer-events: none;
       z-index: 1;
     }
@@ -49,39 +57,63 @@
     /* Grain Overlay */
     body::before {
       content: '';
-      position: fixed; inset: 0;
+      position: fixed;
+      inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
-      pointer-events: none; z-index: 100; opacity: 0.3; mix-blend-mode: overlay;
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.3;
+      mix-blend-mode: overlay;
     }
 
     header {
-      padding: 0 0 0; /* Minimized to the extreme */
+      padding: 0 0 0;
+      /* Minimized to the extreme */
       text-align: center;
       position: relative;
       z-index: 10;
-      margin-top: -40px; /* Pull header up */
+      margin-top: -40px;
+      /* Pull header up */
       padding-bottom: 20px;
     }
 
     .wall-title {
       font-family: 'Pinyon Script', cursive;
-      font-size: clamp(54px, 8vw, 92px); /* Slightly bigger */
+      font-size: clamp(54px, 8vw, 92px);
+      /* Slightly bigger */
       color: var(--gold-light);
       text-shadow: 0 0 35px rgba(212, 175, 55, 0.25);
       font-weight: 400;
-      margin-bottom: 0; /* Reduced from 5px */
+      margin-bottom: 0;
+      /* Reduced from 5px */
       opacity: 0;
       animation: shimmerIn 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards, subtleGlow 4s ease-in-out 1.7s infinite;
     }
 
     @keyframes shimmerIn {
-      0% { opacity: 0; transform: translateY(25px) scale(0.96); filter: blur(4px); }
-      100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+      0% {
+        opacity: 0;
+        transform: translateY(25px) scale(0.96);
+        filter: blur(4px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
     }
 
     @keyframes subtleGlow {
-      0%, 100% { text-shadow: 0 0 35px rgba(212, 175, 55, 0.25); }
-      50% { text-shadow: 0 0 50px rgba(212, 175, 55, 0.45), 0 0 80px rgba(212, 175, 55, 0.2); }
+
+      0%,
+      100% {
+        text-shadow: 0 0 35px rgba(212, 175, 55, 0.25);
+      }
+
+      50% {
+        text-shadow: 0 0 50px rgba(212, 175, 55, 0.45), 0 0 80px rgba(212, 175, 55, 0.2);
+      }
     }
 
     .wall-description {
@@ -90,17 +122,26 @@
     }
 
     @keyframes fadeSlideUp {
-      0% { opacity: 0; transform: translateY(15px); }
-      100% { opacity: 1; transform: translateY(0); }
+      0% {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .wall-description {
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
-      font-size: clamp(16px, 2.2vw, 22px); /* Slightly bigger */
+      font-size: clamp(16px, 2.2vw, 22px);
+      /* Slightly bigger */
       color: rgba(246, 232, 188, 0.75);
       letter-spacing: 0.05em;
-      margin-bottom: -55px; /* Reduced from 10px */
+      margin-bottom: -10px;
+      /* Reduced from 10px */
       max-width: 800px;
       margin-left: auto;
       margin-right: auto;
@@ -113,7 +154,7 @@
       margin: 0 auto;
       min-height: 100vh;
       padding-top: 0;
-      padding-bottom: 120px; 
+      padding-bottom: 120px;
       z-index: 5;
     }
 
@@ -125,8 +166,8 @@
       width: min(380px, 85vw);
       padding: 35px;
       margin: 16px;
-      box-shadow: 
-        5px 5px 20px rgba(0,0,0,0.5),
+      box-shadow:
+        5px 5px 20px rgba(0, 0, 0, 0.5),
         inset 0 0 40px rgba(212, 175, 55, 0.05);
       transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
       opacity: 0;
@@ -136,26 +177,43 @@
       transform: translate(0, 0) rotate(var(--rotation));
     }
 
-    .note-style-1 { --note-bg: #f5e8c0; }
-    .note-style-2 { --note-bg: #e8d8a8; }
-    .note-style-3 { --note-bg: #efe0b8; }
+    .note-style-1 {
+      --note-bg: #f5e8c0;
+    }
+
+    .note-style-2 {
+      --note-bg: #e8d8a8;
+    }
+
+    .note-style-3 {
+      --note-bg: #efe0b8;
+    }
 
     @keyframes noteEntrance {
-      from { opacity: 0; transform: translate(0, 40px) rotate(var(--rotation)) scale(0.9); }
-      to { opacity: 1; transform: translate(0, 0) rotate(var(--rotation)) scale(1); }
+      from {
+        opacity: 0;
+        transform: translate(0, 40px) rotate(var(--rotation)) scale(0.9);
+      }
+
+      to {
+        opacity: 1;
+        transform: translate(0, 0) rotate(var(--rotation)) scale(1);
+      }
     }
 
     .memory-note:hover {
       transform: translate(0, -10px) rotate(0deg) scale(1.08) !important;
       z-index: 100;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.7);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
     }
 
     /* Delete button for moderator */
     .delete-note {
       position: absolute;
-      top: 10px; right: 10px;
-      width: 24px; height: 24px;
+      top: 10px;
+      right: 10px;
+      width: 24px;
+      height: 24px;
       background: #e05c5c;
       color: white;
       border: none;
@@ -167,18 +225,24 @@
       font-size: 14px;
       z-index: 10;
     }
-    body.moderator-mode .delete-note { display: flex; }
+
+    body.moderator-mode .delete-note {
+      display: flex;
+    }
 
     .memory-note::before {
       content: '';
       position: absolute;
-      top: -15px; left: 50%;
+      top: -15px;
+      left: 50%;
       transform: translateX(-50%);
-      width: 90px; height: 28px;
-      background: rgba(255, 255, 255, 0.2); /* Frosted tape look */
+      width: 90px;
+      height: 28px;
+      background: rgba(255, 255, 255, 0.2);
+      /* Frosted tape look */
       backdrop-filter: blur(4px);
       border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
       z-index: 5;
     }
 
@@ -191,7 +255,7 @@
     }
 
     .note-footer {
-      border-top: 1px solid rgba(0,0,0,0.06);
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
       padding-top: 15px;
       display: flex;
       justify-content: space-between;
@@ -201,7 +265,7 @@
     }
 
     .note-name {
-      color: rgba(0,0,0,0.5);
+      color: rgba(0, 0, 0, 0.5);
     }
 
     .note-batch {
@@ -212,7 +276,9 @@
     /* ── Fixed Footer Submission Bar ── */
     #submission-bar {
       position: fixed;
-      bottom: 0; left: 0; right: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
       background: linear-gradient(to top, var(--dark) 70%, transparent);
       padding: 50px 20px;
       z-index: 200;
@@ -246,8 +312,10 @@
     #etch-modal {
       position: fixed;
       inset: 0;
-      background: rgba(5, 3, 1, 0.85); /* Slightly darker */
-      backdrop-filter: blur(12px) saturate(1.2); /* Enhanced blur */
+      background: rgba(5, 3, 1, 0.85);
+      /* Slightly darker */
+      backdrop-filter: blur(12px) saturate(1.2);
+      /* Enhanced blur */
       -webkit-backdrop-filter: blur(12px) saturate(1.2);
       z-index: 300;
       display: flex;
@@ -266,12 +334,13 @@
     .etch-form {
       width: min(580px, 90vw);
       position: relative;
-      transform: translateY(40px) scale(0.95); /* Popup effect */
+      transform: translateY(40px) scale(0.95);
+      /* Popup effect */
       transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
       background: rgba(10, 7, 3, 0.95);
       padding: 50px 60px;
       border: 1px solid var(--gold-dim);
-      box-shadow: 0 30px 100px rgba(0,0,0,0.8);
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.8);
     }
 
     #etch-modal.open .etch-form {
@@ -313,6 +382,7 @@
       transition: border-color 0.3s ease;
       cursor: pointer;
     }
+
     .select-wrapper:focus-within {
       border-color: var(--gold);
     }
@@ -345,7 +415,7 @@
       visibility: hidden;
       transform: translateY(10px);
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
 
     .select-wrapper.active .custom-options {
@@ -373,8 +443,13 @@
     }
 
     /* Custom Scrollbar for dropdown */
-    .custom-options::-webkit-scrollbar { width: 4px; }
-    .custom-options::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+    .custom-options::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .custom-options::-webkit-scrollbar-thumb {
+      background: var(--gold-dim);
+    }
 
     .etch-input {
       width: 100%;
@@ -399,7 +474,8 @@
 
     #prompt-hint {
       position: absolute;
-      top: 8px; left: 0;
+      top: 8px;
+      left: 0;
       font-size: 22px;
       font-style: italic;
       color: var(--cream);
@@ -408,8 +484,8 @@
       transition: opacity 0.3s ease;
     }
 
-    .etch-input:focus + #prompt-hint,
-    .etch-input:not(:placeholder-shown) + #prompt-hint {
+    .etch-input:focus+#prompt-hint,
+    .etch-input:not(:placeholder-shown)+#prompt-hint {
       opacity: 0 !important;
     }
 
@@ -467,9 +543,11 @@
 
     #admin-access {
       position: fixed;
-      top: 20px; right: 20px;
+      top: 20px;
+      right: 20px;
       z-index: 250;
     }
+
     .admin-btn {
       background: transparent;
       border: 1px solid rgba(212, 175, 55, 0.1);
@@ -481,6 +559,7 @@
       text-transform: uppercase;
       cursor: pointer;
     }
+
     .admin-btn:hover {
       color: var(--gold);
       border-color: var(--gold-dim);
@@ -506,8 +585,9 @@
       text-decoration: none;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .mixer-back:hover { 
-      color: var(--gold); 
+
+    .mixer-back:hover {
+      color: var(--gold);
       background: rgba(212, 175, 55, 0.12);
       border-color: var(--gold);
       letter-spacing: 0.3em;
@@ -516,25 +596,43 @@
     }
 
     @media (max-width: 768px) {
-      header { padding: 15px 20px 5px; } /* More compact header on mobile */
-      .wall-title { font-size: 48px; }
-      .wall-description { margin: 0 20px 0; text-align: center; }
-      .mixer-back { 
-        margin: 16px 16px 0; 
-        font-size: 8px; 
+      header {
+        padding: 15px 20px 5px;
+      }
+
+      /* More compact header on mobile */
+      .wall-title {
+        font-size: 48px;
+      }
+
+      .wall-description {
+        margin: 0 20px 0;
+        text-align: center;
+      }
+
+      .mixer-back {
+        margin: 16px 16px 0;
+        font-size: 8px;
         padding: 8px 14px;
         letter-spacing: 0.15em;
       }
+
       .memory-note {
         position: relative !important;
         left: 0 !important;
         top: 0 !important;
-        margin: 24px auto; /* More vertical spacing */
+        margin: 24px auto;
+        /* More vertical spacing */
         width: 92vw;
         padding: 28px 24px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
       }
-      .note-text { font-size: 19px; line-height: 1.35; }
+
+      .note-text {
+        font-size: 19px;
+        line-height: 1.35;
+      }
+
       #wall-container {
         display: flex;
         flex-direction: column;
@@ -542,20 +640,47 @@
         padding-top: 10px;
         padding-bottom: 140px;
       }
+
       .etch-form {
-        padding: 35px 20px; /* Adjusted padding */
+        padding: 35px 20px;
+        /* Adjusted padding */
         width: 94vw;
         border-radius: 4px;
       }
-      .form-header h3 { font-size: 15px; margin-bottom: 35px; }
-      .etch-input, .custom-select-trigger { font-size: 19px; }
-      .submit-etch, .close-etch { padding: 12px 25px; font-size: 10px; }
-      #submission-bar { padding: 35px 20px; }
-      .etch-trigger { width: 85%; padding: 14px 20px; font-size: 10px; }
-      #moderator-btn { display: none !important; }
+
+      .form-header h3 {
+        font-size: 15px;
+        margin-bottom: 35px;
+      }
+
+      .etch-input,
+      .custom-select-trigger {
+        font-size: 19px;
+      }
+
+      .submit-etch,
+      .close-etch {
+        padding: 12px 25px;
+        font-size: 10px;
+      }
+
+      #submission-bar {
+        padding: 35px 20px;
+      }
+
+      .etch-trigger {
+        width: 85%;
+        padding: 14px 20px;
+        font-size: 10px;
+      }
+
+      #moderator-btn {
+        display: none !important;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <div id="admin-access">
@@ -566,7 +691,8 @@
 
   <header>
     <h1 class="wall-title">Memory Wall</h1>
-    <p class="wall-description">A collection of shared memories from alumni across decades. Etch your own legacy below!</p>
+    <p class="wall-description">A collection of shared memories from alumni across decades. Etch your own legacy below!
+    </p>
   </header>
 
   <main id="wall-container">
@@ -621,13 +747,13 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    const firebaseConfig = { 
-      apiKey: "AIzaSyAAbJeb6hQFc78RGgzY-eoftS5zrx-pRv0", 
-      authDomain: "memory-wall-pc-srcc.firebaseapp.com", 
-      projectId: "memory-wall-pc-srcc", 
-      storageBucket: "memory-wall-pc-srcc.firebasestorage.app", 
-      messagingSenderId: "85707520730", 
-      appId: "1:85707520730:web:277d825c226586996a03e3", 
+    const firebaseConfig = {
+      apiKey: "AIzaSyAAbJeb6hQFc78RGgzY-eoftS5zrx-pRv0",
+      authDomain: "memory-wall-pc-srcc.firebaseapp.com",
+      projectId: "memory-wall-pc-srcc",
+      storageBucket: "memory-wall-pc-srcc.firebasestorage.app",
+      messagingSenderId: "85707520730",
+      appId: "1:85707520730:web:277d825c226586996a03e3",
       measurementId: "G-V8T3981NCW"
     };
 
@@ -662,7 +788,7 @@
         selectedYearLabel.textContent = `Team of ${year}-${nextYear}`;
         selectedYearLabel.style.color = 'var(--cream)';
         customSelect.classList.remove('active');
-        
+
         document.querySelectorAll('.custom-option').forEach(el => el.classList.remove('selected'));
         opt.classList.add('selected');
       };
@@ -691,26 +817,26 @@
     onSnapshot(q, (snapshot) => {
       wall.innerHTML = '';
       const isMobile = window.innerWidth <= 768;
-      
+
       snapshot.docs.forEach((docSnap, i) => {
         const m = docSnap.data();
         const note = document.createElement('div');
         const styleNum = (i % 3) + 1;
         note.className = `memory-note note-style-${styleNum}`;
-        
+
         // Slight rotation for scattered feel
-        const rotation = (Math.random() * 8 - 4).toFixed(1); 
+        const rotation = (Math.random() * 8 - 4).toFixed(1);
         const delay = (i * 0.1).toFixed(1);
-        
+
         note.style.setProperty('--rotation', `${rotation}deg`);
         note.style.setProperty('--delay', `${delay}s`);
-        
+
         if (!isMobile) {
           // Centered layout with 75% width
           const side = i % 2 === 0 ? 'left' : 'right';
-          const horizontalOffset = 12.5 + (Math.random() * 5); 
-          const verticalOffset = 50 + (i * 180) + (Math.random() * 30 - 15); 
-          
+          const horizontalOffset = 12.5 + (Math.random() * 5);
+          const verticalOffset = 50 + (i * 180) + (Math.random() * 30 - 15);
+
           if (side === 'left') note.style.left = `${horizontalOffset}%`;
           else note.style.right = `${horizontalOffset}%`;
           note.style.top = `${verticalOffset}px`;
@@ -740,8 +866,8 @@
       const text = memoryInput.value.trim();
       const name = nameInput.value.trim();
 
-        if (!batch || !text) {
-          alert("Please fill in both fields (Team and Memory).");
+      if (!batch || !text) {
+        alert("Please fill in both fields (Team and Memory).");
         return;
       }
 
@@ -818,4 +944,5 @@
 
   </script>
 </body>
+
 </html>

@@ -770,7 +770,7 @@ export default function ScrollStoryV2() {
                       fontFamily: "'Times New Roman', Times, serif",
                       fontSize: isMobile ? "clamp(9px, 2.5vw, 13px)" : "clamp(16px, 2.5vw, 31px)",
                       color: "#FDFDFD",
-                      letterSpacing: isMobile ? "0.06em" : "0.19em",
+                      letterSpacing: isMobile ? "0.14em" : "0.19em",
                       lineHeight: 1,
                       fontWeight: 400,
                       textTransform: "uppercase",
@@ -779,40 +779,39 @@ export default function ScrollStoryV2() {
                   >
                     Shri Ram College of Commerce
                   </div>
-
-                  <div style={{ display: "flex", width: "100%", alignItems: "center", gap: isMobile ? "6px" : "10px", marginTop: isMobile ? "10px" : "18px" }}>
-                    <div
-                      style={{
-                        flex: 1,
-                        height: "1px",
-                        background: "linear-gradient(90deg, transparent, #C9A84C)",
-                      }}
-                    />
-                    <span style={{ color: "#C9A84C", fontSize: isMobile ? "8px" : "12px", lineHeight: 1, paddingTop: "2px" }}>✦</span>
-                    <div
-                      style={{
-                        flex: 1,
-                        height: "1px",
-                        background: "linear-gradient(90deg, #C9A84C, transparent)",
-                      }}
-                    />
-                  </div>
-
-                  <div
-                    style={{
-                      fontFamily: "'Pinyon Script', cursive",
-                      fontSize: isMobile ? "clamp(24px, 7.5vw, 32px)" : "clamp(36px, 6vw, 66px)",
-                      color: "#C9A84C",
-                      textShadow: "0 0 30px rgba(201,168,76,0.55), 0 2px 10px rgba(0,0,0,0.9)",
-                      lineHeight: 1,
-                      letterSpacing: "0.02em",
-                      marginTop: isMobile ? "8px" : "20px"
-                    }}
-                  >
-                    30 Years of Excellence
-                  </div>
-
                 </div>
+              </div>
+
+              <div style={{ display: "flex", width: "100%", alignItems: "center", gap: isMobile ? "6px" : "10px", marginTop: isMobile ? "0px" : "0px" }}>
+                <div
+                  style={{
+                    flex: 1,
+                    height: "1px",
+                    background: "linear-gradient(90deg, transparent, #C9A84C)",
+                  }}
+                />
+                <span style={{ color: "#C9A84C", fontSize: isMobile ? "8px" : "12px", lineHeight: 1, paddingTop: "2px" }}>✦</span>
+                <div
+                  style={{
+                    flex: 1,
+                    height: "1px",
+                    background: "linear-gradient(90deg, #C9A84C, transparent)",
+                  }}
+                />
+              </div>
+
+              <div
+                style={{
+                  fontFamily: "'Pinyon Script', cursive",
+                  fontSize: isMobile ? "clamp(24px, 7.5vw, 32px)" : "clamp(36px, 6vw, 66px)",
+                  color: "#C9A84C",
+                  textShadow: "0 0 30px rgba(201,168,76,0.55), 0 2px 10px rgba(0,0,0,0.9)",
+                  lineHeight: 1,
+                  letterSpacing: "0.02em",
+                  marginTop: isMobile ? "12px" : "20px"
+                }}
+              >
+                30 Years of Excellence
               </div>
             </div>
           </div>

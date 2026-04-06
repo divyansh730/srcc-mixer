@@ -23,6 +23,8 @@ export default function ClosingNote() {
             setTimeout(() => setActiveLine(0), 400);   // Line 1 appears
             setTimeout(() => setActiveLine(1), 3200);  // Line 2 appears, Line 1 disappears
             setTimeout(() => setActiveLine(2), 6000);  // Line 3 appears, Line 2 disappears
+            setTimeout(() => setActiveLine(3), 9600);  // Line 4 appears, Line 3 disappears
+            setTimeout(() => setActiveLine(4), 10800); // Line 5 appears, Line 4 stays
             observer.disconnect();
           }
         });
@@ -40,7 +42,9 @@ export default function ClosingNote() {
   const lines = [
     "The 'P' in PC was always about the people.",
     "You were always at the heart of it.",
-    "At the Alumni Mixer 2026, let's celebrate what PC was, and what it still feels like because of you!"
+    "At the Alumni Mixer 2026, let's celebrate what PC was, and what it still feels like because of you!",
+    "Excited to welcome you back to SRCC!",
+    "4:00 P.M., 25 April 2026"
   ];
 
   return (
@@ -71,11 +75,10 @@ export default function ClosingNote() {
         zIndex: -1
       }} />
 
-      <div style={{ position: "relative", width: "100%", maxWidth: "900px", height: "120px", display: "flex", justifyContent: "center", alignItems: "center" }}>
-        {lines.map((line, index) => {
-          // A line is visible if it is the precisely active line. The 3rd line stays visible forever once reached.
-          const isVisible = index === 2 ? activeLine >= 2 : activeLine === index;
-          // Determine if it has already passed (faded out up)
+      <div style={{ position: "relative", width: "100%", maxWidth: "900px", minHeight: "160px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        {lines.slice(0, 3).map((line, index) => {
+          // Lines 0, 1, 2 disappear when the next one appears.
+          const isVisible = activeLine === index;
           const isPast = activeLine > index;
 
           return (
@@ -92,7 +95,6 @@ export default function ClosingNote() {
                 margin: 0,
                 lineHeight: 1.4,
                 opacity: isVisible ? 1 : 0,
-                // If it's visible, translateY is 0. If it hasn't appeared yet, it's lower (40px). If it's past, it floats up higher (-40px).
                 transform: `translate(-50%, calc(-50% + ${isVisible ? "0px" : isPast ? "-40px" : "40px"}))`,
                 transition: "opacity 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
                 textShadow: index !== 2 ? "0 0 24px rgba(201,168,76,0.5)" : "none",
@@ -103,6 +105,43 @@ export default function ClosingNote() {
             </p>
           );
         })}
+
+        <div style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: isMobile ? "8px" : "16px",
+            width: "100%",
+            pointerEvents: activeLine >= 3 ? "auto" : "none"
+        }}>
+          {lines.slice(3, 5).map((line, idx) => {
+            const index = idx + 3;
+            const isVisible = activeLine >= index;
+            // same formatting as first popup
+            return (
+              <p
+                key={index}
+                style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontSize: "clamp(36px, 7vw, 56px)",
+                  color: "#C9A84C",
+                  margin: 0,
+                  lineHeight: 1.2,
+                  opacity: isVisible ? 1 : 0,
+                  transform: `translateY(${isVisible ? "0px" : "40px"})`,
+                  transition: "opacity 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                  textShadow: "0 0 24px rgba(201,168,76,0.5)",
+                }}
+              >
+                {line}
+              </p>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -354,22 +354,22 @@ body::before {
 
 @media (max-width: 740px) {
   .landing-heading-block {
-    margin-bottom: 40px;
+    margin-bottom: 24px;
   }
 
   .landing-heading-block--simple {
-    margin-bottom: 22px;
+    margin-bottom: 12px;
   }
 
   .landing-heading-rule {
     height: 44px;
-    margin-bottom: 22px;
+    margin-bottom: 16px;
   }
 
   .landing-heading-kicker {
     font-size: 9px;
     letter-spacing: 0.28em;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
   .landing-welcome-title {

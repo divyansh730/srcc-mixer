@@ -7,7 +7,7 @@ import FilmStrip from "./components/FilmStrip";
 export default function AppV2() {
   useEffect(() => {
     const STORAGE_KEY = 'srcc_mixer_scroll_pos';
-    
+
     // Restore scroll position
     const savedPos = localStorage.getItem(STORAGE_KEY);
     if (savedPos) {

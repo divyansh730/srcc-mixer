@@ -29,7 +29,7 @@ const landingOptions = [
   },
   {
     id: "campus-birdseye",
-    title: "T-10",
+    title: "Alum Engagement",
     image: assetUrl("srcc-aerial.jpg"),
     status: "Explore",
     description:
@@ -130,7 +130,7 @@ export default function LandingPage() {
         }}
       />
 
-      <div style={{ position: "relative", zIndex: 2, maxWidth: "1180px", margin: "0 auto", padding: isMobile ? "25px 16px 0px" : "50px 40px 0px" }}>
+      <div style={{ position: "relative", zIndex: 2, maxWidth: "1180px", margin: "0 auto", padding: isMobile ? "12px 16px 0px" : "50px 40px 0px" }}>
         <div ref={headingBlockRef} className="landing-heading-block landing-heading-block--simple">
           <h2 className="landing-welcome-title">Through the Years</h2>
         </div>

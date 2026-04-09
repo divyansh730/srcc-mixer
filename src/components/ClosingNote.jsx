@@ -51,7 +51,7 @@ export default function ClosingNote() {
     <div
       ref={containerRef}
       style={{
-        padding: isMobile ? "32px 20px 24px" : "clamp(40px, 10vh, 120px) 20px clamp(40px, 8vh, 80px)",
+        padding: isMobile ? "16px 20px 16px" : "clamp(40px, 10vh, 120px) 20px clamp(40px, 8vh, 80px)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -59,7 +59,7 @@ export default function ClosingNote() {
         textAlign: "center",
         position: "relative",
         zIndex: 5,
-        minHeight: isMobile ? "40vh" : "50vh"
+        minHeight: isMobile ? "20vh" : "50vh"
       }}
     >
       {/* Subtle background glow */}

@@ -13,12 +13,14 @@ export default function Footer() {
 
   return (
     <footer style={{
-      background: "linear-gradient(180deg, #1f1107 0%, #110702 100%)",
-      borderTop: "2px solid rgba(201,168,76,0.35)",
-      boxShadow: "0 -10px 40px rgba(0,0,0,0.4)",
-      padding: isMobile ? "24px 20px 12px" : "32px 80px 16px",
+      background: "#050200", // Deep rich dark color fitting the aesthetic
+      borderTop: "1px solid rgba(201, 168, 76, 0.4)",
+      boxShadow: "0 -8px 32px rgba(201, 168, 76, 0.08)",
+      padding: isMobile ? "40px 20px 20px" : "60px 80px 30px",
       position: "relative",
       zIndex: 10,
+      width: "100%",
+      boxSizing: "border-box", // Prevents horizontal scroll locks
     }}>
       <div style={{
         maxWidth: "1180px",
@@ -26,52 +28,96 @@ export default function Footer() {
         display: "flex",
         flexDirection: isMobile ? "column" : "row",
         justifyContent: "space-between",
-        alignItems: isMobile ? "flex-start" : "center",
-        gap: "40px"
+        alignItems: isMobile ? "center" : "flex-end",
+        gap: "40px",
+        textAlign: isMobile ? "center" : "left",
       }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-          <div style={{
-            fontFamily: "'Times New Roman', Times, serif",
-            fontSize: "18px",
-            color: "#DDE3ED",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase"
-          }}>
-            The Placement Cell
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px", alignItems: isMobile ? "center" : "flex-start" }}>
+          <div>
+            <h3 style={{
+              margin: 0,
+              fontFamily: "'Cinzel', serif",
+              fontSize: isMobile ? "18px" : "22px",
+              fontWeight: 600,
+              color: "#DDE3ED",
+              letterSpacing: "0.15em",
+              textTransform: "uppercase"
+            }}>
+              The Placement Cell
+            </h3>
+            <p style={{
+              margin: "6px 0 0 0",
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: "15px",
+              color: "rgba(201, 168, 76, 0.8)",
+              letterSpacing: "0.08em",
+              fontStyle: "italic"
+            }}>
+              Shri Ram College of Commerce
+            </p>
           </div>
-          <div style={{
-            fontFamily: "'Cinzel', serif",
-            fontSize: "12px",
-            color: "#C9A84C",
-            letterSpacing: "0.08em",
-            textTransform: "uppercase"
+          <p style={{
+            margin: "12px 0 0 0",
+            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: "15px",
+            color: "rgba(226, 230, 237, 0.85)",
+            letterSpacing: "0.05em",
+            maxWidth: "340px",
+            lineHeight: 1.5,
+            fontStyle: "italic"
           }}>
-            Shri Ram College of Commerce
-          </div>
+            &quot;The future belongs to those who believe in the beauty of their dreams.&quot;<br />
+            <span style={{ fontStyle: "normal", fontSize: "12px", opacity: 0.8, display: "block", marginTop: "4px" }}>— Eleanor Roosevelt</span>
+          </p>
         </div>
 
         <div style={{ 
-          display: "flex", 
-          gap: isMobile ? "24px" : "40px",
-          fontFamily: "'Cinzel', serif",
-          fontSize: "11px",
-          letterSpacing: "0.15em",
-          color: "rgba(226, 230, 237, 0.7)",
-          textTransform: "uppercase"
+          display: "flex",
+          flexDirection: "column",
+          alignItems: isMobile ? "center" : "flex-end",
+          gap: "24px"
         }}>
-          <a href="#" style={{ color: "inherit", textDecoration: "none", transition: "color 0.3s" }} 
-             onMouseEnter={(e) => e.target.style.color = "#C9A84C"}
-             onMouseLeave={(e) => e.target.style.color = "rgba(226, 230, 237, 0.7)"}>Instagram</a>
-          <a href="#" style={{ color: "inherit", textDecoration: "none", transition: "color 0.3s" }}
-             onMouseEnter={(e) => e.target.style.color = "#C9A84C"}
-             onMouseLeave={(e) => e.target.style.color = "rgba(226, 230, 237, 0.7)"}>LinkedIn</a>
-          <a href="#" style={{ color: "inherit", textDecoration: "none", transition: "color 0.3s" }}
-             onMouseEnter={(e) => e.target.style.color = "#C9A84C"}
-             onMouseLeave={(e) => e.target.style.color = "rgba(226, 230, 237, 0.7)"}>Facebook</a>
+          <div style={{ 
+            display: "flex", 
+            gap: isMobile ? "24px" : "32px",
+            fontFamily: "'Cinzel', serif",
+            fontSize: "12px",
+            fontWeight: 500,
+            letterSpacing: "0.15em",
+            color: "rgba(201, 168, 76, 0.9)",
+            textTransform: "uppercase"
+          }}>
+            {["Instagram", "LinkedIn", "Facebook"].map(platform => (
+              <a key={platform} href="#" style={{ 
+                color: "inherit", 
+                textDecoration: "none", 
+                transition: "all 0.4s ease",
+                position: "relative"
+              }} 
+                 onMouseEnter={(e) => {
+                   e.currentTarget.style.color = "#FFF";
+                   e.currentTarget.style.textShadow = "0 0 12px rgba(201,168,76,0.6)";
+                 }}
+                 onMouseLeave={(e) => {
+                   e.currentTarget.style.color = "rgba(201, 168, 76, 0.9)";
+                   e.currentTarget.style.textShadow = "none";
+                 }}>
+                {platform}
+              </a>
+            ))}
+          </div>
+
+          <p style={{
+            margin: 0,
+            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: "13px",
+            color: "rgba(226, 230, 237, 0.3)",
+            letterSpacing: "0.06em",
+          }}>
+            &copy; {new Date().getFullYear()} The Placement Cell, SRCC. All rights reserved.
+          </p>
         </div>
       </div>
-
-
     </footer>
   );
 }

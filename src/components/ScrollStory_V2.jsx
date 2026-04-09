@@ -146,21 +146,23 @@ export default function ScrollStoryV2() {
         const expandP = range(p, 0.52, 0.82);
         const sc = 1 + (expandP * expandP) * 14;
         dialBgRef.current.style.opacity = currentOp;
-        dialBgRef.current.style.transform = `translate3d(0,0,0) scale(${sc})`;
+        dialBgRef.current.style.visibility = currentOp <= 0 ? "hidden" : "visible";
+        dialBgRef.current.style.transform = `translate3d(0,0,0) scale3d(${sc}, ${sc}, 1)`;
         const sr1 = p * 90, sr2 = -p * 130, sr3 = p * 170;
         const sr4 = -p * 60, sr5 = p * 200, srOut = -p * 140, srIn = p * 180;
-        if (ring1Ref.current) ring1Ref.current.style.transform = `rotate(${perp.r1 + sr1}deg)`;
-        if (ring2Ref.current) ring2Ref.current.style.transform = `rotate(${perp.r2 + sr2}deg)`;
-        if (ring3Ref.current) ring3Ref.current.style.transform = `rotate(${perp.r3 + sr3}deg)`;
-        if (ring4Ref.current) ring4Ref.current.style.transform = `rotate(${perp.r4 + sr4}deg)`;
-        if (ring5Ref.current) ring5Ref.current.style.transform = `rotate(${perp.r5 + sr5}deg)`;
-        if (outTickRef.current) outTickRef.current.style.transform = `rotate(${perp.out + srOut}deg)`;
-        if (inTickRef.current) inTickRef.current.style.transform = `rotate(${perp.inn + srIn}deg)`;
+        if (ring1Ref.current) ring1Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r1 + sr1}deg)`;
+        if (ring2Ref.current) ring2Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r2 + sr2}deg)`;
+        if (ring3Ref.current) ring3Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r3 + sr3}deg)`;
+        if (ring4Ref.current) ring4Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r4 + sr4}deg)`;
+        if (ring5Ref.current) ring5Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r5 + sr5}deg)`;
+        if (outTickRef.current) outTickRef.current.style.transform = `translate3d(0,0,0) rotate(${perp.out + srOut}deg)`;
+        if (inTickRef.current) inTickRef.current.style.transform = `translate3d(0,0,0) rotate(${perp.inn + srIn}deg)`;
         if (revealRef.current) {
-          const revealOp = ease(range(p, 0.70, 0.82));
+          const rawRevealOp = ease(range(p, 0.70, 0.82));
+          const revealOp = rawRevealOp > 0.001 ? rawRevealOp : 0.001; // Pre-cache massive block
           const revealTy = 40 * (1 - ease(range(p, 0.70, 0.92)));
           revealRef.current.style.opacity = revealOp;
-          revealRef.current.style.transform = `translateY(${revealTy}px)`;
+          revealRef.current.style.transform = `translate3d(0, ${revealTy}px, 0)`;
         }
       }
       if (headerRef.current) {
@@ -496,7 +498,8 @@ export default function ScrollStoryV2() {
               justifyContent: "center",
               opacity: 0,
               willChange: "transform, opacity",
-              pointerEvents: "none"
+              pointerEvents: "none",
+              backfaceVisibility: "hidden",
             }}
           >
             <svg viewBox="0 0 1000 1000" style={{ width: "min(115vw, 115vh)", height: "min(115vw, 115vh)", overflow: "visible", maxWidth: "1200px", opacity: 0.75 }}>
@@ -589,7 +592,7 @@ export default function ScrollStoryV2() {
 
                 {/* === ORNATE FILIGREE DOUBLE-RING === */}
                 <circle ref={ring3Ref} cx="500" cy="500" r="380" fill="none" stroke="#C9A84C" strokeWidth="1.5" strokeOpacity="0.5" transform-origin="500px 500px" />
-                <circle cx="500" cy="500" r="360" fill="none" stroke="#C9A84C" strokeWidth="2.5" filter="url(#goldGlow)" strokeOpacity="0.85" />
+                <circle cx="500" cy="500" r="360" fill="none" stroke="#C9A84C" strokeWidth="2.5" filter={isMobile ? "none" : "url(#goldGlow)"} strokeOpacity="0.85" />
                 <circle cx="500" cy="500" r="340" fill="none" stroke="#C9A84C" strokeWidth="1" strokeOpacity="0.4" />
                 {/* Filigree scrollwork around the 360 ring — 24 ornamental arcs */}
                 {Array.from({ length: 24 }).map((_, i) => {
@@ -624,7 +627,7 @@ export default function ScrollStoryV2() {
                 })}
 
                 {/* === INNER ORNATE COMPASS ROSE === */}
-                <circle ref={ring5Ref} cx="500" cy="500" r="210" fill="none" stroke="#C9A84C" strokeWidth="2" strokeOpacity="0.6" filter="url(#softGlow)" transform-origin="500px 500px" />
+                <circle ref={ring5Ref} cx="500" cy="500" r="210" fill="none" stroke="#C9A84C" strokeWidth="2" strokeOpacity="0.6" filter={isMobile ? "none" : "url(#softGlow)"} transform-origin="500px 500px" />
                 <circle cx="500" cy="500" r="195" fill="none" stroke="#C9A84C" strokeWidth="0.5" strokeOpacity="0.3" />
 
                 <g ref={inTickRef} transform-origin="500px 500px">

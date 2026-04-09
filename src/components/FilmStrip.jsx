@@ -52,11 +52,11 @@ function TickerRow({ images, reverse, speedSeconds, isCenter, isMobile }) {
           <div
             key={`${src}-${i}`}
             style={{
-              width: isCenter 
-                ? (isMobile ? "clamp(160px, 25vh, 260px)" : "clamp(260px, 35vh, 420px)") 
+              width: isCenter
+                ? (isMobile ? "clamp(160px, 25vh, 260px)" : "clamp(260px, 35vh, 420px)")
                 : (isMobile ? "clamp(120px, 20vh, 200px)" : "clamp(200px, 28vh, 320px)"),
-              height: isCenter 
-                ? (isMobile ? "min(18vh, 180px)" : "min(28vh, 280px)") 
+              height: isCenter
+                ? (isMobile ? "min(18vh, 180px)" : "min(28vh, 280px)")
                 : (isMobile ? "min(14vh, 140px)" : "min(20vh, 200px)"),
               flexShrink: 0,
               marginRight: "20px",

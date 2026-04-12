@@ -14,17 +14,18 @@ export default function ClosingNote() {
   }, []);
 
   useEffect(() => {
+    const timers = [];
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             // Trigger lines sequentially and slowly.
             // When a new line becomes active, the previous one goes away.
-            setTimeout(() => setActiveLine(0), 400);   // Line 1 appears
-            setTimeout(() => setActiveLine(1), 3200);  // Line 2 appears, Line 1 disappears
-            setTimeout(() => setActiveLine(2), 6000);  // Line 3 appears, Line 2 disappears
-            setTimeout(() => setActiveLine(3), 9600);  // Line 4 appears, Line 3 disappears
-            setTimeout(() => setActiveLine(4), 10800); // Line 5 appears, Line 4 stays
+            timers.push(setTimeout(() => setActiveLine(0), 500));   // Line 1 appears
+            timers.push(setTimeout(() => setActiveLine(1), 4300));  // Line 2 appears, Line 1 disappears
+            timers.push(setTimeout(() => setActiveLine(2), 8200));  // Line 3 appears, Line 2 disappears
+            timers.push(setTimeout(() => setActiveLine(3), 13600)); // Line 4 appears, Line 3 disappears
+            timers.push(setTimeout(() => setActiveLine(4), 16000)); // Line 5 appears, Line 4 stays
             observer.disconnect();
           }
         });
@@ -36,7 +37,10 @@ export default function ClosingNote() {
       observer.observe(containerRef.current);
     }
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      timers.forEach((timer) => clearTimeout(timer));
+    };
   }, []);
 
   const lines = [

@@ -536,7 +536,9 @@
         { name: "Devaj Mohanpuria", team: 2024, photo: assetUrl("Alum photos/Devaj Mohanpuria.jpeg"), videoLink: "https://youtu.be/RaTW5zgkF14" }
       ];
     const STORAGE_KEY = "srcc_alum_custom_cards";
-    let alums = [...defaultAlums];
+    const sortAlums = (list) => [...list].sort((a, b) => (a.team - b.team) || a.name.localeCompare(b.name));
+    let customAlums = [];
+    let alums = sortAlums(defaultAlums);
 
      const grid = document.getElementById("alum-grid");
      const modal = document.getElementById("video-modal");
@@ -647,11 +649,11 @@
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
         const parsed = raw ? JSON.parse(raw) : [];
-        if (Array.isArray(parsed) && parsed.length) {
-          alums = [...defaultAlums, ...parsed];
-        }
+        customAlums = Array.isArray(parsed) ? parsed : [];
+        alums = sortAlums([...defaultAlums, ...customAlums]);
       } catch {
-        alums = [...defaultAlums];
+        customAlums = [];
+        alums = sortAlums(defaultAlums);
       }
     }
 
@@ -733,10 +735,9 @@
        }
 
        const custom = { name, team, photo, videoLink };
-       const customCards = alums.slice(defaultAlums.length);
-       customCards.push(custom);
-       saveCustomCards(customCards);
-       loadCustomCards();
+       customAlums.push(custom);
+       saveCustomCards(customAlums);
+       alums = sortAlums([...defaultAlums, ...customAlums]);
        renderCards();
        closeManageModal();
      }

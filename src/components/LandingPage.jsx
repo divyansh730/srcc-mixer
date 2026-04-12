@@ -34,7 +34,7 @@ const landingOptions = [
     image: assetUrl("srcc-aerial.jpg"),
     status: "Open",
     description:
-      "Reconnect with alumni voices and moments through curated engagement stories.",
+      "Conversations with our beloved alumni - sharing their stories from The Cell!",
     href: ALUM_ENGAGEMENT_PAGE,
   },
 ];

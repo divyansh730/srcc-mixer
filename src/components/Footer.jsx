@@ -13,14 +13,14 @@ export default function Footer() {
 
   return (
     <footer style={{
-      background: "#050200", // Deep rich dark color fitting the aesthetic
-      borderTop: "1px solid rgba(201, 168, 76, 0.4)",
-      boxShadow: "0 -8px 32px rgba(201, 168, 76, 0.08)",
-      padding: isMobile ? "40px 20px 20px" : "60px 80px 30px",
+      background: "linear-gradient(180deg, rgba(10, 5, 0, 0.8) 0%, rgba(12, 6, 2, 0.95) 100%)",
+      borderTop: "1px solid rgba(201, 168, 76, 0.25)",
+      boxShadow: "inset 0 8px 24px rgba(0, 0, 0, 0.6), 0 -12px 40px rgba(201, 168, 76, 0.12)",
+      padding: isMobile ? "40px 20px 24px" : "60px 80px 40px",
       position: "relative",
       zIndex: 10,
       width: "100%",
-      boxSizing: "border-box", // Prevents horizontal scroll locks
+      boxSizing: "border-box",
     }}>
       <div style={{
         maxWidth: "1180px",
@@ -31,6 +31,8 @@ export default function Footer() {
         alignItems: isMobile ? "center" : "flex-end",
         gap: "40px",
         textAlign: isMobile ? "center" : "left",
+        position: "relative",
+        zIndex: 2,
       }}>
         <div style={{ display: "flex", flexDirection: "column", gap: "12px", alignItems: isMobile ? "center" : "flex-start" }}>
           <div>

@@ -5,6 +5,7 @@ import HeroPhotoCollage from "./HeroPhotoCollage";
 const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`;
 const MEMORY_WALL_PAGE = `${import.meta.env.BASE_URL}memory-wall.html`;
 const GALLERY_PAGE = `${import.meta.env.BASE_URL}pc-gallery.html`;
+const ALUM_ENGAGEMENT_PAGE = `${import.meta.env.BASE_URL}alum-engagement.html`;
 const SRCC_LOGO = assetUrl("srcc-logo.png");
 const MIXER_LOGO = assetUrl("Mixer logo.png");
 const BG_CLOCK = assetUrl("srcc-clock.jpg");
@@ -409,8 +410,8 @@ export default function ScrollStoryV2() {
                   <a href={GALLERY_PAGE} className="nav-link" style={{ fontSize: "11px" }}>
                     PC Gallery
                   </a>
-                  <a href="#birdseye" className="nav-link" style={{ fontSize: "11px" }}>
-                    Campus Birdseye
+                  <a href={ALUM_ENGAGEMENT_PAGE} className="nav-link" style={{ fontSize: "11px" }}>
+                    Alum Engagement
                   </a>
                 </nav>
               </>
@@ -430,8 +431,8 @@ export default function ScrollStoryV2() {
           <a href={GALLERY_PAGE} className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
             PC Gallery
           </a>
-          <a href="#birdseye" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
-            Campus Birdseye
+          <a href={ALUM_ENGAGEMENT_PAGE} className="mobile-menu-link" onClick={() => setMenuOpen(false)}>
+            Alum Engagement
           </a>
         </div>
       )}

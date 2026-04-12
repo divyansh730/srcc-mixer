@@ -7,6 +7,7 @@ import Footer from "./Footer";
 const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`;
 const MEMORY_WALL_PAGE = `${import.meta.env.BASE_URL}memory-wall.html`;
 const GALLERY_PAGE = `${import.meta.env.BASE_URL}pc-gallery.html`;
+const ALUM_ENGAGEMENT_PAGE = `${import.meta.env.BASE_URL}alum-engagement.html`;
 
 const landingOptions = [
   {
@@ -31,10 +32,10 @@ const landingOptions = [
     id: "campus-birdseye",
     title: "Alum Engagement",
     image: assetUrl("srcc-aerial.jpg"),
-    status: "Explore",
+    status: "Open",
     description:
-      "An aerial view of SRCC campus - revisit key locations and relive your memories!",
-    href: "#birdseye",
+      "Reconnect with alumni voices and moments through curated engagement stories.",
+    href: ALUM_ENGAGEMENT_PAGE,
   },
 ];
 
@@ -117,6 +118,7 @@ export default function LandingPage() {
       style={{
         background: "linear-gradient(180deg, #0A0500 0%, #0D0602 100%)",
         position: "relative",
+        minHeight: "100vh",
       }}
     >
 

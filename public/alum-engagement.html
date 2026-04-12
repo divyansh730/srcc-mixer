@@ -482,20 +482,22 @@
   </div>
 
   <script>
-     const defaultAlums = [
-       { name: "Devangee Shah", team: 2024, photo: "./Alum Photos/Devangee Shah.jpeg", videoLink: "" },
-       { name: "Manvi Shangari", team: 2021, photo: "./Alum Photos/Manvi Shangari.jpeg", videoLink: "" },
-       { name: "Gunn Wadhwa", team: 2023, photo: "./Alum Photos/Gunn Wadhwa.jpeg", videoLink: "" },
-       { name: "Archit Taluka", team: 2016, photo: "./Alum Photos/Archit Taluka.jpeg", videoLink: "" },
-       { name: "Muskan Anand", team: 2019, photo: "./Alum Photos/Muskan Anand.jpeg", videoLink: "" },
-       { name: "Aakash BT", team: 2021, photo: "./Alum Photos/Aakash BT.jpeg", videoLink: "" },
-       { name: "Rakshan Bhat", team: 2023, photo: "./Alum Photos/Rakshan Bhat.jpeg", videoLink: "" },
-       { name: "Naman Jain", team: 2023, photo: "./Alum Photos/Naman Jain.jpeg", videoLink: "" },
-       { name: "Pranava Rastogi", team: 2020, photo: "./Alum Photos/Pranava Rastogi.jpeg", videoLink: "" },
-       { name: "Shalu Gupta", team: 2015, photo: "./Alum Photos/Shalu Gupta.jpeg", videoLink: "" },
-       { name: "Aarushi Vibu", team: 2024, photo: "./Alum Photos/Aarushi Vibu.jpeg", videoLink: "" },
-       { name: "Shivaye Gulati", team: 2016, photo: "./Alum Photos/Shivaye Gulati.jpeg", videoLink: "" },
-       { name: "Devaj Mohanpuria", team: 2024, photo: "./Alum Photos/Devaj Mohanpuria.jpeg", videoLink: "" }
+    const assetUrl = (path) => `${window.location.origin}/srcc-mixer/${path}`;
+    
+    const defaultAlums = [
+       { name: "Devangee Shah", team: 2024, photo: assetUrl("Alum photos/Devangee Shah.jpeg"), videoLink: "" },
+       { name: "Manvi Shangari", team: 2021, photo: assetUrl("Alum photos/Manvi Shangari.jpeg"), videoLink: "" },
+       { name: "Gunn Wadhwa", team: 2023, photo: assetUrl("Alum photos/Gunn Wadhwa.jpeg"), videoLink: "" },
+       { name: "Archit Taluka", team: 2016, photo: assetUrl("Alum photos/Archit Taluka.jpeg"), videoLink: "" },
+       { name: "Muskan Anand", team: 2019, photo: assetUrl("Alum photos/Muskan Anand.jpeg"), videoLink: "" },
+       { name: "Aakash BT", team: 2021, photo: assetUrl("Alum photos/Aakash BT.jpeg"), videoLink: "" },
+       { name: "Rakshan Bhat", team: 2023, photo: assetUrl("Alum photos/Rakshan Bhat.jpeg"), videoLink: "" },
+       { name: "Naman Jain", team: 2023, photo: assetUrl("Alum photos/Naman Jain.jpeg"), videoLink: "" },
+       { name: "Pranava Rastogi", team: 2020, photo: assetUrl("Alum photos/Pranava Rastogi.jpeg"), videoLink: "" },
+       { name: "Shalu Gupta", team: 2015, photo: assetUrl("Alum photos/Shalu Gupta.jpeg"), videoLink: "" },
+       { name: "Aarushi Vibu", team: 2024, photo: assetUrl("Alum photos/Aarushi Vibu.jpeg"), videoLink: "" },
+       { name: "Shivaye Gulati", team: 2016, photo: assetUrl("Alum photos/Shivaye Gulati.jpeg"), videoLink: "" },
+       { name: "Devaj Mohanpuria", team: 2024, photo: assetUrl("Alum photos/Devaj Mohanpuria.jpeg"), videoLink: "" }
      ];
     const STORAGE_KEY = "srcc_alum_custom_cards";
     let alums = [...defaultAlums];

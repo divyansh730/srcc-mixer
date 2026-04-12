@@ -279,23 +279,28 @@
       font-size: 16px;
       margin-bottom: 18px;
     }
-    .modal-player-wrap {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      border: 1px solid rgba(201, 168, 76, 0.2);
-      background: linear-gradient(160deg, rgba(20,12,6,0.94) 0%, rgba(9,4,1,0.96) 100%);
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-      border-radius: 4px;
-      box-shadow: inset 0 0 0 1px rgba(201, 168, 76, 0.08);
-    }
-    .modal-player {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      display: block;
-    }
+     .modal-player-wrap {
+       width: 100%;
+       aspect-ratio: 16 / 9;
+       border: 1px solid rgba(201, 168, 76, 0.2);
+       background: linear-gradient(160deg, rgba(20,12,6,0.94) 0%, rgba(9,4,1,0.96) 100%);
+       display: grid;
+       place-items: center;
+       overflow: hidden;
+       border-radius: 4px;
+       box-shadow: inset 0 0 0 1px rgba(201, 168, 76, 0.08);
+     }
+     .modal-player {
+       width: 100%;
+       height: 100%;
+       border: 0;
+       display: block;
+       opacity: 0;
+       transition: opacity 0.3s ease;
+     }
+     .modal-player.loaded {
+       opacity: 1;
+     }
     .modal-placeholder {
       font-family: "Cinzel", serif;
       font-size: 10px;
@@ -517,7 +522,7 @@
         { name: "Pranava Rastogi", team: 2020, photo: assetUrl("Alum photos/Pranava Rastogi.jpeg"), videoLink: "https://youtu.be/UoBcfPkHbUI" },
         { name: "Shalu Gupta", team: 2015, photo: assetUrl("Alum photos/Shalu Gupta.jpeg"), videoLink: "https://youtu.be/xBK8-nJ1NwA" },
         { name: "Aarushi Vibu", team: 2024, photo: assetUrl("Alum photos/Aarushi Vibu.jpeg"), videoLink: "https://youtu.be/FUYrWQ39RaE" },
-        { name: "Shivaye Gulati", team: 2016, photo: assetUrl("Alum photos/Shivaye Gulati.jpeg"), videoLink: "" },
+        { name: "Shivaye Gulati", team: 2016, photo: assetUrl("Alum photos/Shivaye Gulati.jpeg"), videoLink: "https://youtu.be/H2r-d3d0bU4" },
         { name: "Devaj Mohanpuria", team: 2024, photo: assetUrl("Alum photos/Devaj Mohanpuria.jpeg"), videoLink: "https://youtu.be/RaTW5zgkF14" }
       ];
     const STORAGE_KEY = "srcc_alum_custom_cards";
@@ -590,56 +595,52 @@
        return "";
      }
 
-    function resetEmbedState() {
-      if (embedTimeoutId) {
-        clearTimeout(embedTimeoutId);
-        embedTimeoutId = null;
-      }
-      modalPlayer.onload = null;
-      modalPlayer.onerror = null;
-      modalPlayer.src = "";
-      modalPlayer.style.display = "none";
-      modalPlaceholder.classList.remove("loading-pulse");
-    }
+     function resetEmbedState() {
+       if (embedTimeoutId) {
+         clearTimeout(embedTimeoutId);
+         embedTimeoutId = null;
+       }
+       modalPlayer.onload = null;
+       modalPlayer.onerror = null;
+       modalPlayer.src = "";
+       modalPlayer.classList.remove("loaded");
+       modalPlaceholder.classList.remove("loading-pulse");
+     }
 
-    function showPlaceholder(text, loading = false) {
-      modalPlaceholder.textContent = text;
-      modalPlaceholder.style.display = "block";
-      modalPlaceholder.classList.toggle("loading-pulse", loading);
-    }
+     function showPlaceholder(text, loading = false) {
+       modalPlaceholder.textContent = text;
+       modalPlaceholder.style.display = "block";
+       modalPlaceholder.classList.toggle("loading-pulse", loading);
+     }
 
-    function beginEmbedLoad(embedUrl, rawUrl) {
-      const token = ++activeEmbedToken;
-      resetEmbedState();
-      showPlaceholder("Loading video...", true);
-      modalFallback.href = rawUrl;
-      modalFallback.style.display = "inline-block";
+     function beginEmbedLoad(embedUrl, rawUrl) {
+       const token = ++activeEmbedToken;
+       resetEmbedState();
+       showPlaceholder("Loading video...", true);
+       modalFallback.href = rawUrl;
+       modalFallback.style.display = "inline-block";
 
-      modalPlayer.onload = () => {
-        if (token !== activeEmbedToken) return;
-        if (embedTimeoutId) clearTimeout(embedTimeoutId);
-        embedTimeoutId = null;
-        modalPlayer.style.display = "block";
-        modalPlaceholder.classList.remove("loading-pulse");
-        modalPlaceholder.style.display = "none";
-      };
+       modalPlayer.onload = () => {
+         if (token !== activeEmbedToken) return;
+         if (embedTimeoutId) clearTimeout(embedTimeoutId);
+         embedTimeoutId = null;
+         modalPlayer.classList.add("loaded");
+         modalPlaceholder.style.display = "none";
+       };
 
-      modalPlayer.onerror = () => {
-        if (token !== activeEmbedToken) return;
-        showPlaceholder("Could not load embedded video. Use 'Open in new tab'.", false);
-      };
+       modalPlayer.onerror = () => {
+         if (token !== activeEmbedToken) return;
+         showPlaceholder("Could not load embedded video. Use 'Open in new tab'.", false);
+       };
 
-      embedTimeoutId = setTimeout(() => {
-        if (token !== activeEmbedToken) return;
-        showPlaceholder("Embed is blocked or still loading. Use 'Open in new tab'.", false);
-      }, 8000);
+       embedTimeoutId = setTimeout(() => {
+         if (token !== activeEmbedToken) return;
+         showPlaceholder("Embed is blocked or still loading. Use 'Open in new tab'.", false);
+       }, 8000);
 
-      // Keep modal responsive first, then start network load.
-      setTimeout(() => {
-        if (token !== activeEmbedToken || !modal.classList.contains("open")) return;
-        modalPlayer.src = embedUrl;
-      }, 120);
-    }
+       // Set src immediately with autoplay parameter
+       modalPlayer.src = `${embedUrl}?autoplay=1`;
+     }
 
     function loadCustomCards() {
       try {

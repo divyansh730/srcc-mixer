@@ -146,42 +146,63 @@
       grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
       gap: 24px;
     }
-    .alum-card {
-      border: 1px solid rgba(201, 168, 76, 0.18);
-      background: linear-gradient(160deg, rgba(20,12,6,0.94) 0%, rgba(9,4,1,0.96) 100%);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
-      border-radius: 8px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
-    }
-    .alum-card:hover {
-      transform: translateY(-6px) scale(1.015);
-      border-color: rgba(201, 168, 76, 0.46);
-      box-shadow: 0 22px 42px rgba(0, 0, 0, 0.62), 0 0 34px rgba(201, 168, 76, 0.08);
-    }
-    .alum-photo {
-      position: relative;
-      aspect-ratio: 1 / 1;
-      background: radial-gradient(circle at 30% 20%, rgba(201, 168, 76, 0.18), rgba(9, 5, 2, 0.95) 55%),
-                  linear-gradient(135deg, #25180a 0%, #120a04 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(246, 232, 188, 0.75);
-      font-family: "Cinzel", serif;
-      letter-spacing: 0.16em;
-      font-size: 11px;
-      text-transform: uppercase;
-    }
-    .alum-photo::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-top: 1px solid rgba(201, 168, 76, 0.16);
-      background: linear-gradient(180deg, rgba(255,255,255,0.04), transparent 35%);
-      pointer-events: none;
-    }
+     .alum-card {
+       border: 1px solid rgba(201, 168, 76, 0.18);
+       background: linear-gradient(160deg, rgba(18,10,5,0.92) 0%, rgba(8,3,1,0.94) 100%);
+       box-shadow: 
+         0 12px 30px rgba(0, 0, 0, 0.5),
+         inset 0 1px 0 rgba(201, 168, 76, 0.08);
+       border-radius: 8px;
+       overflow: hidden;
+       cursor: pointer;
+       transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+     }
+     .alum-card:hover {
+       transform: translateY(-6px) scale(1.015);
+       border-color: rgba(201, 168, 76, 0.46);
+       box-shadow: 
+         0 22px 42px rgba(0, 0, 0, 0.62),
+         0 0 34px rgba(201, 168, 76, 0.08),
+         inset 0 1px 0 rgba(201, 168, 76, 0.12);
+     }
+     .alum-photo {
+       position: relative;
+       aspect-ratio: 1 / 1;
+       background: radial-gradient(circle at 30% 20%, rgba(201, 168, 76, 0.12), rgba(9, 5, 2, 0.92) 50%),
+                   linear-gradient(135deg, #1a0f08 0%, #0a0502 100%);
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       color: rgba(246, 232, 188, 0.75);
+       font-family: "Cinzel", serif;
+       letter-spacing: 0.16em;
+       font-size: 11px;
+       text-transform: uppercase;
+       border: 1px solid rgba(201, 168, 76, 0.14);
+       box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+     }
+     .alum-photo img {
+       width: 100%;
+       height: 100%;
+       object-fit: cover;
+       display: block;
+       filter: brightness(0.92) contrast(1.05) saturate(0.85);
+       transition: filter 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+     }
+     .alum-card:hover .alum-photo img {
+       filter: brightness(1) contrast(1.1) saturate(1);
+     }
+     .alum-photo::after {
+       content: "";
+       position: absolute;
+       inset: 0;
+       border: 1px solid rgba(201, 168, 76, 0.14);
+       background: 
+         linear-gradient(180deg, rgba(255,255,255,0.06) 0%, transparent 20%),
+         linear-gradient(180deg, transparent 80%, rgba(0,0,0,0.3) 100%);
+       pointer-events: none;
+       border-radius: 4px;
+     }
     .alum-meta {
       padding: 14px 14px 16px;
       text-align: center;

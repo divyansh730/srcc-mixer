@@ -1,6 +1,21 @@
 import { useState, useEffect } from "react";
 
 export default function Footer() {
+  const socialLinks = [
+    {
+      platform: "Instagram",
+      href: "https://www.instagram.com/pcsrcc?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
+    },
+    {
+      platform: "LinkedIn",
+      href: "https://www.linkedin.com/company/the-placement-cell-srcc",
+    },
+    {
+      platform: "YouTube",
+      href: "https://www.youtube.com/@ThePlacementCellSRCC",
+    },
+  ];
+
   const [isMobile, setIsMobile] = useState(() =>
     typeof window === "undefined" ? false : window.innerWidth <= 768
   );
@@ -10,6 +25,45 @@ export default function Footer() {
     window.addEventListener("resize", onResize, { passive: true });
     return () => window.removeEventListener("resize", onResize);
   }, []);
+
+  const renderSocialIcon = (platform) => {
+    const iconStyle = {
+      width: isMobile ? "17px" : "18px",
+      height: isMobile ? "17px" : "18px",
+      display: "block",
+      color: "currentColor",
+      opacity: 0.92,
+    };
+
+    if (platform === "Instagram") {
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" style={iconStyle} aria-hidden="true">
+          <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+          <circle cx="12" cy="12" r="4.1" />
+          <circle cx="17.4" cy="6.6" r="0.8" fill="currentColor" stroke="none" />
+        </svg>
+      );
+    }
+
+    if (platform === "LinkedIn") {
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" style={iconStyle} aria-hidden="true">
+          <rect x="3.5" y="3.5" width="17" height="17" rx="2.5" />
+          <line x1="8.4" y1="10" x2="8.4" y2="17" />
+          <circle cx="8.4" cy="7.2" r="0.95" fill="currentColor" stroke="none" />
+          <path d="M12.3 17v-4.2c0-1.5 1-2.3 2.1-2.3s2 .8 2 2.3V17" />
+          <line x1="12.3" y1="10" x2="12.3" y2="17" />
+        </svg>
+      );
+    }
+
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" style={iconStyle} aria-hidden="true">
+        <rect x="3.5" y="6" width="17" height="12" rx="3" />
+        <polygon points="10,10 15.5,12 10,14" fill="currentColor" stroke="none" />
+      </svg>
+    );
+  };
 
   return (
     <footer style={{
@@ -83,27 +137,46 @@ export default function Footer() {
             display: "flex", 
             gap: isMobile ? "24px" : "32px",
             fontFamily: "'Cinzel', serif",
-            fontSize: "12px",
+            fontSize: "11px",
             fontWeight: 500,
-            letterSpacing: "0.15em",
+            letterSpacing: "0.14em",
             color: "rgba(201, 168, 76, 0.9)",
             textTransform: "uppercase"
           }}>
-            {["Instagram", "LinkedIn", "Facebook"].map(platform => (
-              <a key={platform} href="#" style={{ 
+            {socialLinks.map(({ platform, href }) => (
+              <a key={platform} href={href} target="_blank" rel="noopener noreferrer" style={{ 
                 color: "inherit", 
                 textDecoration: "none", 
                 transition: "all 0.4s ease",
-                position: "relative"
+                position: "relative",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "8px",
+                minWidth: isMobile ? "72px" : "84px"
               }} 
                  onMouseEnter={(e) => {
-                   e.currentTarget.style.color = "#FFF";
-                   e.currentTarget.style.textShadow = "0 0 12px rgba(201,168,76,0.6)";
-                 }}
-                 onMouseLeave={(e) => {
-                   e.currentTarget.style.color = "rgba(201, 168, 76, 0.9)";
-                   e.currentTarget.style.textShadow = "none";
-                 }}>
+                    e.currentTarget.style.color = "#FFF";
+                    e.currentTarget.style.textShadow = "0 0 12px rgba(201,168,76,0.6)";
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = "rgba(201, 168, 76, 0.9)";
+                    e.currentTarget.style.textShadow = "none";
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }}>
+                <span style={{
+                  width: isMobile ? "34px" : "38px",
+                  height: isMobile ? "34px" : "38px",
+                  borderRadius: "50%",
+                  border: "1px solid rgba(201,168,76,0.32)",
+                  background: "radial-gradient(circle at 30% 25%, rgba(201,168,76,0.2), rgba(9,4,1,0.7))",
+                  display: "grid",
+                  placeItems: "center",
+                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06), 0 6px 16px rgba(0,0,0,0.32)",
+                }}>
+                  {renderSocialIcon(platform)}
+                </span>
                 {platform}
               </a>
             ))}

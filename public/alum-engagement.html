@@ -289,22 +289,29 @@
        overflow: hidden;
        border-radius: 4px;
        box-shadow: inset 0 0 0 1px rgba(201, 168, 76, 0.08);
+       position: relative;
      }
      .modal-player {
        width: 100%;
        height: 100%;
        border: 0;
        display: block;
+       position: absolute;
+       top: 0;
+       left: 0;
+       z-index: 2;
      }
-    .modal-placeholder {
-      font-family: "Cinzel", serif;
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      color: rgba(201, 168, 76, 0.72);
-      text-transform: uppercase;
-      padding: 18px;
-      text-align: center;
-    }
+     .modal-placeholder {
+       font-family: "Cinzel", serif;
+       font-size: 10px;
+       letter-spacing: 0.18em;
+       color: rgba(201, 168, 76, 0.72);
+       text-transform: uppercase;
+       padding: 18px;
+       text-align: center;
+       position: absolute;
+       z-index: 1;
+     }
     .modal-fallback {
       margin-top: 12px;
       display: inline-block;
@@ -617,22 +624,15 @@
 
        // Set src immediately with autoplay parameter
        modalPlayer.src = `${embedUrl}?autoplay=1`;
+       modalPlayer.style.display = "block";
        
-       // For iframes, we don't get reliable load events, so hide placeholder after brief delay
+       // Hide placeholder after brief delay so video is visible
        embedTimeoutId = setTimeout(() => {
          if (token !== activeEmbedToken) return;
          modalPlaceholder.style.display = "none";
          if (embedTimeoutId) clearTimeout(embedTimeoutId);
          embedTimeoutId = null;
-       }, 500);
-
-       // Fallback: if still no src after 8 seconds, show error
-       setTimeout(() => {
-         if (token !== activeEmbedToken) return;
-         if (!modalPlayer.src) {
-           showPlaceholder("Could not load embedded video. Use 'Open in new tab'.", false);
-         }
-       }, 8000);
+       }, 300);
      }
 
     function loadCustomCards() {

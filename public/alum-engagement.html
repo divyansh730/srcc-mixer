@@ -580,25 +580,28 @@
        if (!teamSelect.contains(e.target)) teamSelect.classList.remove('active');
      };
 
-     function toYouTubeEmbedUrl(link) {
-       if (!link) return "";
-       try {
-         let videoId = "";
-         if (link.includes("youtube.com/watch")) {
-           const url = new URL(link);
-           videoId = url.searchParams.get("v");
-         } else if (link.includes("youtu.be/")) {
-           videoId = link.split("youtu.be/")[1].split("?")[0];
-         } else if (link.includes("youtube.com/embed/")) {
-           videoId = link.split("/embed/")[1].split("?")[0];
-         }
-         if (videoId) return `https://www.youtube.com/embed/${videoId}`;
-       } catch (e) {
-         // Fallback: assume it's already an embed URL
-         if (link.includes("youtube.com/embed/")) return link;
-       }
-       return "";
-     }
+      function toYouTubeEmbedUrl(link) {
+        if (!link) return "";
+        try {
+          let videoId = "";
+          if (link.includes("youtube.com/watch")) {
+            const url = new URL(link);
+            videoId = url.searchParams.get("v");
+          } else if (link.includes("youtu.be/")) {
+            const parts = link.split("youtu.be/");
+            if (parts.length > 1) {
+              videoId = parts[1].split("?")[0].split("&")[0];
+            }
+          } else if (link.includes("youtube.com/embed/")) {
+            videoId = link.split("/embed/")[1].split("?")[0];
+          }
+          if (videoId) return `https://www.youtube.com/embed/${videoId}`;
+        } catch (e) {
+          // Fallback: assume it's already an embed URL
+          if (link.includes("youtube.com/embed/")) return link;
+        }
+        return "";
+      }
 
      function resetEmbedState() {
        if (embedTimeoutId) {

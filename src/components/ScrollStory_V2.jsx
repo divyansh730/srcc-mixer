@@ -36,6 +36,7 @@ export default function ScrollStoryV2() {
   const baseLogoMetricsRef = useRef({ x: 0, y: 0, size: 0 });
 
   const [showCountdownInHeader, setShowCountdownInHeader] = useState(false);
+  const showCountdownInHeaderRef = useRef(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [viewportWidth, setViewportWidth] = useState(() =>
     typeof window === "undefined" ? 1440 : window.innerWidth
@@ -55,6 +56,10 @@ export default function ScrollStoryV2() {
   const logoEndSize = isMobile ? 34 : 42;
   const logoEndX = isMobile ? 16 : 48;
   const logoEndY = (mainHeaderBarHeight - logoEndSize) / 2;
+
+  useEffect(() => {
+    showCountdownInHeaderRef.current = showCountdownInHeader;
+  }, [showCountdownInHeader]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -173,7 +178,11 @@ export default function ScrollStoryV2() {
       }
       if (countdownRef.current) {
         const rect = countdownRef.current.getBoundingClientRect();
-        setShowCountdownInHeader(rect.top < winH * 0.5);
+        const shouldShow = rect.top < winH * 0.5;
+        if (shouldShow !== showCountdownInHeaderRef.current) {
+          showCountdownInHeaderRef.current = shouldShow;
+          setShowCountdownInHeader(shouldShow);
+        }
       }
       if (logoRef.current) {
         const lp = ease(range(p, 0.10, 0.40));
@@ -334,8 +343,8 @@ export default function ScrollStoryV2() {
               src={MIXER_LOGO}
               alt="Mixer Logo"
               style={{
-                width: "57px",
-                height: "57px",
+                width: isMobile ? "46px" : "57px",
+                height: isMobile ? "46px" : "57px",
                 objectFit: "contain",
                 flexShrink: 0,
                 marginLeft: isMobile ? "0" : "-3px",
@@ -739,7 +748,7 @@ export default function ScrollStoryV2() {
                 flexDirection: "column",
                 alignItems: "center",
                 gap: isMobile ? "3px" : "8px",
-                maxWidth: isMobile ? "320px" : "none",
+                maxWidth: isMobile ? "min(94vw, 360px)" : "none",
                 transform: "translate3d(0,0,0)",
               }}
             >
@@ -747,24 +756,25 @@ export default function ScrollStoryV2() {
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  alignItems: "flex-start",
+                  alignItems: "center",
                   gap: isMobile ? "12px" : "28px",
                   justifyContent: "center",
                   marginBottom: isMobile ? "14px" : "32px",
                 }}
               >
-                <div ref={placeholderRef} style={{ marginTop: isMobile ? "-3px" : "-10px", width: isMobile ? "55px" : "125px", height: isMobile ? "55px" : "125px", flexShrink: 0 }} />
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: isMobile ? "0px" : "2px", textAlign: "center", position: "relative", left: "0.09em" }}>
+                <div ref={placeholderRef} style={{ marginTop: isMobile ? "0px" : "-10px", width: isMobile ? (isVeryCompactMobile ? "58px" : "62px") : "125px", height: isMobile ? (isVeryCompactMobile ? "58px" : "62px") : "125px", flexShrink: 0 }} />
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: isMobile ? "1px" : "2px", textAlign: "center", position: "relative", left: isMobile ? "0" : "0.09em" }}>
                   <div
                     style={{
                       fontFamily: "'Times New Roman', Times, serif",
-                      fontSize: isMobile ? "clamp(16px, 4.5vw, 22px)" : "clamp(36px, 5.5vw, 68px)",
+                      fontSize: isMobile ? "clamp(21px, 6.4vw, 30px)" : "clamp(36px, 5.5vw, 68px)",
                       color: "#FDFDFD",
-                      letterSpacing: isMobile ? "0.02em" : "0.03em",
+                      letterSpacing: isMobile ? "0.01em" : "0.03em",
                       lineHeight: 1,
                       fontWeight: 400,
                       textTransform: "uppercase",
                       textShadow: "0 2px 20px rgba(0,0,0,0.9)",
+                      whiteSpace: "nowrap",
                     }}
                   >
                     The Placement Cell
@@ -772,13 +782,14 @@ export default function ScrollStoryV2() {
                   <div
                     style={{
                       fontFamily: "'Times New Roman', Times, serif",
-                      fontSize: isMobile ? "clamp(9px, 2.5vw, 13px)" : "clamp(16px, 2.5vw, 31px)",
+                      fontSize: isMobile ? "clamp(11px, 3.2vw, 14px)" : "clamp(16px, 2.5vw, 31px)",
                       color: "#FDFDFD",
-                      letterSpacing: isMobile ? "0.14em" : "0.19em",
+                      letterSpacing: isMobile ? "0.07em" : "0.19em",
                       lineHeight: 1,
                       fontWeight: 400,
                       textTransform: "uppercase",
                       textShadow: "0 2px 20px rgba(0,0,0,0.9)",
+                      whiteSpace: "nowrap",
                     }}
                   >
                     Shri Ram College of Commerce
@@ -794,7 +805,7 @@ export default function ScrollStoryV2() {
                     background: "linear-gradient(90deg, transparent, #C9A84C)",
                   }}
                 />
-                <span style={{ color: "#C9A84C", fontSize: isMobile ? "8px" : "12px", lineHeight: 1, paddingTop: "2px" }}>✦</span>
+                <span style={{ color: "#C9A84C", fontSize: isMobile ? "7px" : "12px", lineHeight: 1, paddingTop: "2px" }}>✦</span>
                 <div
                   style={{
                     flex: 1,
@@ -807,12 +818,13 @@ export default function ScrollStoryV2() {
               <div
                 style={{
                   fontFamily: "'Pinyon Script', cursive",
-                  fontSize: isMobile ? "clamp(24px, 7.5vw, 32px)" : "clamp(36px, 6vw, 66px)",
+                  fontSize: isMobile ? "clamp(28px, 8.8vw, 38px)" : "clamp(36px, 6vw, 66px)",
                   color: "#C9A84C",
                   textShadow: "0 0 30px rgba(201,168,76,0.55), 0 2px 10px rgba(0,0,0,0.9)",
                   lineHeight: 1,
                   letterSpacing: "0.02em",
-                  marginTop: isMobile ? "12px" : "20px"
+                  marginTop: isMobile ? "10px" : "20px",
+                  whiteSpace: "nowrap",
                 }}
               >
                 30 Years of Excellence

@@ -51,7 +51,7 @@ export default function ClosingNote() {
     <div
       ref={containerRef}
       style={{
-        padding: isMobile ? "16px 20px 16px" : "clamp(40px, 10vh, 120px) 20px clamp(40px, 8vh, 80px)",
+        padding: isMobile ? "40px 20px 38px" : "clamp(40px, 10vh, 120px) 20px clamp(40px, 8vh, 80px)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -59,7 +59,7 @@ export default function ClosingNote() {
         textAlign: "center",
         position: "relative",
         zIndex: 5,
-        minHeight: isMobile ? "20vh" : "50vh"
+        minHeight: isMobile ? "34vh" : "50vh"
       }}
     >
       {/* Subtle background glow */}
@@ -75,7 +75,7 @@ export default function ClosingNote() {
         zIndex: -1
       }} />
 
-      <div style={{ position: "relative", width: "100%", maxWidth: "900px", minHeight: "160px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <div style={{ position: "relative", width: "100%", maxWidth: "900px", minHeight: isMobile ? "230px" : "160px", display: "flex", justifyContent: "center", alignItems: "center" }}>
         {lines.slice(0, 3).map((line, index) => {
           // Lines 0, 1, 2 disappear when the next one appears.
           const isVisible = activeLine === index;
@@ -90,10 +90,16 @@ export default function ClosingNote() {
                 left: "50%",
                 width: "100%",
                 fontFamily: "'Cormorant Garamond', serif",
-                fontSize: index === 2 ? "clamp(24px, 5vw, 36px)" : "clamp(46px, 8vw, 68px)",
+                fontSize: isMobile
+                  ? index === 2
+                    ? "clamp(18px, 5.4vw, 24px)"
+                    : "clamp(35px, 9.8vw, 46px)"
+                  : index === 2
+                    ? "clamp(24px, 5vw, 36px)"
+                    : "clamp(46px, 8vw, 68px)",
                 color: index === 2 ? "#E2E6ED" : "#C9A84C",
                 margin: 0,
-                lineHeight: 1.4,
+                lineHeight: isMobile ? 1.3 : 1.4,
                 opacity: isVisible ? 1 : 0,
                 transform: `translate(-50%, calc(-50% + ${isVisible ? "0px" : isPast ? "-40px" : "40px"}))`,
                 transition: "opacity 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
@@ -114,7 +120,7 @@ export default function ClosingNote() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: isMobile ? "8px" : "16px",
+            gap: isMobile ? "14px" : "16px",
             width: "100%",
             pointerEvents: activeLine >= 3 ? "auto" : "none"
         }}>
@@ -127,10 +133,10 @@ export default function ClosingNote() {
                 key={index}
                 style={{
                   fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: "clamp(36px, 7vw, 56px)",
+                  fontSize: isMobile ? "clamp(32px, 8.8vw, 42px)" : "clamp(36px, 7vw, 56px)",
                   color: "#C9A84C",
                   margin: 0,
-                  lineHeight: 1.2,
+                  lineHeight: isMobile ? 1.24 : 1.2,
                   opacity: isVisible ? 1 : 0,
                   transform: `translateY(${isVisible ? "0px" : "40px"})`,
                   transition: "opacity 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)",

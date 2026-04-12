@@ -43,7 +43,7 @@ export default function BirdseyeSection() {
         position: "relative",
         background: "linear-gradient(180deg, transparent 0%, #0A0500 15%, #080402 100%)",
         padding: "0",
-        marginTop: isMobile ? "16px" : "72px",
+        marginTop: isMobile ? "50px" : "72px",
         borderTop: "none",
       }}
     >

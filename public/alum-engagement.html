@@ -343,6 +343,60 @@
       outline: none;
     }
     .form-input:focus { border-color: rgba(201, 168, 76, 0.55); }
+    .select-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    .custom-select-trigger {
+      width: 100%;
+      border: 1px solid rgba(201, 168, 76, 0.22);
+      background: rgba(201, 168, 76, 0.03);
+      color: rgba(201, 168, 76, 0.7);
+      font-family: "Cormorant Garamond", serif;
+      font-size: 17px;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .select-wrapper.active .custom-select-trigger {
+      border-color: rgba(201, 168, 76, 0.55);
+      background: rgba(201, 168, 76, 0.08);
+    }
+    .custom-options {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: rgba(12, 8, 4, 0.96);
+      border: 1px solid rgba(201, 168, 76, 0.22);
+      border-top: none;
+      max-height: 200px;
+      overflow-y: auto;
+      display: none;
+      z-index: 10;
+    }
+    .select-wrapper.active .custom-options {
+      display: block;
+    }
+    .custom-option {
+      padding: 10px;
+      color: rgba(201, 168, 76, 0.7);
+      font-family: "Cormorant Garamond", serif;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .custom-option:hover {
+      background: rgba(201, 168, 76, 0.12);
+      color: var(--cream);
+    }
+    .custom-option.selected {
+      background: rgba(201, 168, 76, 0.15);
+      color: var(--cream);
+    }
     .manage-actions {
       margin-top: 14px;
       display: flex;
@@ -406,10 +460,20 @@
   <div class="manage-modal" id="manage-modal" aria-hidden="true">
     <div class="manage-card" role="dialog" aria-modal="true" aria-labelledby="manage-title">
       <div class="manage-title" id="manage-title">Add Alum Card</div>
+      <div class="form-row"><input class="form-input" id="new-photo-url" type="url" placeholder="Photo URL" /></div>
       <div class="form-row"><input class="form-input" id="new-name" type="text" placeholder="Name" /></div>
-      <div class="form-row"><input class="form-input" id="new-team" type="text" placeholder="Team (e.g. 2024-25)" /></div>
-      <div class="form-row"><input class="form-input" id="new-photo" type="url" placeholder="Photo URL (optional)" /></div>
-      <div class="form-row"><input class="form-input" id="new-video" type="url" placeholder="Google Drive video link" /></div>
+      <div class="form-row">
+        <div class="select-wrapper" id="team-select">
+          <div class="custom-select-trigger">
+            <span id="selected-team">Select Team</span>
+            <span style="font-size: 12px; color: rgba(201, 168, 76, 0.5);">▾</span>
+          </div>
+          <div class="custom-options" id="team-options">
+            <!-- Will be populated by JS -->
+          </div>
+        </div>
+      </div>
+      <div class="form-row"><input class="form-input" id="new-video" type="url" placeholder="YouTube embed link" /></div>
       <div class="manage-actions">
         <button class="manage-btn" id="cancel-add" type="button">Cancel</button>
         <button class="manage-btn" id="save-add" type="button">Save card</button>
@@ -418,21 +482,21 @@
   </div>
 
   <script>
-    const defaultAlums = [
-      { name: "Devangee Shah", team: "2024-25", photo: "", driveLink: "" },
-      { name: "Manvi Shangari", team: "2021-22", photo: "", driveLink: "" },
-      { name: "Gunn Wadhwa", team: "2023-24", photo: "", driveLink: "https://drive.google.com/file/d/1YKmb8RDcTX6h-UI8yb49W0j3mVj_RIVH/view?usp=sharing" },
-      { name: "Archit Taluka", team: "2016-17", photo: "", driveLink: "" },
-      { name: "Muskan Anand", team: "2019-20", photo: "", driveLink: "" },
-       { name: "Aakash BT", team: "2021-22", photo: "", driveLink: "" },
-       { name: "Rakshan Bhat", team: "2023-24", photo: "", driveLink: "" },
-       { name: "Naman Jain", team: "2023-24", photo: "", driveLink: "" },
-       { name: "Pranava Rastogi", team: "2020-21", photo: "", driveLink: "" },
-       { name: "Shalu Gupta", team: "2015-16", photo: "", driveLink: "" },
-       { name: "Aarushi Vibu", team: "2024-25", photo: "", driveLink: "" },
-       { name: "Shivaye Gulati", team: "2016-17", photo: "", driveLink: "" },
-       { name: "Devaj Mohanpuria", team: "2024-25", photo: "", driveLink: "" }
-    ];
+     const defaultAlums = [
+       { name: "Devangee Shah", team: 2024, photo: "./Alum Photos/Devangee Shah.jpeg", videoLink: "" },
+       { name: "Manvi Shangari", team: 2021, photo: "./Alum Photos/Manvi Shangari.jpeg", videoLink: "" },
+       { name: "Gunn Wadhwa", team: 2023, photo: "./Alum Photos/Gunn Wadhwa.jpeg", videoLink: "" },
+       { name: "Archit Taluka", team: 2016, photo: "./Alum Photos/Archit Taluka.jpeg", videoLink: "" },
+       { name: "Muskan Anand", team: 2019, photo: "./Alum Photos/Muskan Anand.jpeg", videoLink: "" },
+       { name: "Aakash BT", team: 2021, photo: "./Alum Photos/Aakash BT.jpeg", videoLink: "" },
+       { name: "Rakshan Bhat", team: 2023, photo: "./Alum Photos/Rakshan Bhat.jpeg", videoLink: "" },
+       { name: "Naman Jain", team: 2023, photo: "./Alum Photos/Naman Jain.jpeg", videoLink: "" },
+       { name: "Pranava Rastogi", team: 2020, photo: "./Alum Photos/Pranava Rastogi.jpeg", videoLink: "" },
+       { name: "Shalu Gupta", team: 2015, photo: "./Alum Photos/Shalu Gupta.jpeg", videoLink: "" },
+       { name: "Aarushi Vibu", team: 2024, photo: "./Alum Photos/Aarushi Vibu.jpeg", videoLink: "" },
+       { name: "Shivaye Gulati", team: 2016, photo: "./Alum Photos/Shivaye Gulati.jpeg", videoLink: "" },
+       { name: "Devaj Mohanpuria", team: 2024, photo: "./Alum Photos/Devaj Mohanpuria.jpeg", videoLink: "" }
+     ];
     const STORAGE_KEY = "srcc_alum_custom_cards";
     let alums = [...defaultAlums];
 
@@ -442,34 +506,66 @@
     const modalPlayer = document.getElementById("modal-player");
     const modalPlaceholder = document.getElementById("modal-placeholder");
     const modalFallback = document.getElementById("modal-fallback");
-    const modalClose = document.getElementById("modal-close");
-    const addCardBtn = document.getElementById("add-card-btn");
-    const manageModal = document.getElementById("manage-modal");
-    const cancelAddBtn = document.getElementById("cancel-add");
-    const saveAddBtn = document.getElementById("save-add");
-    const newNameInput = document.getElementById("new-name");
-    const newTeamInput = document.getElementById("new-team");
-    const newPhotoInput = document.getElementById("new-photo");
-    const newVideoInput = document.getElementById("new-video");
-    let activeEmbedToken = 0;
-    let embedTimeoutId = null;
+     const modalClose = document.getElementById("modal-close");
+     const addCardBtn = document.getElementById("add-card-btn");
+     const manageModal = document.getElementById("manage-modal");
+     const cancelAddBtn = document.getElementById("cancel-add");
+     const saveAddBtn = document.getElementById("save-add");
+     const newPhotoUrlInput = document.getElementById("new-photo-url");
+     const newNameInput = document.getElementById("new-name");
+     const teamSelect = document.getElementById("team-select");
+     const selectedTeamLabel = document.getElementById("selected-team");
+     const teamOptionsContainer = document.getElementById("team-options");
+     const newVideoInput = document.getElementById("new-video");
+     let activeEmbedToken = 0;
+     let embedTimeoutId = null;
+     let selectedTeamValue = "";
 
-    function toDriveEmbedUrl(link) {
-      if (!link) return "";
-      try {
-        const parsed = new URL(link);
-        const urlText = parsed.toString();
-        if (urlText.includes("/preview")) return urlText;
-        const fileMatch = urlText.match(/\/file\/d\/([^/]+)/);
-        if (fileMatch && fileMatch[1]) return `https://drive.google.com/file/d/${fileMatch[1]}/preview?embedded=true`;
-        const idParam = parsed.searchParams.get("id");
-        if (idParam) return `https://drive.google.com/file/d/${idParam}/preview?embedded=true`;
-      } catch {
-        const fileMatch = link.match(/\/file\/d\/([^/]+)/);
-        if (fileMatch && fileMatch[1]) return `https://drive.google.com/file/d/${fileMatch[1]}/preview?embedded=true`;
-      }
-      return "";
-    }
+     // Populate Team Dropdown
+     for (let year = 2024; year >= 1995; year--) {
+       const opt = document.createElement('div');
+       opt.className = 'custom-option';
+       const nextYear = (year + 1).toString().slice(2);
+       opt.textContent = `Team of ${year}-${nextYear}`;
+       opt.dataset.value = year;
+       opt.onclick = (e) => {
+         e.stopPropagation();
+         selectedTeamValue = year;
+         selectedTeamLabel.textContent = `Team of ${year}-${nextYear}`;
+         selectedTeamLabel.style.color = 'rgba(201, 168, 76, 0.9)';
+         teamSelect.classList.remove('active');
+
+         document.querySelectorAll('#team-options .custom-option').forEach(el => el.classList.remove('selected'));
+         opt.classList.add('selected');
+       };
+       teamOptionsContainer.appendChild(opt);
+     }
+
+     // Toggle Team Select
+     teamSelect.querySelector('.custom-select-trigger').onclick = () => teamSelect.classList.toggle('active');
+     window.onclick = (e) => {
+       if (!teamSelect.contains(e.target)) teamSelect.classList.remove('active');
+     };
+
+     function toYouTubeEmbedUrl(link) {
+       if (!link) return "";
+       try {
+         let videoId = "";
+         if (link.includes("youtube.com/watch")) {
+           const url = new URL(link);
+           videoId = url.searchParams.get("v");
+         } else if (link.includes("youtu.be/")) {
+           videoId = link.split("youtu.be/")[1].split("?")[0];
+         } else if (link.includes("youtube.com/embed/")) {
+           videoId = link.split("/embed/")[1].split("?")[0];
+         }
+         if (videoId) return `https://www.youtube.com/embed/${videoId}`;
+       } catch (e) {
+         // Fallback: assume it's already an embed URL
+         if (link.includes("youtube.com/embed/")) return link;
+       }
+       return "";
+     }
 
     function resetEmbedState() {
       if (embedTimeoutId) {
@@ -538,29 +634,30 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
     }
 
-    function renderCards() {
-      grid.innerHTML = "";
-      alums.forEach((alum) => {
-        const card = document.createElement("button");
-        card.type = "button";
-        card.className = "alum-card";
-        card.innerHTML = `
-          <div class="alum-photo">${alum.photo ? `<img src="${alum.photo}" alt="${alum.name}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">` : "Photo Frame"}</div>
-          <div class="alum-meta">
-            <div class="alum-name">${alum.name}</div>
-            <div class="alum-tag">Team of ${alum.team}</div>
-          </div>
-        `;
-        card.addEventListener("click", () => openModal(alum));
-        grid.appendChild(card);
-      });
-    }
+     function renderCards() {
+       grid.innerHTML = "";
+       alums.forEach((alum) => {
+         const card = document.createElement("button");
+         card.type = "button";
+         card.className = "alum-card";
+         const nextYear = (alum.team + 1).toString().slice(2);
+         card.innerHTML = `
+           <div class="alum-photo">${alum.photo ? `<img src="${alum.photo}" alt="${alum.name}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">` : "Photo Frame"}</div>
+           <div class="alum-meta">
+             <div class="alum-name">${alum.name}</div>
+             <div class="alum-tag">Team of ${alum.team}-${nextYear}</div>
+           </div>
+         `;
+         card.addEventListener("click", () => openModal(alum));
+         grid.appendChild(card);
+       });
+     }
 
-    function openModal(alum) {
-      modalTitle.textContent = alum.name;
-      const embedUrl = toDriveEmbedUrl(alum.driveLink);
-      if (embedUrl) {
-        beginEmbedLoad(embedUrl, alum.driveLink);
+     function openModal(alum) {
+       modalTitle.textContent = alum.name;
+       const embedUrl = toYouTubeEmbedUrl(alum.videoLink);
+       if (embedUrl) {
+         beginEmbedLoad(embedUrl, alum.videoLink);
       } else {
         resetEmbedState();
         modalFallback.style.display = "none";
@@ -588,30 +685,35 @@
       }
     }
 
-    function closeManageModal() {
-      manageModal.classList.remove("open");
-      manageModal.setAttribute("aria-hidden", "true");
-      newNameInput.value = "";
-      newTeamInput.value = "";
-      newPhotoInput.value = "";
-      newVideoInput.value = "";
-    }
+     function closeManageModal() {
+       manageModal.classList.remove("open");
+       manageModal.setAttribute("aria-hidden", "true");
+       newPhotoUrlInput.value = "";
+       newNameInput.value = "";
+       selectedTeamValue = "";
+       selectedTeamLabel.textContent = "Select Team";
+       selectedTeamLabel.style.color = "rgba(201, 168, 76, 0.7)";
+       newVideoInput.value = "";
+     }
 
-    function addCustomCard() {
-      const name = newNameInput.value.trim();
-      const team = newTeamInput.value.trim();
-      const photo = newPhotoInput.value.trim();
-      const driveLink = newVideoInput.value.trim();
-      if (!name || !team) return;
+     function addCustomCard() {
+       const photo = newPhotoUrlInput.value.trim();
+       const name = newNameInput.value.trim();
+       const team = selectedTeamValue;
+       const videoLink = newVideoInput.value.trim();
+       if (!name || !team || !videoLink) {
+         alert("Please fill in all fields");
+         return;
+       }
 
-      const custom = { name, team, photo, driveLink };
-      const customCards = alums.slice(defaultAlums.length);
-      customCards.push(custom);
-      saveCustomCards(customCards);
-      loadCustomCards();
-      renderCards();
-      closeManageModal();
-    }
+       const custom = { name, team, photo, videoLink };
+       const customCards = alums.slice(defaultAlums.length);
+       customCards.push(custom);
+       saveCustomCards(customCards);
+       loadCustomCards();
+       renderCards();
+       closeManageModal();
+     }
 
     loadCustomCards();
     renderCards();

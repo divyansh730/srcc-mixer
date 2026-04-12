@@ -265,20 +265,25 @@
       cursor: pointer;
     }
     .modal-close:hover { color: var(--cream); border-color: rgba(201, 168, 76, 0.5); }
-    .modal-title {
-      font-family: "Cinzel", serif;
-      font-size: 18px;
-      letter-spacing: 0.1em;
-      color: var(--cream);
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-    .modal-copy {
-      color: rgba(246, 232, 188, 0.72);
-      font-style: italic;
-      font-size: 16px;
-      margin-bottom: 18px;
-    }
+     .modal-title {
+       font-family: "Cinzel", serif;
+       font-size: 18px;
+       letter-spacing: 0.1em;
+       color: var(--cream);
+       text-transform: uppercase;
+       margin-bottom: 6px;
+     }
+     .modal-team {
+       font-family: "Cinzel", serif;
+       font-size: 11px;
+       letter-spacing: 0.12em;
+       color: rgba(201, 168, 76, 0.7);
+       text-transform: uppercase;
+       margin-bottom: 18px;
+     }
+     .modal-copy {
+       display: none;
+     }
      .modal-player-wrap {
        width: 100%;
        aspect-ratio: 16 / 9;
@@ -472,18 +477,17 @@
     <section class="alum-grid" id="alum-grid"></section>
   </main>
 
-  <div class="video-modal" id="video-modal" aria-hidden="true">
-    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <button class="modal-close" id="modal-close" type="button">Close</button>
-      <h2 class="modal-title" id="modal-title">Alum Name</h2>
-      <p class="modal-copy">Watch the engagement video right here.</p>
-      <div class="modal-player-wrap" id="modal-player-wrap">
-        <div class="modal-placeholder" id="modal-placeholder">Video embed will be added here</div>
-         <iframe class="modal-player" id="modal-player" title="Alum engagement video" allow="autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" style="display:none;"></iframe>
-      </div>
-      <a class="modal-fallback" id="modal-fallback" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">Open in new tab</a>
-    </div>
-  </div>
+   <div class="video-modal" id="video-modal" aria-hidden="true">
+     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+       <button class="modal-close" id="modal-close" type="button">Close</button>
+       <h2 class="modal-title" id="modal-title">Alum Name</h2>
+       <div class="modal-team" id="modal-team">Team of YYYY-YY</div>
+       <div class="modal-player-wrap" id="modal-player-wrap">
+         <div class="modal-placeholder" id="modal-placeholder">Video embed will be added here</div>
+          <iframe class="modal-player" id="modal-player" title="Alum engagement video" allow="autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" style="display:none;"></iframe>
+       </div>
+     </div>
+   </div>
 
   <div class="manage-modal" id="manage-modal" aria-hidden="true">
     <div class="manage-card" role="dialog" aria-modal="true" aria-labelledby="manage-title">
@@ -670,19 +674,20 @@
        });
      }
 
-     function openModal(alum) {
-       modalTitle.textContent = alum.name;
-       const embedUrl = toYouTubeEmbedUrl(alum.videoLink);
-       if (embedUrl) {
-         beginEmbedLoad(embedUrl, alum.videoLink);
-      } else {
-        resetEmbedState();
-        modalFallback.style.display = "none";
-        showPlaceholder("Video embed link is missing or invalid.", false);
-      }
-      modal.setAttribute("aria-hidden", "false");
-      modal.classList.add("open");
-    }
+      function openModal(alum) {
+        modalTitle.textContent = alum.name;
+        const nextYear = (alum.team + 1).toString().slice(2);
+        document.getElementById("modal-team").textContent = `Team of ${alum.team}-${nextYear}`;
+        const embedUrl = toYouTubeEmbedUrl(alum.videoLink);
+        if (embedUrl) {
+          beginEmbedLoad(embedUrl, alum.videoLink);
+       } else {
+         resetEmbedState();
+         showPlaceholder("Video embed link is missing or invalid.", false);
+       }
+       modal.setAttribute("aria-hidden", "false");
+       modal.classList.add("open");
+     }
 
     function closeModal() {
       activeEmbedToken += 1;

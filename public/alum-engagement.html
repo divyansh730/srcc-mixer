@@ -534,13 +534,12 @@
     const STORAGE_KEY = "srcc_alum_custom_cards";
     let alums = [...defaultAlums];
 
-    const grid = document.getElementById("alum-grid");
-    const modal = document.getElementById("video-modal");
-    const modalTitle = document.getElementById("modal-title");
-    const modalPlayer = document.getElementById("modal-player");
-    const modalPlaceholder = document.getElementById("modal-placeholder");
-    const modalFallback = document.getElementById("modal-fallback");
-     const modalClose = document.getElementById("modal-close");
+     const grid = document.getElementById("alum-grid");
+     const modal = document.getElementById("video-modal");
+     const modalTitle = document.getElementById("modal-title");
+     const modalPlayer = document.getElementById("modal-player");
+     const modalPlaceholder = document.getElementById("modal-placeholder");
+      const modalClose = document.getElementById("modal-close");
      const addCardBtn = document.getElementById("add-card-btn");
      const manageModal = document.getElementById("manage-modal");
      const cancelAddBtn = document.getElementById("cancel-add");
@@ -623,8 +622,6 @@
        const token = ++activeEmbedToken;
        resetEmbedState();
        showPlaceholder("Loading video...", true);
-       modalFallback.href = rawUrl;
-       modalFallback.style.display = "inline-block";
 
        // Set src immediately with autoplay parameter
        modalPlayer.src = `${embedUrl}?autoplay=1`;

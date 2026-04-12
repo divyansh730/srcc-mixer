@@ -514,7 +514,11 @@
   </div>
 
   <script>
-    const assetUrl = (path) => `${window.location.origin}/srcc-mixer/${path}`;
+    const getBasePath = () => {
+      const firstSegment = window.location.pathname.split("/").filter(Boolean)[0];
+      return firstSegment === "srcc-mixer" ? "/srcc-mixer/" : "/";
+    };
+    const assetUrl = (path) => `${window.location.origin}${getBasePath()}${path}`;
     
      const defaultAlums = [
         { name: "Devangee Shah", team: 2024, photo: assetUrl("Alum photos/Devangee Shah.jpeg"), videoLink: "https://youtu.be/4Kt9KKZQ9t8" },

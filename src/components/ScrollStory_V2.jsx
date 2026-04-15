@@ -255,15 +255,21 @@ export default function ScrollStoryV2() {
           const sop = 1 - ease(range(p, 0.05, 0.18));
           scrollIndRef.current.style.opacity = sop;
         }
-        if (mlTextRef.current) {
-          const inOp = ease(range(p, 0.46, 0.54));
-          const outOpOp = ease(range(p, 0.66, 0.72));
-          const finalOp = inOp * (1 - outOpOp);
-          const ty = inOp < 1 ? 60 * (1 - inOp) : -60 * outOpOp;
-          mlTextRef.current.style.transition = 'none';
-          mlTextRef.current.style.opacity = finalOp;
-          mlTextRef.current.style.transform = `translate3d(0, ${ty}px, 0)`;
-        }
+         if (mlTextRef.current) {
+           const inOp = ease(range(p, 0.46, 0.54));
+           const outOpOp = ease(range(p, 0.66, 0.72));
+           const finalOp = inOp * (1 - outOpOp);
+           const ty = inOp < 1 ? 60 * (1 - inOp) : -60 * outOpOp;
+           mlTextRef.current.style.transition = 'none';
+           mlTextRef.current.style.opacity = finalOp;
+           mlTextRef.current.style.transform = `translate3d(0, ${ty}px, 0)`;
+         }
+         if (corridorBgRef.current) {
+           const inOp = ease(range(p, 0.44, 0.56));
+           const outOpOp = ease(range(p, 0.65, 0.73));
+           const bgOp = inOp * (1 - outOpOp) * 0.95;
+           corridorBgRef.current.style.opacity = bgOp;
+         }
         if (countdownRef.current) {
           const inOp = ease(range(p, 0.48, 0.56));
           const outOpOp = ease(range(p, 0.67, 0.73));
@@ -946,7 +952,29 @@ export default function ScrollStoryV2() {
               pointerEvents: "none",
             }}
           >
-            <div className="countdown-pattern" />
+            <div
+              ref={corridorBgRef}
+              style={{
+                position: "absolute",
+                inset: 0,
+                backgroundImage: `url('${BG_CORRIDOR}')`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundAttachment: "fixed",
+                zIndex: 0,
+                opacity: 0,
+                willChange: "opacity",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background: "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.65) 100%)",
+                zIndex: 1,
+                pointerEvents: "none",
+              }}
+            />
             <div
               id="alumni-mixer-text"
               style={{
@@ -954,7 +982,7 @@ export default function ScrollStoryV2() {
                 padding: isMobile ? "0 18px" : "0 24px",
                 maxWidth: isMobile ? "360px" : "none",
                 position: "relative",
-                zIndex: 1,
+                zIndex: 2,
               }}
             >
               <div

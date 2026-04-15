@@ -27,52 +27,6 @@ body::before {
   0%,100% { box-shadow: 0 0 28px rgba(201,168,76,0.1); }
   50% { box-shadow: 0 0 52px rgba(201,168,76,0.28); }
 }
-@keyframes shimmerPattern {
-  0% { opacity: 0.35; }
-  50% { opacity: 0.55; }
-  100% { opacity: 0.35; }
-}
-@keyframes slidePattern {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(60px, 60px); }
-}
-.countdown-pattern {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-.countdown-pattern::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(45deg,
-      transparent,
-      transparent 35px,
-      rgba(201,168,76,0.25) 35px,
-      rgba(201,168,76,0.25) 70px
-    ),
-    repeating-linear-gradient(-45deg,
-      transparent,
-      transparent 35px,
-      rgba(201,168,76,0.18) 35px,
-      rgba(201,168,76,0.18) 70px
-    );
-  animation: slidePattern 20s linear infinite;
-  opacity: 0.45;
-  will-change: transform;
-}
-.countdown-pattern::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 30% 50%, rgba(201,168,76,0.22) 0%, transparent 50%),
-    radial-gradient(circle at 70% 30%, rgba(201,168,76,0.16) 0%, transparent 50%),
-    radial-gradient(circle at 50% 80%, rgba(201,168,76,0.19) 0%, transparent 50%);
-  animation: shimmerPattern 8s ease-in-out infinite;
-}
 .hero-child {
   opacity: 0;
   animation: heroEntrance 1s cubic-bezier(0.16,1,0.3,1) forwards;

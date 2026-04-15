@@ -984,7 +984,7 @@ export default function ScrollStoryV2() {
                 zIndex: 0,
                 opacity: 0,
                 willChange: "opacity, transform",
-                filter: "brightness(0.50) saturate(0.65) contrast(1.25) sepia(0.35) hue-rotate(-5deg)",
+                filter: "brightness(0.32) saturate(0.50) contrast(1.45) sepia(0.50) hue-rotate(8deg) drop-shadow(0 0 30px rgba(201,168,76,0.15))",
                 minHeight: "120vh",
               }}
             />
@@ -993,7 +993,7 @@ export default function ScrollStoryV2() {
               style={{
                 position: "absolute",
                 inset: 0,
-                background: "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.5) 100%)",
+                background: "linear-gradient(180deg, rgba(26,15,7,0.15) 0%, rgba(51,20,5,0.35) 50%, rgba(26,15,7,0.25) 100%)",
                 zIndex: 1,
                 pointerEvents: "none",
                 opacity: 0,
@@ -1016,99 +1016,182 @@ export default function ScrollStoryV2() {
                   fontFamily: "'Pinyon Script', cursive",
                   fontSize: isMobile ? "clamp(30px, 11vw, 44px)" : "clamp(45px, 8.5vw, 80px)",
                   color: "#F6E8BC",
-                  textShadow: "0 0 55px rgba(201,168,76,0.38), 0 4px 32px rgba(0,0,0,0.98)",
+                  textShadow: "0 0 55px rgba(201,168,76,0.5), 0 4px 32px rgba(0,0,0,0.98), 0 0 24px rgba(201,168,76,0.25)",
                   lineHeight: 1,
                   opacity: 0,
                   transform: "translate3d(0, 80px, 0)",
                   willChange: "transform, opacity",
+                  letterSpacing: "0.01em",
                 }}
               >
                 Alumni Mixer 2026
               </div>
 
+              {/* Decorative top accent */}
+              <div
+                style={{
+                  width: isMobile ? "40px" : "60px",
+                  height: "1px",
+                  background: "linear-gradient(90deg, transparent, #C9A84C, transparent)",
+                  opacity: 0,
+                  transform: "translate3d(0, -10px, 0)",
+                  willChange: "opacity, transform",
+                  animation: "inherit",
+                }}
+              />
+
                <div
-                 ref={countdownRef}
+                   ref={countdownRef}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: isMobile ? "14px" : "24px",
+                    marginTop: isMobile ? "2.2rem" : "3.5rem",
+                    fontFamily: "'Cinzel', serif",
+                    opacity: 0,
+                    transform: "translate3d(0, 32px, 0)",
+                    willChange: "transform, opacity",
+                    flexWrap: "wrap",
+                    padding: isMobile ? "0 12px" : "0 20px",
+                  }}
+                >
+                  {[
+                    { value: countdown.days, label: "Days" },
+                    { value: countdown.hours, label: "Hours" },
+                    { value: countdown.minutes, label: "Minutes" },
+                    { value: countdown.seconds, label: "Seconds" },
+                  ].map((item, idx) => (
+                    <div key={item.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
+                      <div
+                        style={{
+                          position: "relative",
+                          minWidth: isCompactMobile ? "68px" : isMobile ? "82px" : "130px",
+                          padding: isCompactMobile ? "22px 10px" : isMobile ? "26px 14px" : "40px 28px",
+                          background: "linear-gradient(135deg, rgba(201,168,76,0.08) 0%, rgba(201,168,76,0.04) 100%)",
+                          border: "1.5px solid rgba(201,168,76,0.35)",
+                          borderRadius: "2px",
+                          backdropFilter: "blur(20px)",
+                          WebkitBackdropFilter: "blur(20px)",
+                          textAlign: "center",
+                          boxShadow: "0 12px 42px rgba(201,168,76,0.08), inset 0 1px 0 rgba(201,168,76,0.2), inset 0 -1px 0 rgba(0,0,0,0.3)",
+                          transition: "all 0.35s cubic-bezier(0.16,1,0.3,1)",
+                          position: "relative",
+                          overflow: "hidden",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.borderColor = "rgba(201,168,76,0.55)";
+                          e.currentTarget.style.boxShadow = "0 16px 48px rgba(201,168,76,0.15), inset 0 1px 0 rgba(201,168,76,0.3), inset 0 -1px 0 rgba(0,0,0,0.4)";
+                          e.currentTarget.style.background = "linear-gradient(135deg, rgba(201,168,76,0.12) 0%, rgba(201,168,76,0.06) 100%)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.borderColor = "rgba(201,168,76,0.35)";
+                          e.currentTarget.style.boxShadow = "0 12px 42px rgba(201,168,76,0.08), inset 0 1px 0 rgba(201,168,76,0.2), inset 0 -1px 0 rgba(0,0,0,0.3)";
+                          e.currentTarget.style.background = "linear-gradient(135deg, rgba(201,168,76,0.08) 0%, rgba(201,168,76,0.04) 100%)";
+                        }}
+                      >
+                        {/* Luxe corner accents */}
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            width: "8px",
+                            height: "8px",
+                            border: "1px solid rgba(201,168,76,0.4)",
+                            borderRight: "none",
+                            borderBottom: "none",
+                            pointerEvents: "none",
+                          }}
+                        />
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: 0,
+                            right: 0,
+                            width: "8px",
+                            height: "8px",
+                            border: "1px solid rgba(201,168,76,0.4)",
+                            borderLeft: "none",
+                            borderBottom: "none",
+                            pointerEvents: "none",
+                          }}
+                        />
+                        <div
+                          style={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: 0,
+                            width: "8px",
+                            height: "8px",
+                            border: "1px solid rgba(201,168,76,0.4)",
+                            borderRight: "none",
+                            borderTop: "none",
+                            pointerEvents: "none",
+                          }}
+                        />
+                        <div
+                          style={{
+                            position: "absolute",
+                            bottom: 0,
+                            right: 0,
+                            width: "8px",
+                            height: "8px",
+                            border: "1px solid rgba(201,168,76,0.4)",
+                            borderLeft: "none",
+                            borderTop: "none",
+                            pointerEvents: "none",
+                          }}
+                        />
+                        <span
+                          style={{
+                            display: "block",
+                            fontSize: isCompactMobile ? "2.0rem" : isMobile ? "2.4rem" : "3.6rem",
+                            color: "#F6E8BC",
+                            lineHeight: 1,
+                            fontWeight: 700,
+                            letterSpacing: "0.03em",
+                            textShadow: "0 0 28px rgba(201,168,76,0.4), 0 2px 8px rgba(0,0,0,0.5)",
+                            fontFamily: "'Cinzel', serif",
+                          }}
+                        >
+                          {String(item.value).padStart(2, "0")}
+                        </span>
+                      </div>
+                      <span
+                        style={{
+                          color: "#C9A84C",
+                          fontSize: isCompactMobile ? "0.65rem" : isMobile ? "0.72rem" : "0.85rem",
+                          letterSpacing: "0.25em",
+                          textTransform: "uppercase",
+                          fontWeight: 600,
+                          marginTop: "6px",
+                          fontFamily: "'Cinzel', serif",
+                        }}
+                      >
+                        {item.label}
+                      </span>
+                    </div>
+                  ))}
+               </div>
+
+               <div
+                 ref={mlSubRef}
                  style={{
-                   display: "flex",
-                   alignItems: "center",
-                   justifyContent: "center",
-                   gap: isMobile ? "12px" : "20px",
-                   marginTop: isMobile ? "1.8rem" : "3rem",
                    fontFamily: "'Cinzel', serif",
+                   fontSize: isMobile ? "clamp(10px, 3.4vw, 12px)" : "clamp(12px, 1.4vw, 15px)",
+                   color: "#D4AF8F",
+                   marginTop: isMobile ? "20px" : "32px",
+                   letterSpacing: isMobile ? "0.12em" : "0.15em",
+                   lineHeight: 1.5,
                    opacity: 0,
                    transform: "translate3d(0, 32px, 0)",
                    willChange: "transform, opacity",
-                   flexWrap: "wrap",
+                   fontWeight: 500,
                  }}
                >
-                 {[
-                   { value: countdown.days, label: "Days" },
-                   { value: countdown.hours, label: "Hours" },
-                   { value: countdown.minutes, label: "Minutes" },
-                   { value: countdown.seconds, label: "Seconds" },
-                 ].map((item, idx) => (
-                   <div key={item.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-                     <div
-                       style={{
-                         position: "relative",
-                         minWidth: isCompactMobile ? "65px" : isMobile ? "75px" : "120px",
-                         padding: isCompactMobile ? "18px 8px" : isMobile ? "20px 12px" : "32px 24px",
-                         background: "rgba(20, 10, 3, 0.7)",
-                         border: "2px solid rgba(201,168,76,0.4)",
-                         borderRadius: "12px",
-                         backdropFilter: "blur(16px)",
-                         WebkitBackdropFilter: "blur(16px)",
-                         textAlign: "center",
-                         boxShadow: "0 8px 32px rgba(201,168,76,0.12), inset 0 1px 0 rgba(201,168,76,0.15)",
-                         transition: "all 0.3s ease",
-                       }}
-                     >
-                       <span
-                         style={{
-                           display: "block",
-                           fontSize: isCompactMobile ? "1.8rem" : isMobile ? "2.1rem" : "3.2rem",
-                           color: "#F6E8BC",
-                           lineHeight: 1,
-                           fontWeight: 600,
-                           letterSpacing: "0.02em",
-                           textShadow: "0 0 24px rgba(201,168,76,0.35)",
-                         }}
-                       >
-                         {String(item.value).padStart(2, "0")}
-                       </span>
-                     </div>
-                     <span
-                       style={{
-                         color: "rgba(201,168,76,0.75)",
-                         fontSize: isCompactMobile ? "0.6rem" : isMobile ? "0.65rem" : "0.8rem",
-                         letterSpacing: "0.2em",
-                         textTransform: "uppercase",
-                         fontWeight: 500,
-                         marginTop: "4px",
-                       }}
-                     >
-                       {item.label}
-                     </span>
-                   </div>
-                 ))}
+                 25 April 2026 • 4:00 P.M. • PB Lawns, SRCC
                </div>
-
-              <div
-                ref={mlSubRef}
-                style={{
-                  fontFamily: "'Times New Roman', Times, serif",
-                  fontSize: isMobile ? "clamp(10px, 3.4vw, 13px)" : "clamp(13px, 1.6vw, 17px)",
-                  color: "#C8CDD6",
-                  marginTop: isMobile ? "16px" : "28px",
-                  letterSpacing: isMobile ? "0.03em" : "0.07em",
-                  lineHeight: 1.6,
-                  opacity: 0,
-                  transform: "translate3d(0, 32px, 0)",
-                  willChange: "transform, opacity",
-                }}
-              >
-                25 April 2026 • 4:00 P.M. • PB Lawns, SRCC
-              </div>
             </div>
           </div>
         </div>

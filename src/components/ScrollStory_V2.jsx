@@ -980,11 +980,12 @@ export default function ScrollStoryV2() {
                 backgroundImage: `url('${BG_CORRIDOR}')`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                backgroundAttachment: "fixed",
+                backgroundRepeat: "no-repeat",
                 zIndex: 0,
                 opacity: 0,
                 willChange: "opacity, transform",
                 filter: "brightness(0.50) saturate(0.65) contrast(1.25) sepia(0.35) hue-rotate(-5deg)",
+                minHeight: "120vh",
               }}
             />
             <div

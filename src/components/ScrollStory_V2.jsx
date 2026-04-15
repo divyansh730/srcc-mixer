@@ -266,12 +266,11 @@ export default function ScrollStoryV2() {
            mlTextRef.current.style.transform = `translate3d(0, ${ty}px, 0)`;
          }
          if (corridorBgRef.current) {
-           const inOp = ease(range(p, 0.44, 0.56));
-           const outOpOp = ease(range(p, 0.65, 0.73));
-           const bgOp = inOp * (1 - outOpOp) * 0.95;
-           corridorBgRef.current.style.opacity = bgOp;
+           // Fade in corridor background starting early, creating smooth transition
+           const corridorInOp = ease(range(p, 0.20, 0.48));
+           corridorBgRef.current.style.opacity = Math.min(corridorInOp, 1);
            if (corridorOverlayRef.current) {
-             corridorOverlayRef.current.style.opacity = bgOp;
+             corridorOverlayRef.current.style.opacity = Math.min(corridorInOp, 1);
            }
          }
         if (countdownRef.current) {
@@ -968,7 +967,7 @@ export default function ScrollStoryV2() {
                 zIndex: 0,
                 opacity: 0,
                 willChange: "opacity",
-                filter: "brightness(0.45) saturate(0.75) contrast(1.15) sepia(0.18)",
+                filter: "brightness(0.50) saturate(0.65) contrast(1.25) sepia(0.35) hue-rotate(-5deg)",
               }}
             />
             <div
@@ -1009,85 +1008,72 @@ export default function ScrollStoryV2() {
                 Alumni Mixer 2026
               </div>
 
-              <div
-                ref={countdownRef}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: isMobile ? "0" : "0",
-                  marginTop: isMobile ? "1.2rem" : "2.2rem",
-                  fontFamily: "'Cinzel', serif",
-                  opacity: 0,
-                  transform: "translate3d(0, 32px, 0)",
-                  willChange: "transform, opacity",
-                }}
-              >
-                {[
-                  { value: countdown.days, label: "Days" },
-                  { value: countdown.hours, label: "Hours" },
-                  { value: countdown.minutes, label: "Minutes" },
-                  { value: countdown.seconds, label: "Seconds" },
-                ].map((item, idx) => (
-                  <div key={item.label} style={{ display: "flex", alignItems: "center" }}>
-                    <div
-                      style={{
-                        position: "relative",
-                        minWidth: isCompactMobile ? "58px" : isMobile ? "68px" : "110px",
-                        padding: isCompactMobile ? "14px 6px" : isMobile ? "16px 10px" : "24px 18px",
-                        background: "rgba(10, 6, 2, 0.55)",
-                        border: "1px solid rgba(201,168,76,0.25)",
-                        borderRadius: "8px",
-                        backdropFilter: "blur(12px)",
-                        WebkitBackdropFilter: "blur(12px)",
-                        textAlign: "center",
-                      }}
-                    >
-                      {/* Corner ornaments */}
-                      <div style={{ position: "absolute", top: "-1px", left: "-1px", width: "8px", height: "8px", borderTop: "2px solid #C9A84C", borderLeft: "2px solid #C9A84C", borderRadius: "2px 0 0 0", opacity: 0.6 }} />
-                      <div style={{ position: "absolute", top: "-1px", right: "-1px", width: "8px", height: "8px", borderTop: "2px solid #C9A84C", borderRight: "2px solid #C9A84C", borderRadius: "0 2px 0 0", opacity: 0.6 }} />
-                      <div style={{ position: "absolute", bottom: "-1px", left: "-1px", width: "8px", height: "8px", borderBottom: "2px solid #C9A84C", borderLeft: "2px solid #C9A84C", borderRadius: "0 0 0 2px", opacity: 0.6 }} />
-                      <div style={{ position: "absolute", bottom: "-1px", right: "-1px", width: "8px", height: "8px", borderBottom: "2px solid #C9A84C", borderRight: "2px solid #C9A84C", borderRadius: "0 0 2px 0", opacity: 0.6 }} />
-                      <span
-                        style={{
-                          display: "block",
-                          fontSize: isCompactMobile ? "1.6rem" : isMobile ? "1.9rem" : "2.8rem",
-                          color: "#F6E8BC",
-                          lineHeight: 1,
-                          fontWeight: 400,
-                          textShadow: "0 0 20px rgba(201,168,76,0.3)",
-                        }}
-                      >
-                        {String(item.value).padStart(2, "0")}
-                      </span>
-                      <span
-                        style={{
-                          display: "block",
-                          color: "rgba(201,168,76,0.65)",
-                          fontSize: isCompactMobile ? "0.5rem" : isMobile ? "0.55rem" : "0.7rem",
-                          letterSpacing: "0.18em",
-                          textTransform: "uppercase",
-                          marginTop: "6px",
-                        }}
-                      >
-                        {item.label}
-                      </span>
-                    </div>
-                    {/* Gold separator between cards */}
-                    {idx < 3 && (
-                      <div style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        gap: "4px",
-                        padding: isCompactMobile ? "0 4px" : isMobile ? "0 6px" : "0 14px",
-                      }}>
-                        <span style={{ color: "#C9A84C", fontSize: isMobile ? "6px" : "8px", opacity: 0.7 }}>◆</span>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+               <div
+                 ref={countdownRef}
+                 style={{
+                   display: "flex",
+                   alignItems: "center",
+                   justifyContent: "center",
+                   gap: isMobile ? "12px" : "20px",
+                   marginTop: isMobile ? "1.8rem" : "3rem",
+                   fontFamily: "'Cinzel', serif",
+                   opacity: 0,
+                   transform: "translate3d(0, 32px, 0)",
+                   willChange: "transform, opacity",
+                   flexWrap: "wrap",
+                 }}
+               >
+                 {[
+                   { value: countdown.days, label: "Days" },
+                   { value: countdown.hours, label: "Hours" },
+                   { value: countdown.minutes, label: "Minutes" },
+                   { value: countdown.seconds, label: "Seconds" },
+                 ].map((item, idx) => (
+                   <div key={item.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+                     <div
+                       style={{
+                         position: "relative",
+                         minWidth: isCompactMobile ? "65px" : isMobile ? "75px" : "120px",
+                         padding: isCompactMobile ? "18px 8px" : isMobile ? "20px 12px" : "32px 24px",
+                         background: "rgba(20, 10, 3, 0.7)",
+                         border: "2px solid rgba(201,168,76,0.4)",
+                         borderRadius: "12px",
+                         backdropFilter: "blur(16px)",
+                         WebkitBackdropFilter: "blur(16px)",
+                         textAlign: "center",
+                         boxShadow: "0 8px 32px rgba(201,168,76,0.12), inset 0 1px 0 rgba(201,168,76,0.15)",
+                         transition: "all 0.3s ease",
+                       }}
+                     >
+                       <span
+                         style={{
+                           display: "block",
+                           fontSize: isCompactMobile ? "1.8rem" : isMobile ? "2.1rem" : "3.2rem",
+                           color: "#F6E8BC",
+                           lineHeight: 1,
+                           fontWeight: 600,
+                           letterSpacing: "0.02em",
+                           textShadow: "0 0 24px rgba(201,168,76,0.35)",
+                         }}
+                       >
+                         {String(item.value).padStart(2, "0")}
+                       </span>
+                     </div>
+                     <span
+                       style={{
+                         color: "rgba(201,168,76,0.75)",
+                         fontSize: isCompactMobile ? "0.6rem" : isMobile ? "0.65rem" : "0.8rem",
+                         letterSpacing: "0.2em",
+                         textTransform: "uppercase",
+                         fontWeight: 500,
+                         marginTop: "4px",
+                       }}
+                     >
+                       {item.label}
+                     </span>
+                   </div>
+                 ))}
+               </div>
 
               <div
                 ref={mlSubRef}

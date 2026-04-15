@@ -41,12 +41,16 @@ export default function ScrollStoryV2() {
   const [viewportWidth, setViewportWidth] = useState(() =>
     typeof window === "undefined" ? 1440 : window.innerWidth
   );
+  const [showDialSVG, setShowDialSVG] = useState(false);
   const [countdown, setCountdown] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
   });
+  const countdownRef_state = useRef({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const scrollActivityRef = useRef(null);
+  const lastScrollTimeRef = useRef(0);
 
   const isMobile = viewportWidth <= 768;
   const isCompactMobile = viewportWidth <= 480;
@@ -72,10 +76,30 @@ export default function ScrollStoryV2() {
       const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
       const s = Math.floor((difference % (1000 * 60)) / 1000);
 
-      setCountdown({ days: d, hours: h, minutes: m, seconds: s });
+      const newCountdown = { days: d, hours: h, minutes: m, seconds: s };
+      countdownRef_state.current = newCountdown;
+      setCountdown(newCountdown);
     }, 1000);
 
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShowDialSVG(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+    
+    if (dialBgRef.current) {
+      observer.observe(dialBgRef.current);
+    }
+    
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -124,8 +148,12 @@ export default function ScrollStoryV2() {
     let lastSy = 0;
     let animId;
     let lastTime = performance.now();
+    let rafPending = false;
+    let needsUpdate = true;
+    const SCROLL_THROTTLE = 50; // Only update if scroll moved more than 50px or 50ms passed
     const speeds = { r1: 2.5, r2: -3.8, r3: 1.8, r4: -1.2, r5: 4.2, out: -2.0, inn: 3.0 };
     const perp = { r1: 0, r2: 0, r3: 0, r4: 0, r5: 0, out: 0, inn: 0 };
+    let lastRenderedSy = -1;
     const onResize = () => { winH = window.innerHeight; winW = window.innerWidth; };
     window.addEventListener("resize", onResize, { passive: true });
     const ease = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
@@ -134,113 +162,130 @@ export default function ScrollStoryV2() {
     const render = (now) => {
       const dt = Math.min((now - lastTime) / 1000, 0.1);
       lastTime = now;
-      perp.r1 += speeds.r1 * dt; perp.r2 += speeds.r2 * dt; perp.r3 += speeds.r3 * dt;
-      perp.r4 += speeds.r4 * dt; perp.r5 += speeds.r5 * dt; perp.out += speeds.out * dt; perp.inn += speeds.inn * dt;
+      
+      // Only update perpetual rotation if needed
+      if (needsUpdate) {
+        perp.r1 += speeds.r1 * dt; perp.r2 += speeds.r2 * dt; perp.r3 += speeds.r3 * dt;
+        perp.r4 += speeds.r4 * dt; perp.r5 += speeds.r5 * dt; perp.out += speeds.out * dt; perp.inn += speeds.inn * dt;
+      }
+      
       const sy = lastSy;
-      const total = winH * TOTAL;
-      const p = clamp(sy / total, 0, 1);
-      if (clockBgRef.current) {
-        const ty = -p * 22;
-        const op = 1 - Math.min(ease(range(p, 0.25, 0.45)), 1);
-        clockBgRef.current.style.opacity = op;
-        clockBgRef.current.style.transform = `translate3d(0, ${ty}%, 0)`;
-      }
-      if (dialBgRef.current) {
-        const inOp = ease(range(p, 0.35, 0.50));
-        const outOpOp = ease(range(p, 0.70, 0.80));
-        const currentOp = Math.min(inOp, 1) * (1 - outOpOp);
-        const expandP = range(p, 0.52, 0.82);
-        const sc = 1 + (expandP * expandP) * 14;
-        dialBgRef.current.style.opacity = currentOp;
-        dialBgRef.current.style.visibility = currentOp <= 0 ? "hidden" : "visible";
-        dialBgRef.current.style.transform = `translate3d(0,0,0) scale3d(${sc}, ${sc}, 1)`;
-        const sr1 = p * 90, sr2 = -p * 130, sr3 = p * 170;
-        const sr4 = -p * 60, sr5 = p * 200, srOut = -p * 140, srIn = p * 180;
-        if (ring1Ref.current) ring1Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r1 + sr1}deg)`;
-        if (ring2Ref.current) ring2Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r2 + sr2}deg)`;
-        if (ring3Ref.current) ring3Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r3 + sr3}deg)`;
-        if (ring4Ref.current) ring4Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r4 + sr4}deg)`;
-        if (ring5Ref.current) ring5Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r5 + sr5}deg)`;
-        if (outTickRef.current) outTickRef.current.style.transform = `translate3d(0,0,0) rotate(${perp.out + srOut}deg)`;
-        if (inTickRef.current) inTickRef.current.style.transform = `translate3d(0,0,0) rotate(${perp.inn + srIn}deg)`;
-        if (revealRef.current) {
-          const rawRevealOp = ease(range(p, 0.70, 0.82));
-          const revealOp = rawRevealOp > 0.001 ? rawRevealOp : 0.001; // Pre-cache massive block
-          const revealTy = 40 * (1 - ease(range(p, 0.70, 0.92)));
-          revealRef.current.style.opacity = revealOp;
-          revealRef.current.style.transform = `translate3d(0, ${revealTy}px, 0)`;
+      const scrollDiff = Math.abs(sy - lastRenderedSy);
+      
+      // Only re-render scroll-dependent elements if scroll moved enough
+      if (scrollDiff > SCROLL_THROTTLE || needsUpdate) {
+        lastRenderedSy = sy;
+        const total = winH * TOTAL;
+        const p = clamp(sy / total, 0, 1);
+        if (clockBgRef.current) {
+          const ty = -p * 22;
+          const op = 1 - Math.min(ease(range(p, 0.25, 0.45)), 1);
+          clockBgRef.current.style.opacity = op;
+          clockBgRef.current.style.transform = `translate3d(0, ${ty}%, 0)`;
+        }
+        if (dialBgRef.current) {
+          const inOp = ease(range(p, 0.35, 0.50));
+          const outOpOp = ease(range(p, 0.70, 0.80));
+          const currentOp = Math.min(inOp, 1) * (1 - outOpOp);
+          const expandP = range(p, 0.52, 0.82);
+          const sc = 1 + (expandP * expandP) * 14;
+          dialBgRef.current.style.opacity = currentOp;
+          dialBgRef.current.style.visibility = currentOp <= 0 ? "hidden" : "visible";
+          dialBgRef.current.style.transform = `translate3d(0,0,0) scale3d(${sc}, ${sc}, 1)`;
+          const sr1 = p * 90, sr2 = -p * 130, sr3 = p * 170;
+          const sr4 = -p * 60, sr5 = p * 200, srOut = -p * 140, srIn = p * 180;
+          if (ring1Ref.current) ring1Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r1 + sr1}deg)`;
+          if (ring2Ref.current) ring2Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r2 + sr2}deg)`;
+          if (ring3Ref.current) ring3Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r3 + sr3}deg)`;
+          if (ring4Ref.current) ring4Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r4 + sr4}deg)`;
+          if (ring5Ref.current) ring5Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r5 + sr5}deg)`;
+          if (outTickRef.current) outTickRef.current.style.transform = `translate3d(0,0,0) rotate(${perp.out + srOut}deg)`;
+          if (inTickRef.current) inTickRef.current.style.transform = `translate3d(0,0,0) rotate(${perp.inn + srIn}deg)`;
+          if (revealRef.current) {
+            const rawRevealOp = ease(range(p, 0.70, 0.82));
+            const revealOp = rawRevealOp > 0.001 ? rawRevealOp : 0.001;
+            const revealTy = 40 * (1 - ease(range(p, 0.70, 0.92)));
+            revealRef.current.style.opacity = revealOp;
+            revealRef.current.style.transform = `translate3d(0, ${revealTy}px, 0)`;
+          }
+        }
+        if (headerRef.current) {
+          const hop = ease(range(p, 0.30, 0.40));
+          headerRef.current.style.opacity = hop;
+          headerRef.current.style.pointerEvents = hop > 0.5 ? "all" : "none";
+        }
+        if (countdownRef.current && countdownRef.current.parentElement) {
+          const rect = countdownRef.current.getBoundingClientRect();
+          const shouldShow = rect.top < winH * 0.5;
+          if (shouldShow !== showCountdownInHeaderRef.current) {
+            showCountdownInHeaderRef.current = shouldShow;
+            setShowCountdownInHeader(shouldShow);
+          }
+        }
+        if (logoRef.current) {
+          const lp = ease(range(p, 0.10, 0.40));
+          const { x: startX, y: startY, size: startSize } = baseLogoMetricsRef.current;
+          if (startSize > 0) {
+            const size = startSize - lp * (startSize - logoEndSize);
+            const x = startX + lp * (logoEndX - startX);
+            const y = startY + lp * (logoEndY - startY);
+            logoRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+            logoRef.current.style.width = `${size}px`;
+            logoRef.current.style.height = `${size}px`;
+            logoRef.current.style.opacity = p > 0.42 ? 0 : 1;
+          } else {
+            logoRef.current.style.opacity = 0;
+          }
+        }
+        if (contentRef.current) {
+          const cp = ease(range(p, 0.08, 0.35));
+          const op = Math.max(1 - cp * (isMobile ? 1.35 : 1.65), 0);
+          const ty = cp * -winH * 0.20;
+          contentRef.current.style.opacity = op;
+          contentRef.current.style.transform = `translate3d(0, ${ty}px, 0) scale(1)`;
+        }
+        if (scrollIndRef.current) {
+          const sop = 1 - ease(range(p, 0.05, 0.18));
+          scrollIndRef.current.style.opacity = sop;
+        }
+        if (mlTextRef.current) {
+          const inOp = ease(range(p, 0.46, 0.54));
+          const outOpOp = ease(range(p, 0.66, 0.72));
+          const finalOp = inOp * (1 - outOpOp);
+          const ty = inOp < 1 ? 60 * (1 - inOp) : -60 * outOpOp;
+          mlTextRef.current.style.transition = 'none';
+          mlTextRef.current.style.opacity = finalOp;
+          mlTextRef.current.style.transform = `translate3d(0, ${ty}px, 0)`;
+        }
+        if (countdownRef.current) {
+          const inOp = ease(range(p, 0.48, 0.56));
+          const outOpOp = ease(range(p, 0.67, 0.73));
+          const finalOp = inOp * (1 - outOpOp);
+          const ty = inOp < 1 ? 40 * (1 - inOp) : -40 * outOpOp;
+          countdownRef.current.style.transition = 'none';
+          countdownRef.current.style.opacity = finalOp;
+          countdownRef.current.style.transform = `translate3d(0, ${ty}px, 0)`;
+        }
+        if (mlSubRef.current) {
+          const inOp = ease(range(p, 0.50, 0.58));
+          const outOpOp = ease(range(p, 0.68, 0.74));
+          const finalOp = inOp * (1 - outOpOp);
+          const ty = inOp < 1 ? 40 * (1 - inOp) : -40 * outOpOp;
+          mlSubRef.current.style.transition = 'none';
+          mlSubRef.current.style.opacity = finalOp;
+          mlSubRef.current.style.transform = `translate3d(0, ${ty}px, 0)`;
         }
       }
-      if (headerRef.current) {
-        const hop = ease(range(p, 0.30, 0.40));
-        headerRef.current.style.opacity = hop;
-        headerRef.current.style.pointerEvents = hop > 0.5 ? "all" : "none";
-      }
-      if (countdownRef.current) {
-        const rect = countdownRef.current.getBoundingClientRect();
-        const shouldShow = rect.top < winH * 0.5;
-        if (shouldShow !== showCountdownInHeaderRef.current) {
-          showCountdownInHeaderRef.current = shouldShow;
-          setShowCountdownInHeader(shouldShow);
-        }
-      }
-      if (logoRef.current) {
-        const lp = ease(range(p, 0.10, 0.40));
-        const { x: startX, y: startY, size: startSize } = baseLogoMetricsRef.current;
-
-        if (startSize > 0) {
-          const size = startSize - lp * (startSize - logoEndSize);
-          const x = startX + lp * (logoEndX - startX);
-          const y = startY + lp * (logoEndY - startY);
-          logoRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-          logoRef.current.style.width = `${size}px`;
-          logoRef.current.style.height = `${size}px`;
-          logoRef.current.style.opacity = p > 0.42 ? 0 : 1;
-        } else {
-          logoRef.current.style.opacity = 0;
-        }
-      }
-      if (contentRef.current) {
-        const cp = ease(range(p, 0.08, 0.35));
-        const op = Math.max(1 - cp * (isMobile ? 1.35 : 1.65), 0);
-        const ty = cp * -winH * 0.20;
-        contentRef.current.style.opacity = op;
-        contentRef.current.style.transform = `translate3d(0, ${ty}px, 0) scale(1)`;
-      }
-      if (scrollIndRef.current) {
-        const sop = 1 - ease(range(p, 0.05, 0.18));
-        scrollIndRef.current.style.opacity = sop;
-      }
-      if (mlTextRef.current) {
-        const inOp = ease(range(p, 0.46, 0.54));
-        const outOpOp = ease(range(p, 0.66, 0.72));
-        const finalOp = inOp * (1 - outOpOp);
-        const ty = inOp < 1 ? 60 * (1 - inOp) : -60 * outOpOp;
-        mlTextRef.current.style.transition = 'none';
-        mlTextRef.current.style.opacity = finalOp;
-        mlTextRef.current.style.transform = `translate3d(0, ${ty}px, 0)`;
-      }
-      if (countdownRef.current) {
-        const inOp = ease(range(p, 0.48, 0.56));
-        const outOpOp = ease(range(p, 0.67, 0.73));
-        const finalOp = inOp * (1 - outOpOp);
-        const ty = inOp < 1 ? 40 * (1 - inOp) : -40 * outOpOp;
-        countdownRef.current.style.transition = 'none';
-        countdownRef.current.style.opacity = finalOp;
-        countdownRef.current.style.transform = `translate3d(0, ${ty}px, 0)`;
-      }
-      if (mlSubRef.current) {
-        const inOp = ease(range(p, 0.50, 0.58));
-        const outOpOp = ease(range(p, 0.68, 0.74));
-        const finalOp = inOp * (1 - outOpOp);
-        const ty = inOp < 1 ? 40 * (1 - inOp) : -40 * outOpOp;
-        mlSubRef.current.style.transition = 'none';
-        mlSubRef.current.style.opacity = finalOp;
-        mlSubRef.current.style.transform = `translate3d(0, ${ty}px, 0)`;
-      }
+      
+      needsUpdate = false;
+      rafPending = false;
       animId = requestAnimationFrame(render);
     };
-    const onScroll = () => { lastSy = window.scrollY; };
+    const onScroll = () => { 
+      lastSy = window.scrollY;
+      needsUpdate = true;
+      lastScrollTimeRef.current = performance.now();
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     animId = requestAnimationFrame(render);
     return () => {
@@ -275,6 +320,7 @@ export default function ScrollStoryV2() {
           backdropFilter: "blur(18px)",
           WebkitBackdropFilter: "blur(18px)",
           boxShadow: "0 4px 30px rgba(0,0,0,0.4)",
+          willChange: "opacity, pointer-events",
         }}
       >
         <div
@@ -355,18 +401,18 @@ export default function ScrollStoryV2() {
           <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "10px" : "3rem", minWidth: 0 }}>
             {isMobile ? (
               <>
-                <div
-                  style={{
-                    opacity: showCountdownInHeader && !isVeryCompactMobile ? 1 : 0,
-                    transform: `translateY(${showCountdownInHeader ? "0px" : "4px"})`,
-                    transition: "opacity 0.35s ease, transform 0.35s ease",
-                    fontFamily: "'Cinzel', serif",
-                    fontSize: isCompactMobile ? "10px" : "12px",
-                    color: "#C9A84C",
-                    letterSpacing: isCompactMobile ? "0.04em" : "0.08em",
-                    whiteSpace: "nowrap",
-                    textAlign: "right",
-                    fontWeight: 600,
+                  <div
+                    style={{
+                      opacity: showCountdownInHeader && !isVeryCompactMobile ? 1 : 0,
+                      transform: `translate3d(0, ${showCountdownInHeader ? "0px" : "4px"}, 0)`,
+                      transition: "opacity 0.35s ease, transform 0.35s ease",
+                      fontFamily: "'Cinzel', serif",
+                      fontSize: isCompactMobile ? "10px" : "12px",
+                      color: "#C9A84C",
+                      letterSpacing: isCompactMobile ? "0.04em" : "0.08em",
+                      whiteSpace: "nowrap",
+                      textAlign: "right",
+                      fontWeight: 600,
                   }}
                 >
                   {`${String(countdown.days).padStart(2, "0")}:${String(countdown.hours).padStart(
@@ -512,8 +558,10 @@ export default function ScrollStoryV2() {
               backfaceVisibility: "hidden",
             }}
           >
-            <svg viewBox="0 0 1000 1000" style={{ width: "min(115vw, 115vh)", height: "min(115vw, 115vh)", overflow: "visible", maxWidth: "1200px", opacity: 0.75 }}>
-              <defs>
+            <svg viewBox="0 0 1000 1000" style={{ width: "min(115vw, 115vh)", height: "min(115vw, 115vh)", overflow: "visible", maxWidth: "1200px", opacity: 0.75, display: showDialSVG ? "block" : "none" }}>
+              {showDialSVG && (
+                <>
+                  <defs>
                 <radialGradient id="ringGlow" cx="50%" cy="50%" r="50%">
                   <stop offset="60%" stopColor="#C9A84C" stopOpacity="0" />
                   <stop offset="100%" stopColor="#C9A84C" stopOpacity="0.12" />
@@ -680,6 +728,8 @@ export default function ScrollStoryV2() {
                 <circle cx="500" cy="500" r="24" fill="none" stroke="#C9A84C" strokeWidth="1.5" strokeOpacity="0.6" />
                 <circle cx="500" cy="500" r="6" fill="#C9A84C" fillOpacity="0.6" />
               </g>
+            </>
+              )}
             </svg>
           </div>
 
@@ -839,7 +889,7 @@ export default function ScrollStoryV2() {
               position: "absolute",
               bottom: isMobile ? "28px" : "50px",
               left: "50%",
-              transform: "translateX(-50%)",
+              transform: "translate3d(-50%, 0, 0)",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",

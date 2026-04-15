@@ -16,6 +16,7 @@ const TOTAL = 7;
 export default function ScrollStoryV2() {
   const clockBgRef = useRef(null);
   const corridorBgRef = useRef(null);
+  const corridorOverlayRef = useRef(null);
   const logoRef = useRef(null);
   const contentRef = useRef(null);
   const scrollIndRef = useRef(null);
@@ -269,6 +270,9 @@ export default function ScrollStoryV2() {
            const outOpOp = ease(range(p, 0.65, 0.73));
            const bgOp = inOp * (1 - outOpOp) * 0.95;
            corridorBgRef.current.style.opacity = bgOp;
+           if (corridorOverlayRef.current) {
+             corridorOverlayRef.current.style.opacity = bgOp;
+           }
          }
         if (countdownRef.current) {
           const inOp = ease(range(p, 0.48, 0.56));
@@ -964,15 +968,19 @@ export default function ScrollStoryV2() {
                 zIndex: 0,
                 opacity: 0,
                 willChange: "opacity",
+                filter: "brightness(0.45) saturate(0.75) contrast(1.15) sepia(0.18)",
               }}
             />
             <div
+              ref={corridorOverlayRef}
               style={{
                 position: "absolute",
                 inset: 0,
-                background: "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.65) 100%)",
+                background: "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.5) 100%)",
                 zIndex: 1,
                 pointerEvents: "none",
+                opacity: 0,
+                willChange: "opacity",
               }}
             />
             <div

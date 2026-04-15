@@ -984,16 +984,16 @@ export default function ScrollStoryV2() {
                 zIndex: 0,
                 opacity: 0,
                 willChange: "opacity, transform",
-                filter: "brightness(0.72) contrast(1.08) saturate(0.95) sepia(0.18) hue-rotate(4deg)",
+                filter: "brightness(0.45) contrast(1.1) saturate(1.05) sepia(0.5) hue-rotate(4deg)",
                 minHeight: "120vh",
               }}
             />
-            <div
+             <div
               ref={corridorOverlayRef}
               style={{
                 position: "absolute",
                 inset: 0,
-                background: "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.3) 100%)",
+                background: "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.5) 100%)",
                 zIndex: 1,
                 pointerEvents: "none",
                 opacity: 0,
@@ -1033,8 +1033,8 @@ export default function ScrollStoryV2() {
                     alignItems: "center",
                     justifyContent: "center",
                     flexDirection: "column",
-                    gap: isMobile ? "1.5rem" : "2.5rem",
-                    marginTop: isMobile ? "2.5rem" : "3.5rem",
+                    gap: isMobile ? "2.2rem" : "3.2rem",
+                    marginTop: isMobile ? "2.8rem" : "3.8rem",
                     opacity: 0,
                     transform: "translate3d(0, 32px, 0)",
                     willChange: "transform, opacity",
@@ -1045,9 +1045,9 @@ export default function ScrollStoryV2() {
                   <div
                     style={{
                       display: "flex",
-                      alignItems: "flex-start",
+                      alignItems: "center",
                       justifyContent: "center",
-                      gap: isMobile ? "1.4rem" : "3rem",
+                      gap: isMobile ? "2rem" : "3.5rem",
                       flexWrap: "wrap",
                     }}
                   >
@@ -1063,31 +1063,31 @@ export default function ScrollStoryV2() {
                           display: "flex",
                           flexDirection: "column",
                           alignItems: "center",
-                          gap: isMobile ? "8px" : "12px",
+                          gap: isMobile ? "10px" : "14px",
                         }}
                       >
-                        {/* Big Number */}
+                        {/* Number - Simplified */}
                         <div
                           style={{
                             fontFamily: "'Pinyon Script', cursive",
-                            fontSize: isCompactMobile ? "3rem" : isMobile ? "3.5rem" : "5.5rem",
+                            fontSize: isCompactMobile ? "3rem" : isMobile ? "3.8rem" : "5.5rem",
                             fontWeight: 400,
                             color: "#F6E8BC",
                             lineHeight: 1,
-                            textShadow: "0 0 30px rgba(201, 168, 76, 0.4), 0 2px 12px rgba(0,0,0,0.6)",
-                            letterSpacing: "0.02em",
+                            textShadow: "0 0 25px rgba(201, 168, 76, 0.35), 0 2px 8px rgba(0,0,0,0.5)",
+                            letterSpacing: "0.01em",
                           }}
                         >
                           {String(item.value).padStart(2, "0")}
                         </div>
 
-                        {/* Elegant Label */}
+                        {/* Label - Simplified */}
                         <div
                           style={{
                             fontFamily: "'Cinzel', serif",
-                            fontSize: isCompactMobile ? "0.7rem" : isMobile ? "0.8rem" : "0.95rem",
-                            color: "rgba(201, 168, 76, 0.55)",
-                            letterSpacing: "0.2em",
+                            fontSize: isCompactMobile ? "0.68rem" : isMobile ? "0.78rem" : "0.9rem",
+                            color: "rgba(201, 168, 76, 0.5)",
+                            letterSpacing: "0.18em",
                             textTransform: "uppercase",
                             fontWeight: 500,
                           }}
@@ -1098,24 +1098,24 @@ export default function ScrollStoryV2() {
                     ))}
                   </div>
 
-                  {/* Decorative Element Below */}
+                  {/* Larger Bottom Divider */}
                   <div
                     style={{
-                      width: isMobile ? "60px" : "100px",
-                      height: "1px",
-                      background: "linear-gradient(90deg, transparent, rgba(201,168,76,0.35), transparent)",
-                      opacity: 0.8,
+                      width: isMobile ? "140px" : "200px",
+                      height: "1.5px",
+                      background: "linear-gradient(90deg, transparent, rgba(201,168,76,0.4), transparent)",
+                      opacity: 0.85,
                     }}
                   />
                 </div>
 
-                <div
+                 <div
                   ref={mlSubRef}
                   style={{
                     fontFamily: "'Times New Roman', Times, serif",
                     fontSize: isMobile ? "clamp(10px, 3.4vw, 12px)" : "clamp(12px, 1.4vw, 15px)",
                     color: "#C8CDD6",
-                    marginTop: isMobile ? "16px" : "24px",
+                    marginTop: isMobile ? "20px" : "32px",
                     letterSpacing: isMobile ? "0.03em" : "0.08em",
                     lineHeight: 1.5,
                     opacity: 0,

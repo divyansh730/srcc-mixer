@@ -266,11 +266,24 @@ export default function ScrollStoryV2() {
            mlTextRef.current.style.transform = `translate3d(0, ${ty}px, 0)`;
          }
          if (corridorBgRef.current) {
-           // Fade in corridor background starting early, creating smooth transition
-           const corridorInOp = ease(range(p, 0.20, 0.48));
-           corridorBgRef.current.style.opacity = Math.min(corridorInOp, 1);
+           // Corridor background scrolls in from below with parallax movement
+           const corridorStartP = range(p, 0.15, 0.50);
+           const corridorInOp = ease(corridorStartP);
+           
+           // Fade out after serving its purpose
+           const corridorEndP = range(p, 0.68, 0.78);
+           const corridorOutOp = 1 - ease(corridorEndP);
+           const finalCorridorOp = Math.min(corridorInOp * corridorOutOp, 1);
+           
+           // Parallax movement: starts below, scrolls up as hero fades
+           const moveAmount = (1 - corridorInOp) * 100; // Moves from 100% down to 0
+           
+           corridorBgRef.current.style.opacity = finalCorridorOp;
+           corridorBgRef.current.style.transform = `translate3d(0, ${moveAmount}%, 0)`;
+           
            if (corridorOverlayRef.current) {
-             corridorOverlayRef.current.style.opacity = Math.min(corridorInOp, 1);
+             corridorOverlayRef.current.style.opacity = finalCorridorOp;
+             corridorOverlayRef.current.style.transform = `translate3d(0, ${moveAmount}%, 0)`;
            }
          }
         if (countdownRef.current) {
@@ -966,7 +979,7 @@ export default function ScrollStoryV2() {
                 backgroundAttachment: "fixed",
                 zIndex: 0,
                 opacity: 0,
-                willChange: "opacity",
+                willChange: "opacity, transform",
                 filter: "brightness(0.50) saturate(0.65) contrast(1.25) sepia(0.35) hue-rotate(-5deg)",
               }}
             />
@@ -979,7 +992,7 @@ export default function ScrollStoryV2() {
                 zIndex: 1,
                 pointerEvents: "none",
                 opacity: 0,
-                willChange: "opacity",
+                willChange: "opacity, transform",
               }}
             />
             <div

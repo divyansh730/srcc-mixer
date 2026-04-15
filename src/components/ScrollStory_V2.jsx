@@ -266,24 +266,29 @@ export default function ScrollStoryV2() {
            mlTextRef.current.style.transform = `translate3d(0, ${ty}px, 0)`;
          }
          if (corridorBgRef.current) {
-           // Corridor background scrolls in from below with parallax movement
-           const corridorStartP = range(p, 0.15, 0.50);
-           const corridorInOp = ease(corridorStartP);
+           // Corridor background parallax: moves up smoothly with hero fade
+           // Starts moving in earlier and moves at a slower rate for parallax effect
+           const corridorMoveStart = range(p, 0.10, 0.25);
+           const corridorMoveFull = range(p, 0.25, 0.65);
            
-           // Fade out after serving its purpose
-           const corridorEndP = range(p, 0.68, 0.78);
-           const corridorOutOp = 1 - ease(corridorEndP);
-           const finalCorridorOp = Math.min(corridorInOp * corridorOutOp, 1);
+           // Parallax: moves slower than hero fade (creates depth)
+           const moveAmount = -corridorMoveStart * 50 - corridorMoveFull * 80; // Negative = moves up
            
-           // Parallax movement: starts below, scrolls up as hero fades
-           const moveAmount = (1 - corridorInOp) * 100; // Moves from 100% down to 0
+           // Crossfade: fades in as hero fades out
+           const heroFadeOut = ease(range(p, 0.25, 0.50));
+           const corridorInOp = heroFadeOut;
            
-           corridorBgRef.current.style.opacity = finalCorridorOp;
-           corridorBgRef.current.style.transform = `translate3d(0, ${moveAmount}%, 0)`;
+           // Fades out after the text section
+           const fadeOutStart = range(p, 0.70, 0.80);
+           const corridorOutOp = 1 - ease(fadeOutStart);
+           const finalCorridorOp = corridorInOp * corridorOutOp;
+           
+           corridorBgRef.current.style.opacity = Math.min(finalCorridorOp, 1);
+           corridorBgRef.current.style.transform = `translate3d(0, ${moveAmount}px, 0)`;
            
            if (corridorOverlayRef.current) {
-             corridorOverlayRef.current.style.opacity = finalCorridorOp;
-             corridorOverlayRef.current.style.transform = `translate3d(0, ${moveAmount}%, 0)`;
+             corridorOverlayRef.current.style.opacity = Math.min(finalCorridorOp, 1);
+             corridorOverlayRef.current.style.transform = `translate3d(0, ${moveAmount}px, 0)`;
            }
          }
         if (countdownRef.current) {

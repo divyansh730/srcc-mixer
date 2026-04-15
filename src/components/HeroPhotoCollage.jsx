@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 
 const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`;
 
@@ -46,6 +46,11 @@ export default function HeroPhotoCollage() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Memoize the repeated photos array to prevent unnecessary recalculations
+  const repeatedPhotos = useMemo(() => {
+    return [...shuffledPhotos, ...shuffledPhotos, ...shuffledPhotos, ...shuffledPhotos];
+  }, []);
+
   return (
     <div
       style={{
@@ -53,6 +58,7 @@ export default function HeroPhotoCollage() {
         inset: 0,
         backgroundColor: "#0A0500",
         overflow: "hidden",
+        willChange: "transform",
       }}
     >
       <div
@@ -70,11 +76,12 @@ export default function HeroPhotoCollage() {
           gap: "2px",
           gridAutoFlow: "row",
           filter: "sepia(0.65) brightness(0.5) contrast(1.1) saturate(1.2)",
-          opacity: 0.65, // Clearly visible but darkened to stay visually behind the text
+          opacity: 0.65,
+          willChange: "contents",
+          backfaceVisibility: "hidden",
         }}
       >
-        {/* Repeat the shuffled array a few times to ensure we have enough images to cover any screen size without blowing them up */}
-        {[...shuffledPhotos, ...shuffledPhotos, ...shuffledPhotos, ...shuffledPhotos].map((photo, i) => {
+        {repeatedPhotos.map((photo, i) => {
           return (
             <div
               key={i}
@@ -82,17 +89,20 @@ export default function HeroPhotoCollage() {
                 borderRadius: "2px",
                 overflow: "hidden",
                 backgroundColor: "#000",
+                backfaceVisibility: "hidden",
               }}
             >
               <img
                 src={assetUrl(`team-photos/${photo}`)}
                 alt="Memory"
                 loading="lazy"
+                decoding="async"
                 style={{
                   width: "100%",
                   height: "100%",
                   objectFit: "cover",
                   display: "block",
+                  backfaceVisibility: "hidden",
                 }}
               />
             </div>
@@ -108,6 +118,7 @@ export default function HeroPhotoCollage() {
           background:
             "radial-gradient(circle at center, transparent 0%, rgba(2,1,0,0.3) 85%, rgba(0,0,0,0.85) 100%)",
           pointerEvents: "none",
+          willChange: "auto",
         }}
       />
 
@@ -119,6 +130,7 @@ export default function HeroPhotoCollage() {
           background:
             "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 15%, transparent 85%, rgba(0,0,0,0.85) 100%)",
           pointerEvents: "none",
+          willChange: "auto",
         }}
       />
     </div>

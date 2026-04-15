@@ -150,10 +150,12 @@ export default function ScrollStoryV2() {
     let lastTime = performance.now();
     let rafPending = false;
     let needsUpdate = true;
-    const SCROLL_THROTTLE = 50; // Only update if scroll moved more than 50px or 50ms passed
+    const SCROLL_THROTTLE = 80; // Increased from 50 to reduce updates
     const speeds = { r1: 2.5, r2: -3.8, r3: 1.8, r4: -1.2, r5: 4.2, out: -2.0, inn: 3.0 };
     const perp = { r1: 0, r2: 0, r3: 0, r4: 0, r5: 0, out: 0, inn: 0 };
     let lastRenderedSy = -1;
+    let isScrolling = false;
+    let scrollTimeout;
     const onResize = () => { winH = window.innerHeight; winW = window.innerWidth; };
     window.addEventListener("resize", onResize, { passive: true });
     const ease = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
@@ -163,8 +165,8 @@ export default function ScrollStoryV2() {
       const dt = Math.min((now - lastTime) / 1000, 0.1);
       lastTime = now;
       
-      // Only update perpetual rotation if needed
-      if (needsUpdate) {
+      // Only update perpetual rotation when NOT actively scrolling
+      if (needsUpdate && !isScrolling) {
         perp.r1 += speeds.r1 * dt; perp.r2 += speeds.r2 * dt; perp.r3 += speeds.r3 * dt;
         perp.r4 += speeds.r4 * dt; perp.r5 += speeds.r5 * dt; perp.out += speeds.out * dt; perp.inn += speeds.inn * dt;
       }
@@ -192,15 +194,20 @@ export default function ScrollStoryV2() {
           dialBgRef.current.style.opacity = currentOp;
           dialBgRef.current.style.visibility = currentOp <= 0 ? "hidden" : "visible";
           dialBgRef.current.style.transform = `translate3d(0,0,0) scale3d(${sc}, ${sc}, 1)`;
-          const sr1 = p * 90, sr2 = -p * 130, sr3 = p * 170;
-          const sr4 = -p * 60, sr5 = p * 200, srOut = -p * 140, srIn = p * 180;
-          if (ring1Ref.current) ring1Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r1 + sr1}deg)`;
-          if (ring2Ref.current) ring2Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r2 + sr2}deg)`;
-          if (ring3Ref.current) ring3Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r3 + sr3}deg)`;
-          if (ring4Ref.current) ring4Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r4 + sr4}deg)`;
-          if (ring5Ref.current) ring5Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r5 + sr5}deg)`;
-          if (outTickRef.current) outTickRef.current.style.transform = `translate3d(0,0,0) rotate(${perp.out + srOut}deg)`;
-          if (inTickRef.current) inTickRef.current.style.transform = `translate3d(0,0,0) rotate(${perp.inn + srIn}deg)`;
+          
+          // Only update dial rotations if visible
+          if (currentOp > 0.01) {
+            const sr1 = p * 90, sr2 = -p * 130, sr3 = p * 170;
+            const sr4 = -p * 60, sr5 = p * 200, srOut = -p * 140, srIn = p * 180;
+            if (ring1Ref.current) ring1Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r1 + sr1}deg)`;
+            if (ring2Ref.current) ring2Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r2 + sr2}deg)`;
+            if (ring3Ref.current) ring3Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r3 + sr3}deg)`;
+            if (ring4Ref.current) ring4Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r4 + sr4}deg)`;
+            if (ring5Ref.current) ring5Ref.current.style.transform = `translate3d(0,0,0) rotate(${perp.r5 + sr5}deg)`;
+            if (outTickRef.current) outTickRef.current.style.transform = `translate3d(0,0,0) rotate(${perp.out + srOut}deg)`;
+            if (inTickRef.current) inTickRef.current.style.transform = `translate3d(0,0,0) rotate(${perp.inn + srIn}deg)`;
+          }
+          
           if (revealRef.current) {
             const rawRevealOp = ease(range(p, 0.70, 0.82));
             const revealOp = rawRevealOp > 0.001 ? rawRevealOp : 0.001;
@@ -284,7 +291,14 @@ export default function ScrollStoryV2() {
     const onScroll = () => { 
       lastSy = window.scrollY;
       needsUpdate = true;
+      isScrolling = true;
       lastScrollTimeRef.current = performance.now();
+      
+      // Clear timeout and reset scrolling flag after scroll ends
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        isScrolling = false;
+      }, 150);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     animId = requestAnimationFrame(render);
@@ -292,6 +306,7 @@ export default function ScrollStoryV2() {
       cancelAnimationFrame(animId);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
+      clearTimeout(scrollTimeout);
     };
   }, [isMobile, logoEndSize, logoEndX, logoEndY]);
 

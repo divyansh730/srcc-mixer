@@ -984,7 +984,7 @@ export default function ScrollStoryV2() {
                 zIndex: 0,
                 opacity: 0,
                 willChange: "opacity, transform",
-                filter: "brightness(0.65) contrast(1.05) saturate(0.8)",
+                filter: "brightness(0.58) contrast(1.12) saturate(1.1) sepia(0.28) hue-rotate(6deg)",
                 minHeight: "120vh",
               }}
             />
@@ -993,7 +993,7 @@ export default function ScrollStoryV2() {
               style={{
                 position: "absolute",
                 inset: 0,
-                background: "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.35) 100%)",
+                background: "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.45) 100%)",
                 zIndex: 1,
                 pointerEvents: "none",
                 opacity: 0,
@@ -1026,73 +1026,104 @@ export default function ScrollStoryV2() {
                 Alumni Mixer 2026
               </div>
 
-               <div
+                <div
                    ref={countdownRef}
-                   style={{
+                  style={{
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    gap: isMobile ? "16px" : "28px",
-                    marginTop: isMobile ? "2.5rem" : "3.8rem",
-                    fontFamily: "'Cinzel', serif",
+                    flexDirection: "column",
+                    gap: isMobile ? "2rem" : "3rem",
+                    marginTop: isMobile ? "2.8rem" : "4rem",
                     opacity: 0,
                     transform: "translate3d(0, 32px, 0)",
                     willChange: "transform, opacity",
-                    flexWrap: "wrap",
-                    padding: isMobile ? "0 12px" : "0",
+                    padding: isMobile ? "0 16px" : "0",
                   }}
                 >
-                   {[
-                    { value: countdown.days, label: "Days" },
-                    { value: countdown.hours, label: "Hours" },
-                    { value: countdown.minutes, label: "Minutes" },
-                    { value: countdown.seconds, label: "Seconds" },
-                  ].map((item, idx) => (
-                    <div key={item.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
+                  {/* Elegant Countdown Timer Display */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: isMobile ? "1.2rem" : "2.2rem",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    {[
+                      { value: countdown.days, label: "Days" },
+                      { value: countdown.hours, label: "Hrs" },
+                      { value: countdown.minutes, label: "Min" },
+                      { value: countdown.seconds, label: "Sec" },
+                    ].map((item, idx) => (
                       <div
+                        key={item.label}
                         style={{
-                          minWidth: isCompactMobile ? "72px" : isMobile ? "88px" : "128px",
-                          padding: isCompactMobile ? "24px 10px" : isMobile ? "28px 14px" : "38px 24px",
-                          background: "rgba(26, 15, 7, 0.45)",
-                          border: "1px solid rgba(201, 168, 76, 0.25)",
-                          borderRadius: "4px",
-                          backdropFilter: "blur(10px)",
-                          WebkitBackdropFilter: "blur(10px)",
-                          textAlign: "center",
-                          boxShadow: "0 8px 24px rgba(0, 0, 0, 0.2)",
-                          transition: "all 0.3s ease",
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          gap: "6px",
                         }}
                       >
-                        <span
+                        {/* Golden divider between items */}
+                        {idx > 0 && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              left: isMobile ? "-0.6rem" : "-1.1rem",
+                              top: "50%",
+                              transform: "translateY(-50%)",
+                              width: "1px",
+                              height: isMobile ? "40px" : "60px",
+                              background: "linear-gradient(180deg, transparent, rgba(201,168,76,0.3), transparent)",
+                              pointerEvents: "none",
+                            }}
+                          />
+                        )}
+                        
+                        {/* Number Display */}
+                        <div
                           style={{
-                            display: "block",
-                            fontSize: isCompactMobile ? "2rem" : isMobile ? "2.3rem" : "3.2rem",
-                            color: "#F6E8BC",
-                            lineHeight: 1.1,
-                            fontWeight: 700,
-                            letterSpacing: "0.02em",
-                            textShadow: "0 0 20px rgba(201, 168, 76, 0.25)",
                             fontFamily: "'Cinzel', serif",
+                            fontSize: isCompactMobile ? "2.2rem" : isMobile ? "2.6rem" : "4rem",
+                            fontWeight: 700,
+                            color: "#F6E8BC",
+                            lineHeight: 1,
+                            textShadow: "0 0 24px rgba(201, 168, 76, 0.35)",
+                            letterSpacing: "0.02em",
                           }}
                         >
                           {String(item.value).padStart(2, "0")}
-                        </span>
+                        </div>
+
+                        {/* Label */}
+                        <div
+                          style={{
+                            fontFamily: "'Cinzel', serif",
+                            fontSize: isCompactMobile ? "0.62rem" : isMobile ? "0.7rem" : "0.85rem",
+                            color: "rgba(201, 168, 76, 0.6)",
+                            letterSpacing: "0.16em",
+                            textTransform: "uppercase",
+                            fontWeight: 500,
+                          }}
+                        >
+                          {item.label}
+                        </div>
                       </div>
-                      <span
-                        style={{
-                          color: "rgba(201, 168, 76, 0.65)",
-                          fontSize: isCompactMobile ? "0.65rem" : isMobile ? "0.7rem" : "0.8rem",
-                          letterSpacing: "0.18em",
-                          textTransform: "uppercase",
-                          fontWeight: 500,
-                          fontFamily: "'Cinzel', serif",
-                        }}
-                      >
-                        {item.label}
-                      </span>
-                    </div>
-                  ))}
-               </div>
+                    ))}
+                  </div>
+
+                  {/* Decorative Element */}
+                  <div
+                    style={{
+                      width: isMobile ? "80px" : "120px",
+                      height: "1px",
+                      background: "linear-gradient(90deg, transparent, rgba(201,168,76,0.4), transparent)",
+                      opacity: 0.7,
+                    }}
+                  />
+                </div>
 
                 <div
                   ref={mlSubRef}

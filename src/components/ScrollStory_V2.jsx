@@ -267,19 +267,18 @@ export default function ScrollStoryV2() {
          }
          if (corridorBgRef.current) {
            // Corridor background parallax: moves up smoothly with hero fade
-           // Starts moving in earlier and moves at a slower rate for parallax effect
            const corridorMoveStart = range(p, 0.10, 0.25);
-           const corridorMoveFull = range(p, 0.25, 0.65);
+           const corridorMoveFull = range(p, 0.25, 0.75);
            
            // Parallax: moves slower than hero fade (creates depth)
-           const moveAmount = -corridorMoveStart * 50 - corridorMoveFull * 80; // Negative = moves up
+           const moveAmount = -corridorMoveStart * 50 - corridorMoveFull * 80;
            
            // Crossfade: fades in as hero fades out
            const heroFadeOut = ease(range(p, 0.25, 0.50));
            const corridorInOp = heroFadeOut;
            
-           // Fades out after the text section
-           const fadeOutStart = range(p, 0.70, 0.80);
+           // Fades out much later and more gradually
+           const fadeOutStart = range(p, 0.75, 0.95);
            const corridorOutOp = 1 - ease(fadeOutStart);
            const finalCorridorOp = corridorInOp * corridorOutOp;
            

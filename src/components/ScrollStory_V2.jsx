@@ -946,12 +946,15 @@ export default function ScrollStoryV2() {
               pointerEvents: "none",
             }}
           >
+            <div className="countdown-pattern" />
             <div
               id="alumni-mixer-text"
               style={{
                 textAlign: "center",
                 padding: isMobile ? "0 18px" : "0 24px",
                 maxWidth: isMobile ? "360px" : "none",
+                position: "relative",
+                zIndex: 1,
               }}
             >
               <div

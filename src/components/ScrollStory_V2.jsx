@@ -984,7 +984,7 @@ export default function ScrollStoryV2() {
                 zIndex: 0,
                 opacity: 0,
                 willChange: "opacity, transform",
-                filter: "brightness(0.58) contrast(1.12) saturate(1.1) sepia(0.28) hue-rotate(6deg)",
+                filter: "brightness(0.72) contrast(1.08) saturate(0.95) sepia(0.18) hue-rotate(4deg)",
                 minHeight: "120vh",
               }}
             />
@@ -993,7 +993,7 @@ export default function ScrollStoryV2() {
               style={{
                 position: "absolute",
                 inset: 0,
-                background: "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.45) 100%)",
+                background: "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.3) 100%)",
                 zIndex: 1,
                 pointerEvents: "none",
                 opacity: 0,
@@ -1033,29 +1033,29 @@ export default function ScrollStoryV2() {
                     alignItems: "center",
                     justifyContent: "center",
                     flexDirection: "column",
-                    gap: isMobile ? "2rem" : "3rem",
-                    marginTop: isMobile ? "2.8rem" : "4rem",
+                    gap: isMobile ? "1.5rem" : "2.5rem",
+                    marginTop: isMobile ? "2.5rem" : "3.5rem",
                     opacity: 0,
                     transform: "translate3d(0, 32px, 0)",
                     willChange: "transform, opacity",
                     padding: isMobile ? "0 16px" : "0",
                   }}
                 >
-                  {/* Elegant Countdown Timer Display */}
+                  {/* Main Numbers Row */}
                   <div
                     style={{
                       display: "flex",
-                      alignItems: "center",
+                      alignItems: "flex-start",
                       justifyContent: "center",
-                      gap: isMobile ? "1.2rem" : "2.2rem",
+                      gap: isMobile ? "1.4rem" : "3rem",
                       flexWrap: "wrap",
                     }}
                   >
                     {[
                       { value: countdown.days, label: "Days" },
-                      { value: countdown.hours, label: "Hrs" },
-                      { value: countdown.minutes, label: "Min" },
-                      { value: countdown.seconds, label: "Sec" },
+                      { value: countdown.hours, label: "Hours" },
+                      { value: countdown.minutes, label: "Minutes" },
+                      { value: countdown.seconds, label: "Seconds" },
                     ].map((item, idx) => (
                       <div
                         key={item.label}
@@ -1063,47 +1063,31 @@ export default function ScrollStoryV2() {
                           display: "flex",
                           flexDirection: "column",
                           alignItems: "center",
-                          gap: "6px",
+                          gap: isMobile ? "8px" : "12px",
                         }}
                       >
-                        {/* Golden divider between items */}
-                        {idx > 0 && (
-                          <div
-                            style={{
-                              position: "absolute",
-                              left: isMobile ? "-0.6rem" : "-1.1rem",
-                              top: "50%",
-                              transform: "translateY(-50%)",
-                              width: "1px",
-                              height: isMobile ? "40px" : "60px",
-                              background: "linear-gradient(180deg, transparent, rgba(201,168,76,0.3), transparent)",
-                              pointerEvents: "none",
-                            }}
-                          />
-                        )}
-                        
-                        {/* Number Display */}
+                        {/* Big Number */}
                         <div
                           style={{
-                            fontFamily: "'Cinzel', serif",
-                            fontSize: isCompactMobile ? "2.2rem" : isMobile ? "2.6rem" : "4rem",
-                            fontWeight: 700,
+                            fontFamily: "'Pinyon Script', cursive",
+                            fontSize: isCompactMobile ? "3rem" : isMobile ? "3.5rem" : "5.5rem",
+                            fontWeight: 400,
                             color: "#F6E8BC",
                             lineHeight: 1,
-                            textShadow: "0 0 24px rgba(201, 168, 76, 0.35)",
+                            textShadow: "0 0 30px rgba(201, 168, 76, 0.4), 0 2px 12px rgba(0,0,0,0.6)",
                             letterSpacing: "0.02em",
                           }}
                         >
                           {String(item.value).padStart(2, "0")}
                         </div>
 
-                        {/* Label */}
+                        {/* Elegant Label */}
                         <div
                           style={{
                             fontFamily: "'Cinzel', serif",
-                            fontSize: isCompactMobile ? "0.62rem" : isMobile ? "0.7rem" : "0.85rem",
-                            color: "rgba(201, 168, 76, 0.6)",
-                            letterSpacing: "0.16em",
+                            fontSize: isCompactMobile ? "0.7rem" : isMobile ? "0.8rem" : "0.95rem",
+                            color: "rgba(201, 168, 76, 0.55)",
+                            letterSpacing: "0.2em",
                             textTransform: "uppercase",
                             fontWeight: 500,
                           }}
@@ -1114,13 +1098,13 @@ export default function ScrollStoryV2() {
                     ))}
                   </div>
 
-                  {/* Decorative Element */}
+                  {/* Decorative Element Below */}
                   <div
                     style={{
-                      width: isMobile ? "80px" : "120px",
+                      width: isMobile ? "60px" : "100px",
                       height: "1px",
-                      background: "linear-gradient(90deg, transparent, rgba(201,168,76,0.4), transparent)",
-                      opacity: 0.7,
+                      background: "linear-gradient(90deg, transparent, rgba(201,168,76,0.35), transparent)",
+                      opacity: 0.8,
                     }}
                   />
                 </div>

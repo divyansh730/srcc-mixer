@@ -31,7 +31,7 @@ const landingOptions = [
   {
     id: "campus-birdseye",
     title: "Alum Engagement",
-    image: assetUrl("srcc-aerial.jpg"),
+    image: assetUrl("alum-button.JPG"),
     status: "Open",
     description:
       "Conversations with our beloved alumni - sharing their stories from The Cell!",
